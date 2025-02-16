@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group = 'at.jku.isse.ecco'
+version = '0.1.9'
+ecco.adapter = true
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':ecco-service')
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
