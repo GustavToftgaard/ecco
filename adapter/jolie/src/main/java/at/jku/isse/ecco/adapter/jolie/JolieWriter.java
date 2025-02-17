@@ -7,7 +7,7 @@ import at.jku.isse.ecco.tree.Node;
 import java.nio.file.Path;
 import java.util.Set;
 
-public class jolieWriter implements ArtifactWriter<Set<Node>, Path> {
+public class JolieWriter implements ArtifactWriter<Set<Node>, Path> {
 
     @Override
     public String getPluginId() {

@@ -10,7 +10,7 @@ import com.google.inject.multibindings.Multibinder;
 import java.nio.file.Path;
 import java.util.Set;
 
-public class jolieModule extends AbstractModule {
+public class JolieModule extends AbstractModule {
     @Override
     protected void configure() {
         super.configure();
@@ -21,7 +21,7 @@ public class jolieModule extends AbstractModule {
                         new TypeLiteral<>() {
                         });
 
-        readerMultibinder.addBinding().to(jolieReader.class);
+        readerMultibinder.addBinding().to(JolieReader.class);
 
         final Multibinder<ArtifactWriter<Set<Node>, Path>> writerMultibinder =
                 Multibinder.newSetBinder(
@@ -29,6 +29,6 @@ public class jolieModule extends AbstractModule {
                         new TypeLiteral<>() {
                         });
 
-        writerMultibinder.addBinding().to(jolieWriter.class);
+        writerMultibinder.addBinding().to(JolieWriter.class);
     }
 }

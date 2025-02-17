@@ -3,14 +3,14 @@ package at.jku.isse.ecco.adapter.jolie;
 import at.jku.isse.ecco.adapter.ArtifactPlugin;
 import com.google.inject.Module;
 
-public class joliePlugin extends ArtifactPlugin {
+public class JoliePlugin extends ArtifactPlugin {
     public static final String DESCRIPTION = "Adds support for Jolie artefacts";
 
-    private final jolieModule module = new jolieModule();
+    private final JolieModule module = new JolieModule();
 
     @Override
     public String getPluginId() {
-        return joliePlugin.class.getName();
+        return JoliePlugin.class.getName();
     }
 
     @Override
@@ -20,7 +20,7 @@ public class joliePlugin extends ArtifactPlugin {
 
     @Override
     public String getName() {
-        return joliePlugin.class.getSimpleName();
+        return JoliePlugin.class.getSimpleName();
     }
 
     @Override
