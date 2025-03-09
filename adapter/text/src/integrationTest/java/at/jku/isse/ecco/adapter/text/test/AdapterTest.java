@@ -25,13 +25,34 @@ public class AdapterTest {
 
 	private static final Path BASE_DIR = DATA_DIR.resolve("input");
 	private static final Path[] FILES = new Path[]{Paths.get("file.txt")};
+	private static final Path[] JOLIE_FILES = new Path[]{Paths.get("contactsBook.ol")};
 
 	@Test
 	public void Java_Adapter_Test() {
+		System.out.println("Java_Adapter_Test");
 		TextReader reader = new TextReader(new MemEntityFactory());
 
 		System.out.println("READ");
 		Set<Node.Op> nodes = reader.read(BASE_DIR, FILES);
+
+		System.out.println(nodes);
+	}
+
+	@Test
+	public void Jolie_Adapter_Test() {
+		System.out.println("\nJolie_Adapter_Test");
+		TextReader reader = new TextReader(new MemEntityFactory());
+
+		System.out.println("READ");
+
+		Set<Node.Op> nodes = reader.read(BASE_DIR, JOLIE_FILES);
+
+//		 print all lines of test file
+//		var iter = nodes.iterator();
+//		var lines = iter.next().getChildren();
+//        for (Node.Op line : lines) {
+//            System.out.println(line);
+//        }
 
 		System.out.println(nodes);
 	}
