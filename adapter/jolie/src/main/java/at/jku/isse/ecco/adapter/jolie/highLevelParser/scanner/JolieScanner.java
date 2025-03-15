@@ -39,41 +39,36 @@ public class JolieScanner {
         keywords = new HashMap<>();
         keywords.put("from", FROM);
         keywords.put("import", IMPORT);
-        keywords.put("interface", INTERFACE);
-        keywords.put("type", TYPE);
-        keywords.put("service", SERVICE);
-        keywords.put("exercution", EXECUTION);
-        keywords.put("embed", EMBED);
+        keywords.put("include", INCLUDE);
         keywords.put("as", AS);
-        keywords.put("imputPort", IMPUTPORT);
-        keywords.put("outputPort", OUTPUTPORT);
-        keywords.put("main", MAIN);
-        keywords.put("requestResponse", REQUEST_RESPONSE);
-        keywords.put("oneWay", ONE_WAY);
 
-        // keywords.put("true", TRUE);
-        // keywords.put("false", FALSE);
-        // keywords.put("AND", AND);
-        // keywords.put("OR", OR);
-        // keywords.put("var", VAR);
-        // keywords.put("print", PRINT);
-        // keywords.put("if", IF);
-        // keywords.put("else", ELSE);
-        // keywords.put("while", WHILE);
-        // keywords.put("NOT", NOT);
-        // keywords.put("return", RETURN);
-        // keywords.put("is", ASSIGN);
-        // keywords.put("of_type", TYPE_DEF);
-        // keywords.put("equals", EQUALS);
-        // keywords.put("not_equals", NOT_EQUALS);
-        // keywords.put("greater_than", GREATER);
-        // keywords.put("greater_or_equal", GREATER_OR_EQUAL);
-        // keywords.put("less_than", LESS);
-        // keywords.put("less_or_equal", LESS_OR_EQUAL);
-        // keywords.put("func", FUNC);
-        // keywords.put("Number", NUMBER_TYPE);
-        // keywords.put("String", STRING_TYPE);
-        // keywords.put("Bool", BOOL_TYPE);
+        keywords.put("interface", INTERFACE);
+        keywords.put("extender", EXTENDER);
+        keywords.put("type", TYPE);
+
+//        keywords.put("requestResponse", REQUEST_RESPONSE);
+//        keywords.put("oneWay", ONE_WAY);
+
+        keywords.put("service", SERVICE);
+        keywords.put("execution", EXECUTION);
+        keywords.put("embed", EMBED);
+        keywords.put("embedded", EMBEDDED);
+
+        keywords.put("inputPort", INPUTPORT);
+        keywords.put("outputPort", OUTPUTPORT);
+
+        keywords.put("location", LOCATION);
+        keywords.put("Location", LOCATION);
+        keywords.put("protocol", PROTOCOL);
+        keywords.put("Protocol", PROTOCOL);
+        keywords.put("interfaces", INTERFACES);
+        keywords.put("Interfaces", INTERFACES);
+
+        keywords.put("init", INIT);
+        keywords.put("main", MAIN);
+        keywords.put("courier", COURIER);
+
+        keywords.put("define", DEFINE);
     }
 
     // In- and output
@@ -119,6 +114,18 @@ public class JolieScanner {
             case ']':
                 addToken(RIGHT_SQUARE_BRACKET);
                 break;
+            case '(':
+                addToken(LEFT_PAREN);
+                break;
+            case ')':
+                addToken(RIGHT_PAREN);
+                break;
+            case '<':
+                addToken(LESS_THAN);
+                break;
+            case '>':
+                addToken(GREATER_THAN);
+                break;
             case ':':
                 addToken(COLON);
                 break;
@@ -128,22 +135,19 @@ public class JolieScanner {
 
             // white space
             case ' ':
+                while (peek() == ' ' && !isAtEnd()) {
+                    advance();
+                }
                 addToken(SPACE);
                 break;
             case '\t':
                 addToken(TAB);
                 break;
-            case '\n':
+
+            // new line / end of line
+            case '\n': // TODO: add check function for new line symbols
             case '\r':
                 break;
-
-            // comment
-            // case '/': {
-            //     while (!isAtEnd() && peek() != '\n') {
-            //         advance();
-            //     }
-            //     break;
-            // }
 
             // rest
             default: {
@@ -152,9 +156,26 @@ public class JolieScanner {
                     do {
                         c = advance();
                     } while (c != '"' && !isAtEnd());
+                    if (isAtEnd()) {
+                         // error("Unterminated string."); // TODO: add error for unterminated strings
+                         return;
+                     }
                     String text = source.substring(start, current);
                     addToken(STRING);
 
+                } else if (c == '/' && (peek() == '/' || peek() == '*')) { // comments
+                    if (peek() == '/') {
+                        while (!isAtEnd() && peek() != '\n') {
+                            advance();
+                        }
+                        addToken(COMMENT);
+                    } else {
+                        do {
+                            c = advance();
+                        } while (!isAtEnd() && c != '*' && peek() != '/'); // TODO: add error for no end mult_comment
+                        advance(); // to include '/' at the end
+                        addToken(MULTILINE_COMMENT);
+                    }
                 } else { // keywords, identifier
                     while (!isWhiteSpace(peek()) && !isSeperator(peek()) && !isAtEnd()) {
                         advance();
@@ -162,14 +183,6 @@ public class JolieScanner {
                     String text = source.substring(start, current);
                     addToken(keywords.getOrDefault(text, ID));
                 }
-
-                // } else { // Encountered an unexpected character. Throw error and recover.
-                //     error("Unexpected character.");
-                //     while (!isWhiteSpace(peek()) && !isAtEnd()) {
-                //         advance();
-                //     }
-                //     break;
-                // }
             }
         }
     }
@@ -196,37 +209,6 @@ public class JolieScanner {
     //     advance();
 
     //     addToken(STRING);
-    // }
-
-    // private void number() {
-    //     while (isDigit(peek())) {
-    //         advance();
-    //     }
-
-    //     // Look for a fractional part.
-    //     if (match('.')) {
-
-    //         while (isDigit(peek())) {
-    //             advance();
-    //         }
-    //     }
-
-    //     addToken(NUMBER);
-    // }
-
-    // helper function for scanToken
-    // private boolean isAlpha(char c) {
-    //     return Character.isLetter(c);
-    // }
-
-    // helper function for scanToken
-    // private boolean isAlphaNumerical(char c) {
-    //     return (Character.isLetter(c) || Character.isDigit(c));
-    // }
-
-    // helper function for scanToken
-    // private boolean isDigit(char c) {
-    //     return Character.isDigit(c);
     // }
 
     // helper function for scanToken

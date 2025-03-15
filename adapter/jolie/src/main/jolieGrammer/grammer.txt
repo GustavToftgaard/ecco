@@ -1,0 +1,42 @@
+
+Program         -> Decl* EOF
+Decl            -> ImportDecl | IncludeDecl | InterfaceDecl | TypeDecl | ServiceDecl | Service | Line
+
+ImportDecl      -> "from" ID "import" ID ( "as" ID )?
+
+IncludeDecl     -> "include" ID(String)
+
+InterfaceDecl   -> "interface" "extender"? ID Block
+// can be expanded further with OW and RR
+
+TypeDecl        -> "type" ID ":" ID? Block?
+
+// CommentDecl     -> ( "//" Read line out ) | ( "/*" Line* "*/" )
+
+ServiceDecl     -> "service" ID ( "(" ID* ")" )? "{" Service* "}"
+    Service         -> Execution | Embed | Embedded | InputPort | OutputPort | Init | Main | Courier | DefineProcedure | Line
+        Execution       -> "execution" ( ":" ID ) | ( "{" ID "}" )
+        Embed           -> "embed" ID "as" ID
+        Embedded        -> "embedded" Block
+        InputPort       -> "inputPort" ID "{" ( PortLocation? PortProtocol? PortInterfaces? PortAggregates? PortRedirects? )* "}"
+        OutputPort      -> "outputPort" ID "{" PortLocation? PortProtocol? PortInterfaces? "}"
+            PortLocation    -> ( "location" | "Location" ) ":" line
+            PortProtocol    -> ( "protocol" | "Protocol" ) ":" line
+            PortInterfaces  -> ( "interfaces" | "Interfaces" ) ":" Line ( Line )*
+            PortAggregates  -> ( "aggregates" | "Aggregates" ) ":" Line ( Line )*
+            PortRedirects   -> ( "redirects" | "Redirects" ) ":" Line ( Line )*
+        Init            -> "init" Block
+        Main            -> "main" Block
+        Courier         -> "courier" "<" ID ">" Block
+        DefineProcedure       -> "define" ID Block
+
+// Main            -> "main" ( "{" ( "[" Procedure "]" )* | Procedure "}" ) | Block
+// Procedure       -> ID "(" ID? ")" ( "(" ID? ")" )? Block
+
+Block           -> "{" Line* "}"
+Line            -> _* "\n" ( keep track of "{" and "}" for block )
+
+// Constants: https://docs.jolie-lang.org/v1.13.x-git/language-tools-and-standard-library/basics/constants/index.html
+// Scope, Install: https://docs.jolie-lang.org/v1.13.x-git/language-tools-and-standard-library/basics/fault-handling/scopes-and-faults/index.html
+//
+
