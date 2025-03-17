@@ -1,15 +1,15 @@
 
 Program         -> Decl* EOF
-Decl            -> ImportDecl | IncludeDecl | InterfaceDecl | TypeDecl | ServiceDecl | Service | Line
+Decl            -> ImportDecl | InterfaceDecl | TypeDecl | ServiceDecl | Service | Line
 
-ImportDecl      -> "from" ID "import" ID ( "as" ID )?
-
-IncludeDecl     -> "include" ID(String)
+ImportDecl      -> Import | Include
+    Import          -> "from" ID "import" ID Line
+    Include         -> "include" ID(String)
 
 InterfaceDecl   -> "interface" "extender"? ID Block
 // can be expanded further with OW and RR
 
-TypeDecl        -> "type" ID ":" ID? Block?
+TypeDecl        -> "type" ID ":" ID? Block? //XOR
 
 // CommentDecl     -> ( "//" Read line out ) | ( "/*" Line* "*/" )
 
@@ -18,7 +18,7 @@ ServiceDecl     -> "service" ID ( "(" ID* ")" )? "{" Service* "}"
         Execution       -> "execution" ( ":" ID ) | ( "{" ID "}" )
         Embed           -> "embed" ID "as" ID
         Embedded        -> "embedded" Block
-        InputPort       -> "inputPort" ID "{" ( PortLocation? PortProtocol? PortInterfaces? PortAggregates? PortRedirects? )* "}"
+        InputPort       -> "inputPort" ID "{" PortLocation? PortProtocol? PortInterfaces? PortAggregates? PortRedirects? "}"
         OutputPort      -> "outputPort" ID "{" PortLocation? PortProtocol? PortInterfaces? "}"
             PortLocation    -> ( "location" | "Location" ) ":" line
             PortProtocol    -> ( "protocol" | "Protocol" ) ":" line
@@ -28,7 +28,7 @@ ServiceDecl     -> "service" ID ( "(" ID* ")" )? "{" Service* "}"
         Init            -> "init" Block
         Main            -> "main" Block
         Courier         -> "courier" "<" ID ">" Block
-        DefineProcedure       -> "define" ID Block
+        DefineProcedure -> "define" ID Block
 
 // Main            -> "main" ( "{" ( "[" Procedure "]" )* | Procedure "}" ) | Block
 // Procedure       -> ID "(" ID? ")" ( "(" ID? ")" )? Block
@@ -39,4 +39,42 @@ Line            -> _* "\n" ( keep track of "{" and "}" for block )
 // Constants: https://docs.jolie-lang.org/v1.13.x-git/language-tools-and-standard-library/basics/constants/index.html
 // Scope, Install: https://docs.jolie-lang.org/v1.13.x-git/language-tools-and-standard-library/basics/fault-handling/scopes-and-faults/index.html
 //
+
+----------------------------------------------------------------------------
+
+ImportDecl      ImportDecl importDecl
+    Import          JolieToken fromID, JolieToken importID, Line? line
+    Include         JolieToken includeID
+
+InterfaceDecl   JolieToken interfaceID, Bool isExtender, Block block
+
+TypeDecl        JolieToken typeID, JolieToken? secondID, Block? block
+
+ServiceDecl     JolieToken serviceID, JolieToken[]? params, Service[] Services
+    Service         Service service, Line line // XOR
+        Execution       JolieToken executionID, JolieToken usesColon
+        Embed           JolieToken embedID, JolieToken asID
+        Embedded        Block block
+        InputPort       JolieToken inputPortID,
+                        PortLocation? location,
+                        PortProtocol? protocol,
+                        PortInterfaces? interfaces,
+                        PortAggregates? aggregates,
+                        PortRedirects? redirects
+        OutputPort      JolieToken outputPortID,
+                        PortLocation? location,
+                        PortProtocol? protocol,
+                        PortInterfaces? interfaces
+            PortLocation    Line line, Bool isCapital
+            PortProtocol    Line line, Bool isCapital
+            PortInterfaces  Line[] lines, Bool isCapital
+            PortAggregates  Line[] lines, Bool isCapital
+            PortRedirects   Line[] lines, Bool isCapital
+        Init            Block block
+        Main            Block block
+        Courier         JolieToken courierInterfaceID, Block block
+        DefineProcedure JolieToken defineID, Block block
+
+Block           Line[] lines
+Line            String line, Bool endBlock
 
