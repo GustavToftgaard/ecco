@@ -7,16 +7,18 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
 public class TypeDecl implements Node {
     private final JolieToken typeID;
-    private JolieToken secondID; //?
-    private Block block; //?
+    private final JolieToken secondID; //?
+    private final Block block; //?
 
     public TypeDecl(JolieToken typeID, JolieToken secondID) {
         this.typeID = typeID;
         this.secondID = secondID;
+        this.block = null;
     }
 
     public TypeDecl(JolieToken typeID, Block block) {
         this.typeID = typeID;
+        this.secondID = null;
         this.block = block;
     }
 
@@ -24,6 +26,18 @@ public class TypeDecl implements Node {
         this.typeID = typeID;
         this.secondID = secondID;
         this.block = block;
+    }
+
+    public JolieToken getTypeID() {
+        return typeID;
+    }
+
+    public JolieToken getSecondID() {
+        return secondID;
+    }
+
+    public Block getBlock() {
+        return block;
     }
 
     @Override

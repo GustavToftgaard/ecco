@@ -8,15 +8,16 @@ import java.util.ArrayList;
 
 public class ServiceDecl implements Node {
     private final JolieToken serviceID;
-    private ArrayList<JolieToken> params; // ?
-    private final ArrayList<Service> services;
+    private final ArrayList<JolieToken> params; // ?
+    private final ArrayList<Node> services;
 
-    public ServiceDecl(JolieToken serviceID, ArrayList<Service> services) {
+    public ServiceDecl(JolieToken serviceID, ArrayList<Node> services) {
         this.serviceID = serviceID;
         this.services = services;
+        this.params = null;
     }
 
-    public ServiceDecl(JolieToken serviceID, ArrayList<Service> services, ArrayList<JolieToken> params) {
+    public ServiceDecl(JolieToken serviceID, ArrayList<Node> services, ArrayList<JolieToken> params) {
         this.serviceID = serviceID;
         this.services = services;
         this.params = params;
@@ -30,7 +31,7 @@ public class ServiceDecl implements Node {
         return params;
     }
 
-    public ArrayList<Service> getServices() {
+    public ArrayList<Node> getServices() {
         return services;
     }
 

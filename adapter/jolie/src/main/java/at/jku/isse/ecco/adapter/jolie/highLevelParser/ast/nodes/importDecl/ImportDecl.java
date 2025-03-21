@@ -21,7 +21,7 @@ public class ImportDecl implements Node {
         return importE;
     }
 
-    public Include getinclude() {
+    public Include getInclude() {
         return include;
     }
 

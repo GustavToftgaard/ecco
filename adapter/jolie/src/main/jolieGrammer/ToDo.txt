@@ -1,3 +1,11 @@
 - Remember ".iol" files
+- Deal with comments and whitespace
+- better block (use line somehow)
+
+
+For Report:
+- Why not the Jolie parser
+    - jolie parser "optimises" (changes) code during execution causing changes in code when compared with original
+        - loss of data and changes to original
 
 

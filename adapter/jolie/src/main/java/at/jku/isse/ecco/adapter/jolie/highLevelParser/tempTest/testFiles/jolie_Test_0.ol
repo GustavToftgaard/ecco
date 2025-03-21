@@ -15,7 +15,8 @@ service Numbers {
   execution:sequential
 
   inputPort numbersInput {
-    ...
+    location: "local"
+    interfaces: NumbersAPI
   }
 
   main {

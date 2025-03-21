@@ -8,16 +8,18 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 public class Import implements Node {
     private final JolieToken fromID;
     private final JolieToken importID;
-    private Line line = null; //?
+    private final Node line; //?
 
-    public Import(JolieToken fromID, JolieToken importID, Line line) {
+    public Import(JolieToken fromID, JolieToken importID, Node line) {
         this.fromID = fromID;
         this.importID = importID;
         this.line = line;
     }
+
     public Import(JolieToken fromID, JolieToken importID) {
         this.fromID = fromID;
         this.importID = importID;
+        this.line = null;
     }
 
     public JolieToken getFromID() {
@@ -28,7 +30,7 @@ public class Import implements Node {
         return importID;
     }
 
-    public Line getLine() {
+    public Node getLine() {
         return line;
     }
 

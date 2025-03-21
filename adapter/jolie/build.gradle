@@ -10,8 +10,16 @@ repositories {
     mavenCentral()
 }
 
+def libDir = file( "libs" )
+
 dependencies {
     implementation project(':ecco-service')
+    implementation fileTree( dir: libDir, include: '*.jar')
+
+    implementation('org.jolie-lang:jolie:1.12.3')
+    implementation('org.jolie-lang:jolie-cli:1.12.3')
+    implementation('org.jolie-lang:libjolie:1.12.3')
+    // implementation('org.jolie-lang:distribution:1.12.3')
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }

@@ -1,6 +1,8 @@
 package at.jku.isse.ecco.adapter.jolie.highLevelParser;
 
+import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.JolieScanner;
+import at.jku.isse.ecco.adapter.jolie.highLevelParser.parser.Parser;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
 import java.io.IOException;
@@ -9,6 +11,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import static at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType.*;
 
 
 public class tempParserRunner {
@@ -33,8 +37,15 @@ public class tempParserRunner {
         JolieScanner scanner = new JolieScanner(source);
         List<JolieToken> tokens = scanner.scanTokens();
 
-        // Parser parser = new Parser(tokens);
-        // parser.parse();
+        List<JolieToken> parserInput = new ArrayList<>();
+        for (JolieToken token : tokens) {
+            if (token.type != SPACE && token.type != COMMENT && token.type != MULTILINE_COMMENT) {
+                parserInput.add(token);
+            }
+        }
+
+         Parser parser = new Parser(parserInput);
+         parser.parse();
     }
 
     public void saveToFile(StringBuilder stringContent, String target) {
@@ -50,7 +61,7 @@ public class tempParserRunner {
         }
     }
 
-    public List<JolieToken> execute(String source) { // List<String>
+    public List<Node> execute(String source) { // List<String>
         hadError = false;
         errors.clear();
         JolieScanner scanner = new JolieScanner(source);
@@ -59,11 +70,20 @@ public class tempParserRunner {
 
         // System.out.println(tokens);
 
-        // Parser parser = new Parser(tokens);
-        // List<Stmt> statements = parser.parse();
+        List<JolieToken> parserInput = new ArrayList<>();
+        for (JolieToken token : tokens) {
+            if (token.type != SPACE && token.type != COMMENT && token.type != MULTILINE_COMMENT) {
+                parserInput.add(token);
+//                System.out.println(token);
+            }
+        }
+//        System.out.println(" ");
+
+         Parser parser = new Parser(parserInput);
+         List<Node> statements = parser.parse();
         // if (hadError) return errors;
 
-        return tokens;
+        return statements;
     }
 
     public static void error(JolieToken token, String message, String errorType) {

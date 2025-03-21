@@ -13,7 +13,7 @@ TypeDecl        -> "type" ID ":" ID? Block? //XOR
 
 // CommentDecl     -> ( "//" Read line out ) | ( "/*" Line* "*/" )
 
-ServiceDecl     -> "service" ID ( "(" ID* ")" )? "{" Service* "}"
+ServiceDecl     -> "service" ID ( "(" ID* ")" )? "{" Service* "}" // (p: MyServiceParam),
     Service         -> Execution | Embed | Embedded | InputPort | OutputPort | Init | Main | Courier | DefineProcedure | Line
         Execution       -> "execution" ( ":" ID ) | ( "{" ID "}" )
         Embed           -> "embed" ID "as" ID
@@ -22,9 +22,9 @@ ServiceDecl     -> "service" ID ( "(" ID* ")" )? "{" Service* "}"
         OutputPort      -> "outputPort" ID "{" PortLocation? PortProtocol? PortInterfaces? "}"
             PortLocation    -> ( "location" | "Location" ) ":" line
             PortProtocol    -> ( "protocol" | "Protocol" ) ":" line
-            PortInterfaces  -> ( "interfaces" | "Interfaces" ) ":" Line ( Line )*
-            PortAggregates  -> ( "aggregates" | "Aggregates" ) ":" Line ( Line )*
-            PortRedirects   -> ( "redirects" | "Redirects" ) ":" Line ( Line )*
+            PortInterfaces  -> ( "interfaces" | "Interfaces" ) ":" Line (, Line )*
+            PortAggregates  -> ( "aggregates" | "Aggregates" ) ":" Line (, Line )*
+            PortRedirects   -> ( "redirects" | "Redirects" ) ":" Line (, Line )*
         Init            -> "init" Block
         Main            -> "main" Block
         Courier         -> "courier" "<" ID ">" Block
@@ -33,7 +33,7 @@ ServiceDecl     -> "service" ID ( "(" ID* ")" )? "{" Service* "}"
 // Main            -> "main" ( "{" ( "[" Procedure "]" )* | Procedure "}" ) | Block
 // Procedure       -> ID "(" ID? ")" ( "(" ID? ")" )? Block
 
-Block           -> "{" Line* "}"
+Block           -> "{" Tokens "}"
 Line            -> _* "\n" ( keep track of "{" and "}" for block )
 
 // Constants: https://docs.jolie-lang.org/v1.13.x-git/language-tools-and-standard-library/basics/constants/index.html
@@ -55,7 +55,7 @@ ServiceDecl     JolieToken serviceID, JolieToken[]? params, Service[] Services
         Execution       JolieToken executionID, JolieToken usesColon
         Embed           JolieToken embedID, JolieToken asID
         Embedded        Block block
-        InputPort       JolieToken inputPortID,
+        InputPort       JolieToken inputPortID, Node[] portParameters
                         PortLocation? location,
                         PortProtocol? protocol,
                         PortInterfaces? interfaces,
