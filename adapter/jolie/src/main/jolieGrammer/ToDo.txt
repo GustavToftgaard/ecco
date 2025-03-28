@@ -7,5 +7,7 @@ For Report:
 - Why not the Jolie parser
     - jolie parser "optimises" (changes) code during execution causing changes in code when compared with original
         - loss of data and changes to original
+        - Give examples using jolie printer (git)
+    - (Write from perspective of what I did, not what I didn't do)
 
 

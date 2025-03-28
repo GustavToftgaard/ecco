@@ -6,7 +6,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.Line;
 
 public class PortLocation implements Node {
     private final Line line;
-    private final Boolean isCapital;
+    private final Boolean isCapital; // TODO: remove boolean
 
     public PortLocation(Line line, Boolean isCapital) {
         this.line = line;

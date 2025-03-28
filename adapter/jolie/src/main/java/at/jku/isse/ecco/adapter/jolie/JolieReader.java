@@ -1,13 +1,17 @@
 package at.jku.isse.ecco.adapter.jolie;
 
+import at.jku.isse.ecco.EccoException;
 import at.jku.isse.ecco.adapter.ArtifactReader;
 import at.jku.isse.ecco.adapter.dispatch.PluginArtifactData;
+import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.visitors.AstToECCO;
 import at.jku.isse.ecco.artifact.Artifact;
 import at.jku.isse.ecco.dao.EntityFactory;
 import at.jku.isse.ecco.service.listener.ReadListener;
 import at.jku.isse.ecco.tree.Node;
 import com.google.inject.Inject;
-import jolie.lang.parse.ast.Program;
+
+import at.jku.isse.ecco.adapter.jolie.highLevelParser.ParserRunner;
+import org.checkerframework.checker.units.qual.A;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -63,13 +67,29 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
     @Override
     public Set<Node.Op> read(Path base, Path[] input) {
         Set<Node.Op> nodes = new HashSet<>();
+
         for (Path path : input) {
             Path resolvedPath = base.resolve(path);
-            nodes.add(createPluginNode(path));
-            // TODO Parse
+            Node.Op pluginNode = this.parseJolieFile(resolvedPath, path);
+            nodes.add(pluginNode);
         }
         return nodes;
     }
+
+    private Node.Op parseJolieFile(Path resolvedPath, Path path) {
+        Node.Op pluginNode = createPluginNode(path); // root node
+        ParserRunner parserRunner = new ParserRunner();
+        List<at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node> ast = parserRunner.parse(path.toString());
+        AstToECCO translator = new AstToECCO(pluginNode, this.entityFactory, path);
+        return translator.translate(ast);
+    }
+
+//    private Node.Op addPluginNode(Set<Node.Op> nodes, Path path){
+//        Artifact.Op<PluginArtifactData> pluginArtifact = this.entityFactory.createArtifact(new PluginArtifactData(this.getPluginId(), path));
+//        Node.Op pluginNode = this.entityFactory.createOrderedNode(pluginArtifact);
+//        nodes.add(pluginNode);
+//        return pluginNode;
+//    }
 
     private Node.Op createPluginNode(Path path) {
         Artifact.Op<PluginArtifactData> pluginArtifactData =
