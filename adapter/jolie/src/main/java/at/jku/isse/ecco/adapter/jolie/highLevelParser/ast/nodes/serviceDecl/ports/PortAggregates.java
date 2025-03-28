@@ -3,14 +3,15 @@ package at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.serviceDecl.por
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.NodeVisitor;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.Line;
+import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
 import java.util.ArrayList;
 
 public class PortAggregates implements Node {
     private final ArrayList<Line> lines;
-    private final Boolean isCapital;
+    private final JolieToken isCapital;
 
-    public PortAggregates(ArrayList<Line> lines, Boolean isCapital) {
+    public PortAggregates(ArrayList<Line> lines, JolieToken isCapital) {
         this.lines = lines;
         this.isCapital = isCapital;
     }
@@ -24,7 +25,7 @@ public class PortAggregates implements Node {
         return lines;
     }
 
-    public Boolean getCapital() {
+    public JolieToken getIsCapital() {
         return isCapital;
     }
 

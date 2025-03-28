@@ -134,16 +134,19 @@ public class Parser {
     // ----
 
     private InterfaceDecl interfaceDecl() {
-        boolean hasExtender = false;
         consume(INTERFACE, "Expected INTERFACE token");
+        JolieToken hasExtender = null;
         if (peek().type == EXTENDER) {
-            consume(EXTENDER, "Expected EXTENDER token in interface decl");
-            hasExtender = true;
+            hasExtender = consume(EXTENDER, "Expected EXTENDER token in interface decl");
         }
         JolieToken interfaceID = consume(ID, "Expected ID token after interface decl");
         Block block = block();
 
-        return new InterfaceDecl(interfaceID, hasExtender, block);
+        if (hasExtender != null) {
+            return new InterfaceDecl(interfaceID, hasExtender, block);
+        } else {
+            return new InterfaceDecl(interfaceID, block);
+        }
 
         // can be expanded further with OW and RR
     }
@@ -352,42 +355,42 @@ public class Parser {
 
     // ----
 
-    private PortLocation portLocation() { // TODO: account for capital letter or not
-        consume(LOCATION, "Expected LOCATION token");
+    private PortLocation portLocation() {
+        JolieToken location = consume(LOCATION, "Expected LOCATION token");
         consume(COLON, "Expected COLON token after LOCATION in location");
         Line line = readLine(previous().line);
-        return new PortLocation(line);
+        return new PortLocation(line, location);
     }
 
-    private PortProtocol portProtocol() { // TODO: account for capital letter or not
-        consume(PROTOCOL, "Expected PROTOCOL token");
+    private PortProtocol portProtocol() {
+        JolieToken protocol = consume(PROTOCOL, "Expected PROTOCOL token");
         consume(COLON, "Expected COLON token after PROTOCOL in protocol");
         Line line = readLine(previous().line);
-        return new PortProtocol(line);
+        return new PortProtocol(line, protocol);
     }
 
-    private PortInterfaces portInterfaces() { // TODO: account for capital letter or not
-        consume(INTERFACES, "Expected INTERFACES token");
+    private PortInterfaces portInterfaces() {
+        JolieToken interfaces = consume(INTERFACES, "Expected INTERFACES token");
         consume(COLON, "Expected COLON token after INTERFACES in interfaces");
         ArrayList<Line> lines = new ArrayList<>();
         lines.add(readLine(previous().line)); // TODO: account for multiline arguments
-        return new PortInterfaces(lines);
+        return new PortInterfaces(lines, interfaces);
     }
 
-    private PortAggregates portAggregates() { // TODO: account for capital letter or not
-        consume(AGGREGATES, "Expected AGGREGATES token");
+    private PortAggregates portAggregates() {
+        JolieToken aggregates = consume(AGGREGATES, "Expected AGGREGATES token");
         consume(COLON, "Expected COLON token after AGGREGATES in aggregates");
         ArrayList<Line> lines = new ArrayList<>();
         lines.add(readLine(previous().line)); // TODO: account for multiline arguments
-        return new PortAggregates(lines);
+        return new PortAggregates(lines, aggregates);
     }
 
-    private PortRedirects portRedirects() { // TODO: account for capital letter or not
-        consume(REDIRECTS, "Expected REDIRECTS token");
+    private PortRedirects portRedirects() {
+        JolieToken redirects = consume(REDIRECTS, "Expected REDIRECTS token");
         consume(COLON, "Expected COLON token after REDIRECTS in redirects");
         ArrayList<Line> lines = new ArrayList<>();
         lines.add(readLine(previous().line)); // TODO: account for multiline arguments
-        return new PortRedirects(lines);
+        return new PortRedirects(lines, redirects);
     }
 
     // ----
@@ -443,7 +446,7 @@ public class Parser {
 
     private Line readLine(int lineNumber) {
         ArrayList<JolieToken> contents = new ArrayList<>();
-        while (peek().line == lineNumber) {
+        while (peek() != null && peek().line == lineNumber) {
             contents.add(advance());
         }
         return new Line(contents);

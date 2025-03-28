@@ -3,12 +3,13 @@ package at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.serviceDecl.por
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.NodeVisitor;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.Line;
+import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
 public class PortLocation implements Node {
     private final Line line;
-    private final Boolean isCapital; // TODO: remove boolean
+    private final JolieToken isCapital;
 
-    public PortLocation(Line line, Boolean isCapital) {
+    public PortLocation(Line line, JolieToken isCapital) {
         this.line = line;
         this.isCapital = isCapital;
     }
@@ -22,7 +23,7 @@ public class PortLocation implements Node {
         return line;
     }
 
-    public Boolean getCapital() {
+    public JolieToken getIsCapital() {
         return isCapital;
     }
 

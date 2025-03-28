@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ParserRunner;
 import org.checkerframework.checker.units.qual.A;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -24,7 +25,7 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
     private List<ReadListener> listeners = new LinkedList<>();
     private final EntityFactory entityFactory;
 
-    private static Map<Integer, String[]> prioritizedPatterns =
+    private static final Map<Integer, String[]> prioritizedPatterns =
             Collections.singletonMap(0, new String[]{"**.ol"});
 
     @Inject
@@ -79,22 +80,15 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
     private Node.Op parseJolieFile(Path resolvedPath, Path path) {
         Node.Op pluginNode = createPluginNode(path); // root node
         ParserRunner parserRunner = new ParserRunner();
-        List<at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node> ast = parserRunner.parse(path.toString());
+        List<at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node> ast = parserRunner.parse(resolvedPath);
         AstToECCO translator = new AstToECCO(pluginNode, this.entityFactory, path);
         return translator.translate(ast);
     }
 
-//    private Node.Op addPluginNode(Set<Node.Op> nodes, Path path){
-//        Artifact.Op<PluginArtifactData> pluginArtifact = this.entityFactory.createArtifact(new PluginArtifactData(this.getPluginId(), path));
-//        Node.Op pluginNode = this.entityFactory.createOrderedNode(pluginArtifact);
-//        nodes.add(pluginNode);
-//        return pluginNode;
-//    }
-
     private Node.Op createPluginNode(Path path) {
         Artifact.Op<PluginArtifactData> pluginArtifactData =
                 this.entityFactory.createArtifact(new PluginArtifactData(this.getPluginId(), path));
-        return this.entityFactory.createNode(pluginArtifactData);
+        return this.entityFactory.createOrderedNode(pluginArtifactData);
     }
 
     /**

@@ -8,7 +8,6 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +18,24 @@ public class ParserRunner {
     public static boolean hadError = false;
     public static List<String> errors = new ArrayList<>();
 
-    public List<Node> parse(String source) { // List<String>
+    public List<Node> parse(Path source) { // List<String>
         hadError = false;
         errors.clear();
-        JolieScanner scanner = new JolieScanner(source);
+
+        List<String> lineList = null;
+        try {
+            lineList = Files.readAllLines(source);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        String[] lines = lineList.toArray(new String[0]);
+        StringBuilder scannerInput = new StringBuilder();
+        for (String line : lines) {
+            scannerInput.append(line).append('\n');
+        }
+
+        JolieScanner scanner = new JolieScanner(scannerInput.toString());
         List<JolieToken> tokens = scanner.scanTokens();
         // if (hadError) return errors;
 

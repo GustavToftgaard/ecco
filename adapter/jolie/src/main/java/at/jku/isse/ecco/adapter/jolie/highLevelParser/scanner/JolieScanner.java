@@ -145,8 +145,7 @@ public class JolieScanner {
                 break;
 
             // new line / end of line
-            case '\n': // TODO: add check function for new line symbols
-            case '\r':
+            case '\n':
                 break;
 
             // rest
@@ -188,11 +187,11 @@ public class JolieScanner {
     }
 
     private boolean isWhiteSpace(char c) {
-        return c == ' ' || c == '\t' || c == '\r' || c == '\n';
+        return c == ' ' || c == '\t' || c == '\n';
     }
 
     private boolean isSeperator(char c) {
-        return c == ':' || c == ';';
+        return c == ':' || c == ';' || c == '(';
     }
 
     // private void string() {

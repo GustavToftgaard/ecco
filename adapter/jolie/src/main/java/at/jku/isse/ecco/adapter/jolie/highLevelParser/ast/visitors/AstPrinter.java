@@ -81,8 +81,8 @@ public class AstPrinter implements NodeVisitor<String> {
         indentLevel++;
 
         builder.append(indent()).append(interfaceDecl.getInterfaceID().lexeme).append("\n");
-        if (interfaceDecl.getHasExtender()) {
-            builder.append(indent()).append("Extender").append("\n");
+        if (interfaceDecl.getHasExtender() != null) {
+            builder.append(indent()).append(interfaceDecl.getHasExtender().lexeme).append("\n");
         }
         builder.append(interfaceDecl.getBlock().accept(this));
 

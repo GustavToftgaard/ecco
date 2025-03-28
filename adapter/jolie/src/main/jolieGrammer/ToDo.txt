@@ -9,5 +9,6 @@ For Report:
         - loss of data and changes to original
         - Give examples using jolie printer (git)
     - (Write from perspective of what I did, not what I didn't do)
+- cast all end line symbols to \n
 
 

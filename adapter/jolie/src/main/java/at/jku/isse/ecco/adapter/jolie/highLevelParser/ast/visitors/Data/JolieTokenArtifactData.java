@@ -37,7 +37,7 @@ public class JolieTokenArtifactData implements ArtifactData {
 
     @Override
     public String toString() {
-        return "TokenArtifactData{" +
+        return "TokenArtifactData{" + "\n" +
                 "   tokenType: " + this.type + "\n" +
                 "   lexeme: " + this.lexeme + "\n" +
                 "   line: " +  this.line + "\n" +
