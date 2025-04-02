@@ -9,10 +9,12 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.serviceDecl.port
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType;
+import jolie.Jolie;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import static at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType.*;
 
@@ -36,7 +38,7 @@ public class Parser {
 
     // program
     private void program() {
-        while (!isAtEnd() && peek().type != EOF) {
+        while (!isAtEnd() && peek().getType() != EOF) {
             try {
                 ast.add(decl());
             } catch (ParseError e) {
@@ -74,7 +76,7 @@ public class Parser {
     private Node decl() {
         Node res = null;
         JolieToken token = peek();
-        switch (token.type) {
+        switch (token.getType()) {
             case FROM:
             case INCLUDE:
 //                System.out.println("import");
@@ -100,7 +102,7 @@ public class Parser {
 
             default:
 //                System.out.println("line");
-                res = readLine(token.line);
+                res = readLine(token.getLine());
                 break;
         }
         return res;
@@ -110,23 +112,22 @@ public class Parser {
 
     private ImportDecl importDecl() {
         Node res = null;
-        JolieToken token = peek();
-        if (token.type == FROM) {
+        if (peek().getType() == FROM) {
             consume(FROM, "Expected FROM token in import decl");
-            JolieToken fromID = consume(ID, "Expected ID after FROM in import decl");
+            JolieToken fromID = consumeAndReturn(ID, "Expected ID after FROM in import decl");
             consume(IMPORT, "Expected IMPORT after ID in import decl");
-            JolieToken importID = consume(ID, "Expected ID after IMPORT in import decl");
+            JolieToken importID = consumeAndReturn(ID, "Expected ID after IMPORT in import decl");
 
             // check of multiple 'as' statements
-            if (previous().line == peek().line) {
-                Node line = readLine(previous().line);
+            if (previous().getLine() == peek().getLine()) {
+                Node line = readLine(previous().getLine());
                 return new ImportDecl(new Import(fromID, importID, line));
             } else {
                 return new ImportDecl(new Import(fromID, importID));
             }
         } else {
             consume(INCLUDE, "Expected INCLUDE token in import decl");
-            JolieToken id = consume(STRING, "Expected string as ID after INCLUDE in import decl");
+            JolieToken id = consumeAndReturn(STRING, "Expected string as ID after INCLUDE in import decl");
             return new ImportDecl(new Include(id));
         }
     }
@@ -136,10 +137,11 @@ public class Parser {
     private InterfaceDecl interfaceDecl() {
         consume(INTERFACE, "Expected INTERFACE token");
         JolieToken hasExtender = null;
-        if (peek().type == EXTENDER) {
-            hasExtender = consume(EXTENDER, "Expected EXTENDER token in interface decl");
+        if (peek().getType() == EXTENDER) {
+            hasExtender = peek();
+            consume(EXTENDER, "Expected EXTENDER token in interface decl");
         }
-        JolieToken interfaceID = consume(ID, "Expected ID token after interface decl");
+        JolieToken interfaceID = consumeAndReturn(ID, "Expected ID token after interface decl");
         Block block = block();
 
         if (hasExtender != null) {
@@ -155,10 +157,10 @@ public class Parser {
 
     private TypeDecl typeDecl() {
         consume(TYPE, "Expected TYPE token");
-        JolieToken typeId = consume(ID, "Expected ID token after TYPE in type decl");
+        JolieToken typeId = consumeAndReturn(ID, "Expected ID token after TYPE in type decl");
         // consume(COLON, "Expected COLON token after ID in type decl"); // TODO
-        if (peek().type == ID) {
-            JolieToken typeTypeId = consume(ID, "Expected ID token after COLON in type decl");
+        if (peek().getType() == ID) {
+            JolieToken typeTypeId = consumeAndReturn(ID, "Expected ID token after COLON in type decl");
             return new TypeDecl(typeId, typeTypeId);
         } else {
             Block block = block();
@@ -171,22 +173,22 @@ public class Parser {
     private ServiceDecl serviceDecl() {
         boolean hasParams = false;
         consume(SERVICE, "Expected SERVICE token");
-        JolieToken serviceId = consume(ID, "Expected ID token after SERVICE in service decl");
+        JolieToken serviceId = consumeAndReturn(ID, "Expected ID token after SERVICE in service decl");
 
         ArrayList<JolieToken> params = new ArrayList<>();
-        if (peek().type == LEFT_PAREN) {
+        if (peek().getType() == LEFT_PAREN) {
             consume(LEFT_PAREN, "Expected LEFT_PAREN token in service decl");
 //            while (peek().type != RIGHT_PAREN) { // TODO: figure our params
 //                JolieToken id = consume(ID, "Expected ID token in service decl");
 //            }
-            readLine(previous().line); // temp
+            readLine(previous().getLine()); // temp
             consume(RIGHT_PAREN, "Expected RIGHT_BRACE token in service decl");
             hasParams = true;
         }
 
         consume(LEFT_BRACE, "Expected LEFT_BRACE token in service decl");
         ArrayList<Node> services = new ArrayList<>();
-        while (peek().type != RIGHT_BRACE) {
+        while (peek().getType() != RIGHT_BRACE) {
             services.add(service());
         }
         consume(RIGHT_BRACE, "Expected RIGHT_BRACE token in service decl");
@@ -201,7 +203,7 @@ public class Parser {
     private Node service() {
         Node res = null;
         JolieToken token = peek();
-        switch (token.type) {
+        switch (token.getType()) {
             case EXECUTION:
 //                System.out.println("execution");
                 res = execution();
@@ -249,7 +251,7 @@ public class Parser {
 
             default:
 //                System.out.println("line");
-                res = readLine(token.line);
+                res = readLine(token.getLine());
                 break;
         }
         return res;
@@ -257,13 +259,14 @@ public class Parser {
 
     private Execution execution() {
         consume(EXECUTION, "Expected EXECUTION token");
-        if (peek().type == COLON) {
-            JolieToken colon = consume(COLON, "Expected COLON token after EXECUTION in execution");
-            JolieToken executionId = consume(ID, "Expected ID token after COLON in execution");
+        if (peek().getType() == COLON) {
+            JolieToken colon = peek();
+            consume(COLON, "Expected COLON token after EXECUTION in execution");
+            JolieToken executionId = consumeAndReturn(ID, "Expected ID token after COLON in execution");
             return new Execution(executionId, colon);
         } else {
             consume(LEFT_BRACE, "Expected LEFT_BRACE token after EXECUTION in execution");
-            JolieToken executionId = consume(ID, "Expected ID token after LEFT_BRACE in execution");
+            JolieToken executionId = consumeAndReturn(ID, "Expected ID token after LEFT_BRACE in execution");
             consume(RIGHT_BRACE, "Expected RIGHT_BRACE token after ID in execution");
             return new Execution(executionId);
         }
@@ -271,9 +274,9 @@ public class Parser {
 
     private Embed embed() {
         consume(EMBED, "Expected EMBED token");
-        JolieToken embedId = consume(ID, "Expected ID token after EMBED in embed");
+        JolieToken embedId = consumeAndReturn(ID, "Expected ID token after EMBED in embed");
         consume(AS, "Expected AS token after in embed");
-        JolieToken asId = consume(ID, "Expected ID token after AS in embed");
+        JolieToken asId = consumeAndReturn(ID, "Expected ID token after AS in embed");
         return new Embed(embedId, asId);
     }
 
@@ -285,13 +288,13 @@ public class Parser {
 
     private InputPort inputPort() {
         consume(INPUTPORT, "Expected INPUTPORT token");
-        JolieToken inputPortId = consume(ID, "Expected ID token after INPUTPORT in inputPort");
+        JolieToken inputPortId = consumeAndReturn(ID, "Expected ID token after INPUTPORT in inputPort");
 
         consume(LEFT_BRACE, "Expected LEFT_BRACE token after ID in inputPort");
         ArrayList<Node> portParams = new ArrayList<>();
-        while (peek().type != RIGHT_BRACE) {
+        while (peek().getType() != RIGHT_BRACE) {
             JolieToken token = peek();
-            switch (token.type) {
+            switch (token.getType()) {
                 case LOCATION:
 //                    System.out.println("LOCATION");
                     portParams.add(portLocation());
@@ -328,13 +331,13 @@ public class Parser {
 
     private OutputPort outputPort() {
         consume(OUTPUTPORT, "Expected OUTPUTPORT token");
-        JolieToken outputPortId = consume(ID, "Expected ID token after OUTPUTPORT in outputPort");
+        JolieToken outputPortId = consumeAndReturn(ID, "Expected ID token after OUTPUTPORT in outputPort");
 
         consume(LEFT_BRACE, "Expected LEFT_BRACE token after ID in outputPort");
         ArrayList<Node> portParams = new ArrayList<>();
-        while (peek().type != RIGHT_BRACE) {
+        while (peek().getType() != RIGHT_BRACE) {
             JolieToken token = peek();
-            switch (token.type) {
+            switch (token.getType()) {
                 case LOCATION:
                     portParams.add(portLocation());
                     break;
@@ -356,40 +359,40 @@ public class Parser {
     // ----
 
     private PortLocation portLocation() {
-        JolieToken location = consume(LOCATION, "Expected LOCATION token");
+        JolieToken location = consumeAndReturn(LOCATION, "Expected LOCATION token");
         consume(COLON, "Expected COLON token after LOCATION in location");
-        Line line = readLine(previous().line);
+        Line line = readLine(previous().getLine());
         return new PortLocation(line, location);
     }
 
     private PortProtocol portProtocol() {
-        JolieToken protocol = consume(PROTOCOL, "Expected PROTOCOL token");
+        JolieToken protocol = consumeAndReturn(PROTOCOL, "Expected PROTOCOL token");
         consume(COLON, "Expected COLON token after PROTOCOL in protocol");
-        Line line = readLine(previous().line);
+        Line line = readLine(previous().getLine());
         return new PortProtocol(line, protocol);
     }
 
     private PortInterfaces portInterfaces() {
-        JolieToken interfaces = consume(INTERFACES, "Expected INTERFACES token");
+        JolieToken interfaces = consumeAndReturn(INTERFACES, "Expected INTERFACES token");
         consume(COLON, "Expected COLON token after INTERFACES in interfaces");
         ArrayList<Line> lines = new ArrayList<>();
-        lines.add(readLine(previous().line)); // TODO: account for multiline arguments
+        lines.add(readLine(previous().getLine())); // TODO: account for multiline arguments
         return new PortInterfaces(lines, interfaces);
     }
 
     private PortAggregates portAggregates() {
-        JolieToken aggregates = consume(AGGREGATES, "Expected AGGREGATES token");
+        JolieToken aggregates = consumeAndReturn(AGGREGATES, "Expected AGGREGATES token");
         consume(COLON, "Expected COLON token after AGGREGATES in aggregates");
         ArrayList<Line> lines = new ArrayList<>();
-        lines.add(readLine(previous().line)); // TODO: account for multiline arguments
+        lines.add(readLine(previous().getLine())); // TODO: account for multiline arguments
         return new PortAggregates(lines, aggregates);
     }
 
     private PortRedirects portRedirects() {
-        JolieToken redirects = consume(REDIRECTS, "Expected REDIRECTS token");
+        JolieToken redirects = consumeAndReturn(REDIRECTS, "Expected REDIRECTS token");
         consume(COLON, "Expected COLON token after REDIRECTS in redirects");
         ArrayList<Line> lines = new ArrayList<>();
-        lines.add(readLine(previous().line)); // TODO: account for multiline arguments
+        lines.add(readLine(previous().getLine())); // TODO: account for multiline arguments
         return new PortRedirects(lines, redirects);
     }
 
@@ -410,7 +413,7 @@ public class Parser {
     private Courier courier() {
         consume(COURIER, "Expected COURIER token");
         consume(LESS_THAN, "Expected LESS_THAN token after COURIER in courier");
-        JolieToken courierId = consume(ID, "Expected ID token after LESS_THAN in courier");
+        JolieToken courierId = consumeAndReturn(ID, "Expected ID token after LESS_THAN in courier");
         consume(GREATER_THAN, "Expected GREATER_THAN token after ID in courier");
         Block block = block();
         return new Courier(courierId, block);
@@ -418,7 +421,7 @@ public class Parser {
 
     private DefineProcedure defineProcedure() {
         consume(DEFINE, "Expected DEFINE token");
-        JolieToken defineProcedureId = consume(ID, "Expected ID token after DEFINE in defineProcedure");
+        JolieToken defineProcedureId = consumeAndReturn(ID, "Expected ID token after DEFINE in defineProcedure");
         Block block = block();
         return new DefineProcedure(defineProcedureId, block);
     }
@@ -429,15 +432,15 @@ public class Parser {
         consume(LEFT_BRACE, "Expected LEFT_BRACE token in block");
         ArrayList<JolieToken> contents = new ArrayList<>();
         int openBraces = 0;
-        while (peek().type != RIGHT_BRACE || openBraces != 0) {
+        while (peek().getType() != RIGHT_BRACE || openBraces != 0) {
             JolieToken token = advance();
-            if (token.type == LEFT_BRACE) {
+            if (token.getType() == LEFT_BRACE) {
                 openBraces++;
-            } else if (token.type == RIGHT_BRACE) {
+            } else if (token.getType() == RIGHT_BRACE) {
                 openBraces--;
             }
             contents.add(token);
-//            System.out.println(previous().type + " | " + previous().lexeme + " | " + openBraces);
+//            System.out.println(previous().getType() + " | " + previous().getLexeme() + " | " + openBraces);
         }
 //        System.out.println(" ");
         consume(RIGHT_BRACE, "Expected RIGHT_BRACE token in block");
@@ -445,17 +448,37 @@ public class Parser {
     }
 
     private Line readLine(int lineNumber) {
-        ArrayList<JolieToken> contents = new ArrayList<>();
-        while (peek() != null && peek().line == lineNumber) {
-            contents.add(advance());
+        StringBuilder line = new StringBuilder();
+        if (peek() != null && peek().getLine() == lineNumber) {
+            line.append(peek().getPreLexeme());
         }
-        return new Line(contents);
+        while (peek() != null && peek().getLine() == lineNumber) {
+            JolieToken token = advance();
+            line.append(token.getLexeme());
+            line.append(token.getPostLexeme());
+        }
+
+        return new Line(line.toString(), lineNumber);
     }
 
     //---------------------------------------------------------------
 
-    private JolieToken consume(JolieTokenType type, String message) {
-        if (match(type)) return previous(); // TODO: add checking for comment token
+    private void consume(JolieTokenType type, String message) {
+        if (match(type)) {
+            JolieToken nextToken = peek();
+            JolieToken token = previous();
+            String fullNewLexeme = token.getPreLexeme() + token.getLexeme() + token.getPostLexeme();
+            nextToken.setPreLexeme(fullNewLexeme);
+            return;
+        }
+
+        throw error(previous(), message);
+    }
+
+    private JolieToken consumeAndReturn(JolieTokenType type, String message) {
+        if (match(type)) {
+            return previous();
+        }
 
         throw error(previous(), message);
     }
@@ -474,7 +497,7 @@ public class Parser {
     private boolean match(JolieTokenType type) {
         if (isAtEnd())
             return false;
-        if (this.tokens.get(this.current).type == type) {
+        if (this.tokens.get(this.current).getType() == type) {
             advance();
             return true;
         }

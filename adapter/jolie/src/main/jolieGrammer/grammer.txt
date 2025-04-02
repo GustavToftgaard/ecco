@@ -3,7 +3,7 @@ Program         -> Decl* EOF
 Decl            -> ImportDecl | InterfaceDecl | TypeDecl | ServiceDecl | Service | Line
 
 ImportDecl      -> Import | Include
-    Import          -> "from" ID "import" ID Line
+    Import          -> "from" ID "import" ID Line?
     Include         -> "include" ID(String)
 
 InterfaceDecl   -> "interface" "extender"? ID Block

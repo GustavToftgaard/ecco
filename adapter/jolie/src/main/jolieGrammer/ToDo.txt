@@ -1,6 +1,7 @@
 - Remember ".iol" files
-- Deal with comments and whitespace
+    - are they still used?
 - better block (use line somehow)
+    - better line (store rest of line in lemex instead of as tokens)
 
 
 For Report:
@@ -10,5 +11,6 @@ For Report:
         - Give examples using jolie printer (git)
     - (Write from perspective of what I did, not what I didn't do)
 - cast all end line symbols to \n
+- pre and post lexeme for printing
 
 

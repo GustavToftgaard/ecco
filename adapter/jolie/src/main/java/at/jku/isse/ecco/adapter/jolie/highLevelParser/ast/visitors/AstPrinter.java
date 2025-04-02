@@ -52,8 +52,8 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("Import").append("\n");
         indentLevel++;
 
-        builder.append(indent()).append(importE.getImportID().lexeme).append("\n");
-        builder.append(indent()).append(importE.getFromID().lexeme).append("\n");
+        builder.append(indent()).append(importE.getImportID().getLexeme()).append("\n");
+        builder.append(indent()).append(importE.getFromID().getLexeme()).append("\n");
         if (importE.getLine() != null) {
             builder.append(importE.getLine().accept(this));
         }
@@ -68,7 +68,7 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("Include").append("\n");
         indentLevel++;
 
-        builder.append(indent()).append(include.getIncludeID().lexeme).append("\n");
+        builder.append(indent()).append(include.getIncludeID().getLexeme()).append("\n");
 
         indentLevel--;
         return builder.toString();
@@ -80,9 +80,9 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("InterfaceDecl").append("\n");
         indentLevel++;
 
-        builder.append(indent()).append(interfaceDecl.getInterfaceID().lexeme).append("\n");
+        builder.append(indent()).append(interfaceDecl.getInterfaceID().getLexeme()).append("\n");
         if (interfaceDecl.getHasExtender() != null) {
-            builder.append(indent()).append(interfaceDecl.getHasExtender().lexeme).append("\n");
+            builder.append(indent()).append(interfaceDecl.getHasExtender().getLexeme()).append("\n");
         }
         builder.append(interfaceDecl.getBlock().accept(this));
 
@@ -96,9 +96,9 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("TypeDecl").append("\n");
         indentLevel++;
 
-        builder.append(indent()).append(typeDecl.getTypeID().lexeme).append("\n");
+        builder.append(indent()).append(typeDecl.getTypeID().getLexeme()).append("\n");
         if (typeDecl.getSecondID() != null) {
-            builder.append(indent()).append(typeDecl.getSecondID().lexeme).append("\n");
+            builder.append(indent()).append(typeDecl.getSecondID().getLexeme()).append("\n");
         }
         if (typeDecl.getBlock() != null) {
             builder.append(typeDecl.getBlock().accept(this));
@@ -114,10 +114,10 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("ServiceDecl").append("\n");
         indentLevel++;
 
-        builder.append(indent()).append(serviceDecl.getServiceID().lexeme).append("\n");
+        builder.append(indent()).append(serviceDecl.getServiceID().getLexeme()).append("\n");
         if (serviceDecl.getParams() != null) {
             for (JolieToken token :serviceDecl.getParams()) {
-                builder.append(indent()).append(token.lexeme);
+                builder.append(indent()).append(token.getLexeme());
             }
             builder.append(indent()).append("\n");
         }
@@ -151,7 +151,7 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("Execution").append("\n");
         indentLevel++;
 
-        builder.append(indent()).append(execution.getExecutionID().lexeme).append("\n");
+        builder.append(indent()).append(execution.getExecutionID().getLexeme()).append("\n");
         if (execution.getUsesColon() != null) {
             builder.append(indent()).append("Uses colon").append("\n");
         }
@@ -166,8 +166,8 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("Embed").append("\n");
         indentLevel++;
 
-        builder.append(indent()).append(embed.getEmbedID().lexeme).append("\n");
-        builder.append(indent()).append(embed.getAsID().lexeme).append("\n");
+        builder.append(indent()).append(embed.getEmbedID().getLexeme()).append("\n");
+        builder.append(indent()).append(embed.getAsID().getLexeme()).append("\n");
 
         indentLevel--;
         return builder.toString();
@@ -191,7 +191,7 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("InputPort").append("\n");
         indentLevel++;
 
-        builder.append(indent()).append(inputPort.getInputPortID().lexeme).append("\n");
+        builder.append(indent()).append(inputPort.getInputPortID().getLexeme()).append("\n");
         for (Node param : inputPort.getPortParameters()) {
             builder.append(param.accept(this));
         }
@@ -206,7 +206,7 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("OutputPort").append("\n");
         indentLevel++;
 
-        builder.append(indent()).append(outputPort.getOutputPortID().lexeme).append("\n");
+        builder.append(indent()).append(outputPort.getOutputPortID().getLexeme()).append("\n");
         for (Node param : outputPort.getPortParameters()) {
             builder.append(param.accept(this));
         }
@@ -311,7 +311,7 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("Courier").append("\n");
         indentLevel++;
 
-        builder.append(indent()).append(courier.getCourierInterfaceID().lexeme).append("\n");
+        builder.append(indent()).append(courier.getCourierInterfaceID().getLexeme()).append("\n");
         builder.append(courier.getBlock().accept(this));
 
         indentLevel--;
@@ -324,7 +324,7 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("DefineProcedure").append("\n");
         indentLevel++;
 
-        builder.append(indent()).append(defineProcedure.getDefineID().lexeme).append("\n");
+        builder.append(indent()).append(defineProcedure.getDefineID().getLexeme()).append("\n");
         builder.append(defineProcedure.getBlock().accept(this));
 
         indentLevel--;
@@ -338,7 +338,7 @@ public class AstPrinter implements NodeVisitor<String> {
         indentLevel++;
 
         for (JolieToken token : block.getContents()) {
-            builder.append(indent()).append(token.lexeme);
+            builder.append(indent()).append(token.getLexeme());
         }
         builder.append(indent()).append("\n");
 
@@ -352,9 +352,7 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("Line").append("\n");
         indentLevel++;
 
-        for (JolieToken token : line.getContents()) {
-            builder.append(indent()).append(token.lexeme);
-        }
+        builder.append(indent()).append(line.getLineContents());
         builder.append(indent()).append("\n");
 
         indentLevel--;

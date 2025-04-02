@@ -41,7 +41,7 @@ public class ParserRunner {
 
         List<JolieToken> parserInput = new ArrayList<>();
         for (JolieToken token : tokens) {
-            if (token.type != SPACE && token.type != COMMENT && token.type != MULTILINE_COMMENT) {
+            if (token.getType() != SPACE && token.getType() != COMMENT && token.getType() != MULTILINE_COMMENT) {
                 parserInput.add(token);
             }
         }

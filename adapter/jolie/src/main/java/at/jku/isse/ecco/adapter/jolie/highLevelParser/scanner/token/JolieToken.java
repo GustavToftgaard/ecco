@@ -3,26 +3,57 @@ package at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token;
 
 
 public class JolieToken {
-    public final JolieTokenType type;
-    public final String lexeme;
-    public final Object literal;
-    public final int line;
-    public final int numberTokenInLine;
+    private final JolieTokenType type;
+    private String preLexeme;
+    private final String lexeme;
+    private String postLexeme;
+    private final int line;
 
-
-    public JolieToken(JolieTokenType type, String lexeme, int line, int numberTokenInLine) {
-        this(type, lexeme, null, line, numberTokenInLine);
+    public JolieToken(JolieTokenType type, String preWhitespace, String lexeme, String postWhitespace, int line) {
+        this.type = type;
+        this.preLexeme = preWhitespace;
+        this.lexeme = lexeme;
+        this.postLexeme = postWhitespace;
+        this.line = line;
     }
 
-    public JolieToken(JolieTokenType type, String lexeme, Object literal, int line, int numberTokenInLine) {
+    public JolieToken(JolieTokenType type, String preWhitespace, String lexeme, int line) {
         this.type = type;
+        this.preLexeme = preWhitespace;
         this.lexeme = lexeme;
-        this.literal = literal;
+        this.postLexeme = "";
         this.line = line;
-        this.numberTokenInLine = numberTokenInLine;
+    }
+
+    public void setPreLexeme(String preLexeme) {
+        this.preLexeme = preLexeme;
+    }
+
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
+    }
+
+    public JolieTokenType getType() {
+        return type;
+    }
+
+    public String getPreLexeme() {
+        return preLexeme;
+    }
+
+    public String getLexeme() {
+        return lexeme;
+    }
+
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    public int getLine() {
+        return line;
     }
 
     public String toString() {
-        return "<" + type + "," + lexeme + "> " + "Literal: " + literal + ", Line: " + line + ", Number Token In Line: " + numberTokenInLine;
+        return "<" + type + "," + lexeme + "> " + ", Line: " + line;
     }
 }
