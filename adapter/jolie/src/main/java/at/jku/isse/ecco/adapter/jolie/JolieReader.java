@@ -11,9 +11,7 @@ import at.jku.isse.ecco.tree.Node;
 import com.google.inject.Inject;
 
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ParserRunner;
-import org.checkerframework.checker.units.qual.A;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -21,7 +19,6 @@ import java.util.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
-
     private List<ReadListener> listeners = new LinkedList<>();
     private final EntityFactory entityFactory;
 
@@ -41,7 +38,6 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
      */
     @Override
     public String getPluginId() {
-        // return JoliePlugin.getPluginId();
         return JoliePlugin.class.getName();
     }
 

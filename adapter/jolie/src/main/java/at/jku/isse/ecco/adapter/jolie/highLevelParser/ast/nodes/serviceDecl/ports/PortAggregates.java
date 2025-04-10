@@ -9,24 +9,13 @@ import java.util.ArrayList;
 
 public class PortAggregates implements Node {
     private final ArrayList<Line> lines;
-    private final JolieToken isCapital;
-
-    public PortAggregates(ArrayList<Line> lines, JolieToken isCapital) {
-        this.lines = lines;
-        this.isCapital = isCapital;
-    }
 
     public PortAggregates(ArrayList<Line> lines) {
         this.lines = lines;
-        this.isCapital = null;
     }
 
     public ArrayList<Line> getLines() {
         return lines;
-    }
-
-    public JolieToken getIsCapital() {
-        return isCapital;
     }
 
     @Override

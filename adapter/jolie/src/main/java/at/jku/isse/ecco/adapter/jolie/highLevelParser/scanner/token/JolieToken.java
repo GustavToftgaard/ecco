@@ -33,6 +33,14 @@ public class JolieToken {
         this.postLexeme = postLexeme;
     }
 
+    public void addToPreLexeme(String preLexeme) {
+        this.preLexeme += preLexeme;
+    }
+
+    public void addToPostLexeme(String postLexeme) {
+        this.postLexeme += postLexeme;
+    }
+
     public JolieTokenType getType() {
         return type;
     }

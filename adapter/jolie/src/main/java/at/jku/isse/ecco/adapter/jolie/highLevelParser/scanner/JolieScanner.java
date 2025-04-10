@@ -196,21 +196,24 @@ public class JolieScanner {
     private void addToken(JolieTokenType type) {
 
         // add postWhitespace for pre token if possible
+
+        String lexeme = this.source.substring(this.start, this.current);
+        String newLines = "";
+
         if (!tokens.isEmpty() && tokens.get(numberOfTokens - 1).getLine() == this.line){
             tokens.get(numberOfTokens - 1).setPostLexeme(preWhitespace);
+
         } else if (!tokens.isEmpty() && tokens.get(numberOfTokens - 1).getLine() < this.line){
-            String newLines = "\n".repeat((this.line - tokens.get(numberOfTokens - 1).getLine()));
+            newLines = "\n".repeat((this.line - tokens.get(numberOfTokens - 1).getLine()));
             tokens.get(numberOfTokens - 1).setPostLexeme(newLines + preWhitespace);
+
+        } else if (tokens.isEmpty()) {
+            newLines = "\n".repeat(this.line - 1);
+        } else {
+            newLines = "\n[ " + type + " | ERROR: addToken ]\n";
         }
 
-        // add token
-        String lexeme = this.source.substring(this.start, this.current);
-        if (tokens.isEmpty()) {
-            String newLines = "\n".repeat(this.line);
-            this.tokens.add(new JolieToken(type, (newLines + preWhitespace), lexeme, this.line));
-        } else {
-            this.tokens.add(new JolieToken(type, preWhitespace, lexeme, this.line));
-        }
+        this.tokens.add(new JolieToken(type, (newLines + preWhitespace), lexeme, this.line));
 
         preWhitespace = "";
         numberOfTokens++;

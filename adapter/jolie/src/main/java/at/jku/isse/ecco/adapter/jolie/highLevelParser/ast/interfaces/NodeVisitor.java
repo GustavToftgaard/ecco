@@ -31,4 +31,5 @@ public interface NodeVisitor<T> {
     T visitDefineProcedure(DefineProcedure defineProcedure);
     T visitBlock(Block block);
     T visitLine(Line line);
+    T visitEndOfFile(EndOfFile endOfFile);
 }

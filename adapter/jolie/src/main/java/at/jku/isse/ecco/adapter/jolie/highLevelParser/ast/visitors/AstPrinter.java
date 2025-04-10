@@ -3,6 +3,7 @@ package at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.visitors;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.NodeVisitor;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.Block;
+import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.EndOfFile;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.Line;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.importDecl.Import;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.importDecl.ImportDecl;
@@ -81,9 +82,6 @@ public class AstPrinter implements NodeVisitor<String> {
         indentLevel++;
 
         builder.append(indent()).append(interfaceDecl.getInterfaceID().getLexeme()).append("\n");
-        if (interfaceDecl.getHasExtender() != null) {
-            builder.append(indent()).append(interfaceDecl.getHasExtender().getLexeme()).append("\n");
-        }
         builder.append(interfaceDecl.getBlock().accept(this));
 
         indentLevel--;
@@ -152,9 +150,6 @@ public class AstPrinter implements NodeVisitor<String> {
         indentLevel++;
 
         builder.append(indent()).append(execution.getExecutionID().getLexeme()).append("\n");
-        if (execution.getUsesColon() != null) {
-            builder.append(indent()).append("Uses colon").append("\n");
-        }
 
         indentLevel--;
         return builder.toString();
@@ -357,5 +352,10 @@ public class AstPrinter implements NodeVisitor<String> {
 
         indentLevel--;
         return builder.toString();
+    }
+
+    @Override
+    public String visitEndOfFile(EndOfFile endOfFile) {
+        return "";
     }
 }

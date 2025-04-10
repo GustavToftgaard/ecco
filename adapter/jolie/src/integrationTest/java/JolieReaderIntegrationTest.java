@@ -1,5 +1,4 @@
 import at.jku.isse.ecco.adapter.jolie.JolieReader;
-import at.jku.isse.ecco.adapter.jolie.ECCOToString;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.NodeTypes;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.visitors.Data.JolieContextArtifactData;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.visitors.Data.JolieLineArtifactData;
@@ -22,7 +21,7 @@ public class JolieReaderIntegrationTest {
 
     @Test
     public void readFileTest() throws URISyntaxException {
-        String relativeResourceFolderPath = "Jolie_Test_Code/simple_file";
+        String relativeResourceFolderPath = "jolieTestCode/simple_file";
         URI resourceFolderUri = Objects.requireNonNull(getClass().getClassLoader().getResource(relativeResourceFolderPath)).toURI();
         String resourceFolderPathString = Paths.get(resourceFolderUri).toString();
         Path resourceFolderPath = Paths.get(resourceFolderPathString);
@@ -31,16 +30,13 @@ public class JolieReaderIntegrationTest {
         assertEquals(1, nodes.size());
         Node.Op resultPluginNode = nodes.iterator().next();
 
-        ECCOToString eccoToString = new ECCOToString(resultPluginNode);
 
+
+//        ECCOToString eccoToString = new ECCOToString(resultPluginNode);
 //        String res = eccoToString.convert();
 //        System.out.println(res);
 
-         printECCO(resultPluginNode);
-
-//        printECCO2(resultPluginNode);
-
-//         testSimpleFile(resultPluginNode);
+         testSimpleFile(resultPluginNode);
     }
 
     public void printECCO(Node.Op rootNode) {
@@ -94,9 +90,9 @@ public class JolieReaderIntegrationTest {
     private void testSimpleFile(Node.Op pluginNode){
         List<Node.Op> pluginNodeChildren = (List<Node.Op>) pluginNode.getChildren();
 
-        assertEquals(5, pluginNodeChildren.size());
+        assertEquals(6, pluginNodeChildren.size());
 
-        Node.Op node = null;
+        Node.Op node;
 
         // 1: ImportDecl
         node = pluginNodeChildren.get(0);
@@ -199,14 +195,10 @@ public class JolieReaderIntegrationTest {
 
         // 5.2: Execution
         node = pluginNodeChildren.get(4).getChildren().get(1);
-        checkContextNode(node, NodeTypes.EXECUTION, 2);
+        checkContextNode(node, NodeTypes.EXECUTION, 1);
 
-        // 5.2.1: COLON
+        // 5.2.1: ID
         node = pluginNodeChildren.get(4).getChildren().get(1).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.COLON, ":", 16);
-
-        // 5.2.2: ID
-        node = pluginNodeChildren.get(4).getChildren().get(1).getChildren().get(1);
         checkTokenNode(node, JolieTokenType.ID, "sequential", 16);
 
         // 5.3:InputPort
@@ -219,35 +211,27 @@ public class JolieReaderIntegrationTest {
 
         // 5.3.2: PortLocation
         node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(1);
-        checkContextNode(node, NodeTypes.PORTLOCATION, 2);
+        checkContextNode(node, NodeTypes.PORTLOCATION, 1);
 
-        // 5.3.2.1: Location
+        // 5.3.2.1: Line
         node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(1).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.LOCATION, "location", 19);
-
-        // 5.3.2.2: Line
-        node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(1).getChildren().get(1);
         checkContextNode(node, NodeTypes.LINE, 1);
 
-        // 5.3.2.2.1: Line node
-        node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(1).getChildren().get(1).getChildren().get(0);
-        checkLineNode(node, ": \"local\"\n" + "    ", 19);
+        // 5.3.2.1.1: LineContents
+        node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(1).getChildren().get(0).getChildren().get(0);
+        checkLineNode(node, " {\n" + "    location: \"local\"\n" + "    ", 19);
 
         // 5.3.3: PortInterfaces
         node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(2);
-        checkContextNode(node, NodeTypes.PORTINTERFACES, 2);
+        checkContextNode(node, NodeTypes.PORTINTERFACES, 1);
 
-        // 5.3.3.1: Interfaces
+        // 5.3.3.1: Line
         node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(2).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.INTERFACES, "interfaces", 20);
-
-        // 5.3.3.2: Line
-        node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(2).getChildren().get(1);
         checkContextNode(node, NodeTypes.LINE, 1);
 
-        // 5.3.3.2.1: ID
-        node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(2).getChildren().get(1).getChildren().get(0);
-        checkLineNode(node, ": NumbersAPI\n" + "  ", 20);
+        // 5.3.3.1.1: LineContents
+        node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(2).getChildren().get(0).getChildren().get(0);
+        checkLineNode(node, "\n" + "    interfaces: NumbersAPI\n" + "  ", 20);
 
         // 5.4: Main
         node = pluginNodeChildren.get(4).getChildren().get(3);
@@ -282,6 +266,13 @@ public class JolieReaderIntegrationTest {
         checkTokenNode(node.getChildren().get(21), JolieTokenType.ID, "...", 30);
         checkTokenNode(node.getChildren().get(22), JolieTokenType.RIGHT_BRACE, "}", 31);
         checkTokenNode(node.getChildren().get(23), JolieTokenType.RIGHT_SQUARE_BRACKET, "]", 31);
+
+        // 6 EndOfFile
+        node = pluginNodeChildren.get(5);
+        checkContextNode(node, NodeTypes.EOF, 1);
+
+        // 6.1 EOF
+        checkTokenNode(node.getChildren().get(0), JolieTokenType.EOF, "", 35);
     }
 
     private void checkContextNode(Node.Op node, NodeTypes nodeType, int numberOfChildren) {

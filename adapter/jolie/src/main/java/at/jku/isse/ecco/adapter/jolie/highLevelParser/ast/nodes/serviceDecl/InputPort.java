@@ -10,12 +10,6 @@ import java.util.ArrayList;
 public class InputPort implements Node {
     private final JolieToken inputPortID;
     private final ArrayList<Node> portParameters;
-//    private PortLocation location; // ?
-//    private PortProtocol protocol; // ?
-//    private PortInterfaces interfaces; // ?
-//    private PortAggregates aggregates; // ?
-//    private PortRedirects redirects; // ?
-
 
     public InputPort(JolieToken inputPortID, ArrayList<Node> portParameters) {
         this.inputPortID = inputPortID;

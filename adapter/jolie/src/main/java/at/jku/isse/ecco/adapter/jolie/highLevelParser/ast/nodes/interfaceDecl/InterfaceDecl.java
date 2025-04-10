@@ -7,27 +7,15 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
 public class InterfaceDecl implements Node {
     private final JolieToken interfaceID;
-    private final JolieToken hasExtender; // ?
     private final Block block;
-
-    public InterfaceDecl(JolieToken interfaceID, JolieToken hasExtender, Block block) {
-        this.interfaceID = interfaceID;
-        this.hasExtender = hasExtender;
-        this.block = block;
-    }
 
     public InterfaceDecl(JolieToken interfaceID, Block block) {
         this.interfaceID = interfaceID;
-        this.hasExtender = null;
         this.block = block;
     }
 
     public JolieToken getInterfaceID() {
         return interfaceID;
-    }
-
-    public JolieToken getHasExtender() {
-        return hasExtender;
     }
 
     public Block getBlock() {

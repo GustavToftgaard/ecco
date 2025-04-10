@@ -17,5 +17,7 @@ public enum NodeTypes {
 
     BLOCK,
 
-    LINE
+    LINE,
+
+    EOF
 }
