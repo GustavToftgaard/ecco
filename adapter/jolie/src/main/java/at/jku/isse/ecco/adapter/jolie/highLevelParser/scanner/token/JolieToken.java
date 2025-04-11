@@ -1,7 +1,5 @@
 package at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token;
 
-
-
 public class JolieToken {
     private final JolieTokenType type;
     private String preLexeme;

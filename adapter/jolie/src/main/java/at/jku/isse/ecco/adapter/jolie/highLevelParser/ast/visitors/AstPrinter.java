@@ -8,7 +8,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.Line;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.importDecl.Import;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.importDecl.ImportDecl;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.importDecl.Include;
-import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.interfaceDecl.InterfaceDecl;
+import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.interfaceDecl.*;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.serviceDecl.*;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.serviceDecl.ports.*;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.typeDecl.TypeDecl;
@@ -82,7 +82,69 @@ public class AstPrinter implements NodeVisitor<String> {
         indentLevel++;
 
         builder.append(indent()).append(interfaceDecl.getInterfaceID().getLexeme()).append("\n");
-        builder.append(interfaceDecl.getBlock().accept(this));
+
+        if (interfaceDecl.getRequestResponse() != null) {
+            builder.append(interfaceDecl.getRequestResponse().accept(this));
+        }
+
+        if (interfaceDecl.getOneWay() != null) {
+            builder.append(interfaceDecl.getOneWay().accept(this));
+        }
+
+        indentLevel--;
+        return builder.toString();
+    }
+
+    @Override
+    public String visitRequestResponseDecl(RequestResponseDecl requestResponseDecl) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(indent()).append("RequestResponseDecl").append("\n");
+        indentLevel++;
+
+        for (RequestResponseElement element : requestResponseDecl.getRequestResponseElements()) {
+            builder.append(element.accept(this));
+        }
+
+        indentLevel--;
+        return builder.toString();
+    }
+
+    @Override
+    public String visitRequestResponseElement(RequestResponseElement requestResponseElement) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(indent()).append("RequestResponseElement").append("\n");
+        indentLevel++;
+
+        builder.append(indent()).append(requestResponseElement.getFunctionID().getLexeme()).append(" ")
+                .append(requestResponseElement.getRequestID().getLexeme()).append(" ")
+                .append(requestResponseElement.getResponseID().getLexeme()).append("\n");
+
+        indentLevel--;
+        return builder.toString();
+    }
+
+    @Override
+    public String visitOneWayDecl(OneWayDecl oneWayDecl) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(indent()).append("OneWayDecl").append("\n");
+        indentLevel++;
+
+        for (OneWayElement element : oneWayDecl.getOneWayElements()) {
+            builder.append(element.accept(this));
+        }
+
+        indentLevel--;
+        return builder.toString();
+    }
+
+    @Override
+    public String visitOneWayElement(OneWayElement oneWayElement) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(indent()).append("OneWayElement").append("\n");
+        indentLevel++;
+
+        builder.append(indent()).append(oneWayElement.getFunctionID().getLexeme()).append(" ")
+                .append(oneWayElement.getRequestID().getLexeme()).append("\n");
 
         indentLevel--;
         return builder.toString();
@@ -240,8 +302,8 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("PortInterfaces").append("\n");
         indentLevel++;
 
-        for (Line line : portInterfaces.getLines()) {
-            builder.append(line.accept(this));
+        for (JolieToken token : portInterfaces.getArguments()) {
+            builder.append(indent()).append(token.getLexeme()).append("\n");
         }
 
         indentLevel--;
@@ -254,8 +316,8 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("PortAggregates").append("\n");
         indentLevel++;
 
-        for (Line line : portAggregates.getLines()) {
-            builder.append(line.accept(this));
+        for (JolieToken token : portAggregates.getArguments()) {
+            builder.append(indent()).append(token.getLexeme()).append("\n");
         }
 
         indentLevel--;
@@ -268,8 +330,8 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("PortRedirects").append("\n");
         indentLevel++;
 
-        for (Line line : portRedirects.getLines()) {
-            builder.append(line.accept(this));
+        for (JolieToken token : portRedirects.getArguments()) {
+            builder.append(indent()).append(token.getLexeme()).append("\n");
         }
 
         indentLevel--;
@@ -332,8 +394,8 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("Block").append("\n");
         indentLevel++;
 
-        for (JolieToken token : block.getContents()) {
-            builder.append(indent()).append(token.getLexeme());
+        for (Line line : block.getContents()) {
+            builder.append(indent()).append(line.accept(this));
         }
         builder.append(indent()).append("\n");
 

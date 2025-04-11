@@ -30,7 +30,7 @@ public class JolieReaderIntegrationTest {
         assertEquals(1, nodes.size());
         Node.Op resultPluginNode = nodes.iterator().next();
 
-
+//        printECCO(resultPluginNode);
 
 //        ECCOToString eccoToString = new ECCOToString(resultPluginNode);
 //        String res = eccoToString.convert();
@@ -140,15 +140,20 @@ public class JolieReaderIntegrationTest {
 
         // 3.2: Block
         node = pluginNodeChildren.get(2).getChildren().get(1);
-        checkContextNode(node, NodeTypes.BLOCK, 6);
+        checkContextNode(node, NodeTypes.BLOCK, 4);
 
-        // 3.2.*:
-        checkTokenNode(node.getChildren().get(0), JolieTokenType.ID, "m", 5);
-        checkTokenNode(node.getChildren().get(1), JolieTokenType.COLON, ":", 5);
-        checkTokenNode(node.getChildren().get(2), JolieTokenType.ID, "int", 5);
-        checkTokenNode(node.getChildren().get(3), JolieTokenType.ID, "n", 6);
-        checkTokenNode(node.getChildren().get(4), JolieTokenType.COLON, ":", 6);
-        checkTokenNode(node.getChildren().get(5), JolieTokenType.ID, "int", 6);
+        // 3.2.*: Lines
+        checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), "{\n  ", 4);
+
+        checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
+        checkLineNode(node.getChildren().get(1).getChildren().get(0), "m:int\n  ", 5);
+
+        checkContextNode(node.getChildren().get(2), NodeTypes.LINE, 1);
+        checkLineNode(node.getChildren().get(2).getChildren().get(0), "n:int\n", 6);
+
+        checkContextNode(node.getChildren().get(3), NodeTypes.LINE, 1);
+        checkLineNode(node.getChildren().get(3).getChildren().get(0), "}", 7);
 
         // ------
 
@@ -160,28 +165,33 @@ public class JolieReaderIntegrationTest {
         node = pluginNodeChildren.get(3).getChildren().get(0);
         checkTokenNode(node, JolieTokenType.ID, "NumbersAPI", 9);
 
-        // 4.2: Block
+        // 4.2: RequestResponse Decl
         node = pluginNodeChildren.get(3).getChildren().get(1);
-        checkContextNode(node, NodeTypes.BLOCK, 17);
+        checkContextNode(node, NodeTypes.REQUEST_RESPONSE_DECL, 2);
 
-        // 4.2.*:
-        checkTokenNode(node.getChildren().get(0), JolieTokenType.ID, "requestResponse", 10);
-        checkTokenNode(node.getChildren().get(1), JolieTokenType.COLON, ":", 10);
-        checkTokenNode(node.getChildren().get(2), JolieTokenType.ID, "sumUpTo", 11);
-        checkTokenNode(node.getChildren().get(3), JolieTokenType.LEFT_PAREN, "(", 11);
-        checkTokenNode(node.getChildren().get(4), JolieTokenType.ID, "int", 11);
-        checkTokenNode(node.getChildren().get(5), JolieTokenType.RIGHT_PAREN, ")", 11);
-        checkTokenNode(node.getChildren().get(6), JolieTokenType.LEFT_PAREN, "(", 11);
-        checkTokenNode(node.getChildren().get(7), JolieTokenType.ID, "int", 11);
-        checkTokenNode(node.getChildren().get(8), JolieTokenType.RIGHT_PAREN, ")", 11);
-        checkTokenNode(node.getChildren().get(9), JolieTokenType.ID, ",", 11);
-        checkTokenNode(node.getChildren().get(10), JolieTokenType.ID, "sumBetween", 12);
-        checkTokenNode(node.getChildren().get(11), JolieTokenType.LEFT_PAREN, "(", 12);
-        checkTokenNode(node.getChildren().get(12), JolieTokenType.ID, "twoArguments", 12);
-        checkTokenNode(node.getChildren().get(13), JolieTokenType.RIGHT_PAREN, ")", 12);
-        checkTokenNode(node.getChildren().get(14), JolieTokenType.LEFT_PAREN, "(", 12);
-        checkTokenNode(node.getChildren().get(15), JolieTokenType.ID, "int", 12);
-        checkTokenNode(node.getChildren().get(16), JolieTokenType.RIGHT_PAREN, ")", 12);
+        // 4.2.1
+        node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(0);
+        checkContextNode(node, NodeTypes.REQUEST_RESPONSE_ELEMENT, 3);
+
+        // 4.2.1.(1-3)
+        node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(0).getChildren().get(0);
+        checkTokenNode(node, JolieTokenType.ID, "sumUpTo", 11);
+        node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(0).getChildren().get(1);
+        checkTokenNode(node, JolieTokenType.ID, "int", 11);
+        node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(0).getChildren().get(2);
+        checkTokenNode(node, JolieTokenType.ID, "int", 11);
+
+        // 4.2.2
+        node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(1);
+        checkContextNode(node, NodeTypes.REQUEST_RESPONSE_ELEMENT, 3);
+
+        // 4.2.2.(1-3)
+        node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(1).getChildren().get(0);
+        checkTokenNode(node, JolieTokenType.ID, "sumBetween", 12);
+        node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(1).getChildren().get(1);
+        checkTokenNode(node, JolieTokenType.ID, "twoArguments", 12);
+        node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(1).getChildren().get(2);
+        checkTokenNode(node, JolieTokenType.ID, "int", 12);
 
         // ------
 
@@ -225,13 +235,9 @@ public class JolieReaderIntegrationTest {
         node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(2);
         checkContextNode(node, NodeTypes.PORTINTERFACES, 1);
 
-        // 5.3.3.1: Line
+        // 5.3.3.1: Token
         node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(2).getChildren().get(0);
-        checkContextNode(node, NodeTypes.LINE, 1);
-
-        // 5.3.3.1.1: LineContents
-        node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(2).getChildren().get(0).getChildren().get(0);
-        checkLineNode(node, "\n" + "    interfaces: NumbersAPI\n" + "  ", 20);
+        checkTokenNode(node, JolieTokenType.ID,"NumbersAPI", 20);
 
         // 5.4: Main
         node = pluginNodeChildren.get(4).getChildren().get(3);
@@ -239,33 +245,32 @@ public class JolieReaderIntegrationTest {
 
         // 5.4.1: Block
         node = pluginNodeChildren.get(4).getChildren().get(3).getChildren().get(0);
-        checkContextNode(node, NodeTypes.BLOCK, 24);
+        checkContextNode(node, NodeTypes.BLOCK, 8);
 
-        // 5.4.1.*:
-        checkTokenNode(node.getChildren().get(0), JolieTokenType.LEFT_SQUARE_BRACKET, "[", 25);
-        checkTokenNode(node.getChildren().get(1), JolieTokenType.ID, "sumUpTo", 25);
-        checkTokenNode(node.getChildren().get(2), JolieTokenType.LEFT_PAREN, "(", 25);
-        checkTokenNode(node.getChildren().get(3), JolieTokenType.ID, "n", 25);
-        checkTokenNode(node.getChildren().get(4), JolieTokenType.RIGHT_PAREN, ")", 25);
-        checkTokenNode(node.getChildren().get(5), JolieTokenType.LEFT_PAREN, "(", 25);
-        checkTokenNode(node.getChildren().get(6), JolieTokenType.ID, "response", 25);
-        checkTokenNode(node.getChildren().get(7), JolieTokenType.RIGHT_PAREN, ")", 25);
-        checkTokenNode(node.getChildren().get(8), JolieTokenType.LEFT_BRACE, "{", 25);
-        checkTokenNode(node.getChildren().get(9), JolieTokenType.ID, "...", 26);
-        checkTokenNode(node.getChildren().get(10), JolieTokenType.RIGHT_BRACE, "}", 27);
-        checkTokenNode(node.getChildren().get(11), JolieTokenType.RIGHT_SQUARE_BRACKET, "]", 27);
-        checkTokenNode(node.getChildren().get(12), JolieTokenType.LEFT_SQUARE_BRACKET, "[", 29);
-        checkTokenNode(node.getChildren().get(13), JolieTokenType.ID, "sumBetween", 29);
-        checkTokenNode(node.getChildren().get(14), JolieTokenType.LEFT_PAREN, "(", 29);
-        checkTokenNode(node.getChildren().get(15), JolieTokenType.ID, "request", 29);
-        checkTokenNode(node.getChildren().get(16), JolieTokenType.RIGHT_PAREN, ")", 29);
-        checkTokenNode(node.getChildren().get(17), JolieTokenType.LEFT_PAREN, "(", 29);
-        checkTokenNode(node.getChildren().get(18), JolieTokenType.ID, "response", 29);
-        checkTokenNode(node.getChildren().get(19), JolieTokenType.RIGHT_PAREN, ")", 29);
-        checkTokenNode(node.getChildren().get(20), JolieTokenType.LEFT_BRACE, "{", 29);
-        checkTokenNode(node.getChildren().get(21), JolieTokenType.ID, "...", 30);
-        checkTokenNode(node.getChildren().get(22), JolieTokenType.RIGHT_BRACE, "}", 31);
-        checkTokenNode(node.getChildren().get(23), JolieTokenType.RIGHT_SQUARE_BRACKET, "]", 31);
+        // 5.4.1.*: Lines
+        checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), "{\n" + "\n" + "    ", 23);
+
+        checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
+        checkLineNode(node.getChildren().get(1).getChildren().get(0), "[ sumUpTo( n )( response ) {\n" + "      ", 25);
+
+        checkContextNode(node.getChildren().get(2), NodeTypes.LINE, 1);
+        checkLineNode(node.getChildren().get(2).getChildren().get(0), "...\n" + "    ", 26);
+
+        checkContextNode(node.getChildren().get(3), NodeTypes.LINE, 1);
+        checkLineNode(node.getChildren().get(3).getChildren().get(0), "} ]\n" + "\n" + "    ", 27);
+
+        checkContextNode(node.getChildren().get(4), NodeTypes.LINE, 1);
+        checkLineNode(node.getChildren().get(4).getChildren().get(0), "[ sumBetween( request )( response ) {\n" + "      ", 29);
+
+        checkContextNode(node.getChildren().get(5), NodeTypes.LINE, 1);
+        checkLineNode(node.getChildren().get(5).getChildren().get(0), "...\n" + "    ", 30);
+
+        checkContextNode(node.getChildren().get(6), NodeTypes.LINE, 1);
+        checkLineNode(node.getChildren().get(6).getChildren().get(0), "} ]\n" + "\n" + "  ", 31);
+
+        checkContextNode(node.getChildren().get(7), NodeTypes.LINE, 1);
+        checkLineNode(node.getChildren().get(7).getChildren().get(0), "}", 33);
 
         // 6 EndOfFile
         node = pluginNodeChildren.get(5);

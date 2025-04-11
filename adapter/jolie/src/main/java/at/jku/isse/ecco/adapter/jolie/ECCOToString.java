@@ -42,6 +42,8 @@ public class ECCOToString {
         return res.toString();
     }
 
+    // ----
+
     private boolean isContextNode(Node.Op node) {
         return (node.getArtifact().getData() instanceof JolieContextArtifactData);
     }

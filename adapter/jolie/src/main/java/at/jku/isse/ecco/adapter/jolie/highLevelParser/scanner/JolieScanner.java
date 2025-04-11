@@ -46,8 +46,8 @@ public class JolieScanner {
         keywords.put("extender", EXTENDER);
         keywords.put("type", TYPE);
 
-//        keywords.put("requestResponse", REQUEST_RESPONSE);
-//        keywords.put("oneWay", ONE_WAY);
+        keywords.put("requestResponse", REQUEST_RESPONSE);
+        keywords.put("oneWay", ONE_WAY);
 
         keywords.put("service", SERVICE);
         keywords.put("execution", EXECUTION);
@@ -157,7 +157,6 @@ public class JolieScanner {
                          // error("Unterminated string."); // TODO: add error for unterminated strings
                          return;
                      }
-                    String text = source.substring(start, current);
                     addToken(STRING);
 
                 } else if (c == '/' && (peek() == '/' || peek() == '*')) { // comments

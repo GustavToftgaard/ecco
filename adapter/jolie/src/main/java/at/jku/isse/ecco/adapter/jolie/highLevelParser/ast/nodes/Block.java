@@ -7,13 +7,13 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 import java.util.ArrayList;
 
 public class Block implements Node {
-    private final ArrayList<JolieToken> contents;
+    private final ArrayList<Line> contents;
 
-    public Block(ArrayList<JolieToken> contents) {
+    public Block(ArrayList<Line> contents) {
         this.contents = contents;
     }
 
-    public ArrayList<JolieToken> getContents() {
+    public ArrayList<Line> getContents() {
         return contents;
     }
 

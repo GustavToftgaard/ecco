@@ -2,20 +2,19 @@ package at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.serviceDecl.por
 
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.NodeVisitor;
-import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.Line;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
 import java.util.ArrayList;
 
 public class PortAggregates implements Node {
-    private final ArrayList<Line> lines;
+    private final ArrayList<JolieToken> arguments;
 
-    public PortAggregates(ArrayList<Line> lines) {
-        this.lines = lines;
+    public PortAggregates(ArrayList<JolieToken> arguments) {
+        this.arguments = arguments;
     }
 
-    public ArrayList<Line> getLines() {
-        return lines;
+    public ArrayList<JolieToken> getArguments() {
+        return arguments;
     }
 
     @Override

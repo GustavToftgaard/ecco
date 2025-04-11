@@ -1,16 +1,112 @@
+General:
 - Remember ".iol" files
-    - are they still used?
-- better block (use line somehow)
-    - better line (store rest of line in lemex instead of as tokens)
+  - are they still used?
+- Error reporting?
 
+Testing:
+- IntegrationTest
+  - JolieReader & JolieWriter
+    - ImportDecl
+      - Import
+        - ("from" ID "import" ID)
+        - ("from" ID "import" ID Line)
+      - Include
+        - ("include" ID(String))
+
+    - InterfaceDecl
+      - ("interface" ID "{" RequestResponseDecl "}")
+      - ("interface" ID "{" OneWayDecl "}")
+      - ("interface" ID "{" RequestResponseDecl OneWayDecl "}")
+      - ("interface" "extender" ID "{" RequestResponseDecl "}")
+      - ("interface" "extender" ID "{" OneWayDecl "}")
+      - ("interface" "extender" ID "{" RequestResponseDecl OneWayDecl "}")
+        - RequestResponseDecl
+          - ("requestResponse" ":" RequestResponseElement)
+          - ("requestResponse" ":" RequestResponseElement ("," RequestResponseElement)*)
+        - OneWayDecl
+          - ("oneWay" ":" OneWayElement)
+          - ("oneWay" ":" OneWayElement ("," OneWayElement)*)
+
+    - TypeDecl
+      - ("type" ID Block)
+      - ("type" ID ":" ID)
+      - ("type" ID ":" ID Block)
+
+    - ServiceDecl
+      - ("service" ID "{" Service* "}")
+      - ("service" ID ( "(" ID* ")" )? "{" Service* "}")
+      - Service
+        - Execution
+          - ("execution" ":" ID)
+          - ("execution" "{" ID "}")
+        - Embed
+          - "embed" ID "as" ID
+        - Embedded
+          - "embedded" Block
+        - InputPort
+          - ("inputPort" ID "{" PortLocation "}")
+          - ("inputPort" ID "{" PortProtocol "}")
+          - ("inputPort" ID "{" PortInterfaces "}")
+          - ("inputPort" ID "{" PortAggregates "}")
+          - ("inputPort" ID "{" PortRedirects "}")
+          - ("inputPort" ID "{" PortLocation PortProtocol PortInterfaces PortAggregates PortRedirects "}")
+        - OutputPort
+          - ("outputPort" ID "{" PortLocation "}")
+          - ("outputPort" ID "{" PortProtocol "}")
+          - ("outputPort" ID "{" PortInterfaces "}")
+          - ("outputPort" ID "{" PortLocation PortProtocol PortInterfaces "}")
+              - PortLocation
+                - ("location" ":" line)
+                - ("Location" ":" line)
+              - PortProtocol
+                - ("protocol"":" line)
+                - ("Protocol" ":" line)
+              - PortInterfaces
+                - "interfaces" ":" Line
+                - "Interfaces" ":" Line
+                - "interfaces" ":" Line (, Line )*
+                - "Interfaces" ":" Line (, Line )*
+              - PortAggregates
+                - "aggregates" ":" Line
+                - "Aggregates" ":" Line
+                - "aggregates" ":" Line (, Line )*
+                - "Aggregates" ":" Line (, Line )*
+              - PortRedirects
+                - "redirects" ":" Line
+                - "Redirects" ":" Line
+                - "redirects" ":" Line (, Line )*
+                - "Redirects" ":" Line (, Line )*
+        - Init
+          - "init" Block
+            - Block
+              - One line
+              - multi lint
+        - Main
+          - "main" Block
+        - Courier
+          - "courier" "<" ID ">" Block
+        - DefineProcedure
+          - "define" ID Block
+        - Line
+    - Line
+      - Empty
+      - Not empty
+    - Comments
+      - In line
+      - End line
+      - Multi line
+
+
+- Other manual
+  - test extraction on
+    - smaller and larger changes commited
+    - better and worse descriptions
 
 For Report:
 - Why not the Jolie parser
-    - jolie parser "optimises" (changes) code during execution causing changes in code when compared with original
-        - loss of data and changes to original
-        - Give examples using jolie printer (git)
-    - (Write from perspective of what I did, not what I didn't do)
+  - jolie parser "optimises" (changes) code during execution causing changes in code when compared with original
+    - loss of data and changes to original
+    - Give examples using jolie printer (git)
+  - (Write from perspective of what I did, not what I didn't do)
 - cast all end line symbols to \n
 - pre and post lexeme for printing
-
-

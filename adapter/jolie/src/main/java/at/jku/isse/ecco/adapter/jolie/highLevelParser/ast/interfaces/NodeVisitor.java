@@ -12,6 +12,10 @@ public interface NodeVisitor<T> {
     T visitImport(Import importE);
     T visitInclude(Include include);
     T visitInterfaceDecl(InterfaceDecl interfaceDecl);
+    T visitRequestResponseDecl(RequestResponseDecl requestResponseDecl);
+    T visitRequestResponseElement(RequestResponseElement requestResponseElement);
+    T visitOneWayDecl(OneWayDecl oneWayDecl);
+    T visitOneWayElement(OneWayElement oneWayElement);
     T visitTypeDecl(TypeDecl typeDecl);
     T visitServiceDecl(ServiceDecl serviceDecl);
     T visitService(Service service);

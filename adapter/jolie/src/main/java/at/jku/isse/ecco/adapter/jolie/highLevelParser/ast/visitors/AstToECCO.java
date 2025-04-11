@@ -8,7 +8,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.NodeTypes;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.importDecl.Import;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.importDecl.ImportDecl;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.importDecl.Include;
-import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.interfaceDecl.InterfaceDecl;
+import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.interfaceDecl.*;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.serviceDecl.*;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.serviceDecl.ports.*;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.typeDecl.TypeDecl;
@@ -81,7 +81,54 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
         at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.INTERFACEDECL);
         node.addChild(createTokenNode(interfaceDecl.getInterfaceID()));
 
-        node.addChild(interfaceDecl.getBlock().accept(this));
+        if (interfaceDecl.getRequestResponse() != null) {
+            node.addChild(interfaceDecl.getRequestResponse().accept(this));
+        } else if (interfaceDecl.getOneWay() != null) {
+            node.addChild(interfaceDecl.getOneWay().accept(this));
+        }
+
+        return node;
+    }
+
+    @Override
+    public at.jku.isse.ecco.tree.Node.Op visitRequestResponseDecl(RequestResponseDecl requestResponseDecl) {
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.REQUEST_RESPONSE_DECL);
+
+        for (RequestResponseElement element : requestResponseDecl.getRequestResponseElements()) {
+            node.addChild(element.accept(this));
+        }
+
+        return node;
+    }
+
+    @Override
+    public at.jku.isse.ecco.tree.Node.Op visitRequestResponseElement(RequestResponseElement requestResponseElement) {
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.REQUEST_RESPONSE_ELEMENT);
+
+        node.addChild(createTokenNode(requestResponseElement.getFunctionID()));
+        node.addChild(createTokenNode(requestResponseElement.getRequestID()));
+        node.addChild(createTokenNode(requestResponseElement.getResponseID()));
+
+        return node;
+    }
+
+    @Override
+    public at.jku.isse.ecco.tree.Node.Op visitOneWayDecl(OneWayDecl oneWayDecl) {
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.ONE_WAY_DECL);
+
+        for (OneWayElement element : oneWayDecl.getOneWayElements()) {
+            node.addChild(element.accept(this));
+        }
+
+        return node;
+    }
+
+    @Override
+    public at.jku.isse.ecco.tree.Node.Op visitOneWayElement(OneWayElement oneWayElement) {
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.ONE_WAY_ELEMENT);
+
+        node.addChild(createTokenNode(oneWayElement.getFunctionID()));
+        node.addChild(createTokenNode(oneWayElement.getRequestID()));
 
         return node;
     }
@@ -200,8 +247,8 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
     public at.jku.isse.ecco.tree.Node.Op visitPortInterfaces(PortInterfaces portInterfaces) {
         at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTINTERFACES);
 
-        for (Node line : portInterfaces.getLines()) {
-            node.addChild(line.accept(this));
+        for (JolieToken token : portInterfaces.getArguments()) {
+            node.addChild(createTokenNode(token));
         }
 
         return node;
@@ -211,8 +258,8 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
     public at.jku.isse.ecco.tree.Node.Op visitPortAggregates(PortAggregates portAggregates) {
         at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTAGGREGATES);
 
-        for (Node line : portAggregates.getLines()) {
-            node.addChild(line.accept(this));
+        for (JolieToken token : portAggregates.getArguments()) {
+            node.addChild(createTokenNode(token));
         }
 
         return node;
@@ -222,8 +269,8 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
     public at.jku.isse.ecco.tree.Node.Op visitPortRedirects(PortRedirects portRedirects) {
         at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTREDIRECTS);
 
-        for (Node line : portRedirects.getLines()) {
-            node.addChild(line.accept(this));
+        for (JolieToken token : portRedirects.getArguments()) {
+            node.addChild(createTokenNode(token));
         }
 
         return node;
@@ -263,8 +310,8 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
     public at.jku.isse.ecco.tree.Node.Op visitBlock(Block block) {
         at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.BLOCK);
 
-        for (JolieToken token : block.getContents()) {
-            node.addChild(createTokenNode(token));
+        for (Line line : block.getContents()) {
+            node.addChild(line.accept(this));
         }
 
         return node;
