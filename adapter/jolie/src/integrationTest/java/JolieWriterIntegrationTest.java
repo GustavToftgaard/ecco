@@ -128,7 +128,7 @@ public class JolieWriterIntegrationTest {
     @Test
     public void writeSingleFile() {
         MemEntityFactory factory = new MemEntityFactory();
-        Path testFilePath = Paths.get(autoTestFolder + "/jolie_test_1.ol");
+        Path testFilePath = Paths.get(autoTestFolder + "/simpleFile1.ol");
 
         // create ecco tree with some line nodes
         String testCodeFile = "jolieTestCode/simple_file";
