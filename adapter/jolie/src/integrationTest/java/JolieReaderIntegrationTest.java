@@ -1,7 +1,7 @@
 import at.jku.isse.ecco.adapter.jolie.JolieReader;
 import at.jku.isse.ecco.storage.mem.dao.MemEntityFactory;
 import at.jku.isse.ecco.tree.Node;
-import jolieReaderIntergrationTests.simpleFiles.JRIT_SimpleFiles;
+import jolieReaderIntergrationTests.TestCases.simpleFiles.JRIT_SimpleFiles;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
