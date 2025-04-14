@@ -78,9 +78,6 @@ Testing:
                 - "Redirects" ":" Line (, Line )*
         - Init
           - "init" Block
-            - Block
-              - One line
-              - multi lint
         - Main
           - "main" Block
         - Courier

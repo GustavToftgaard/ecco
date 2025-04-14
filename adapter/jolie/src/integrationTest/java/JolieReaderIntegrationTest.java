@@ -1,40 +1,30 @@
 import at.jku.isse.ecco.adapter.jolie.JolieReader;
-import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.NodeTypes;
-import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.visitors.Data.JolieContextArtifactData;
-import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.visitors.Data.JolieLineArtifactData;
-import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.visitors.Data.JolieTokenArtifactData;
-import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType;
 import at.jku.isse.ecco.storage.mem.dao.MemEntityFactory;
 import at.jku.isse.ecco.tree.Node;
 import jolieReaderIntergrationTests.simpleFiles.JRIT_SimpleFiles;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class JolieReaderIntegrationTest {
+    private final Map<String, String> filesAndPaths = createHashMapOfTestFiles();
 
     @Test
-    public void readFileTest() throws URISyntaxException {
-        String relativeResourceFolderPath = "jolieTestCode/simple_file";
-        URI resourceFolderUri = Objects.requireNonNull(getClass().getClassLoader().getResource(relativeResourceFolderPath)).toURI();
-        String resourceFolderPathString = Paths.get(resourceFolderUri).toString();
-        Path resourceFolderPath = Paths.get(resourceFolderPathString);
-        Set<Node.Op> nodes = readFolder(resourceFolderPath);
-
-        assertEquals(1, nodes.size());
-        Node.Op resultPluginNode = nodes.iterator().next();
-
-//        printECCO(resultPluginNode);
-
+    public void readSimpleFilesTest() {
         JRIT_SimpleFiles tester = new JRIT_SimpleFiles();
-        tester.test(resultPluginNode, "simpleFile1.ol");
+
+        for (String fileName : tester.getFileNames()) {
+            Set<Node.Op> nodes = readFolder(Paths.get(filesAndPaths.get(fileName)));
+            assertEquals(1, nodes.size());
+            Node.Op resultPluginNode = nodes.iterator().next();
+            tester.test(resultPluginNode, fileName);
+        }
     }
 
 //    public void printECCO(Node.Op rootNode) {
@@ -42,17 +32,6 @@ public class JolieReaderIntegrationTest {
 //        for (int i = 0; i < rootNode.getChildren().size(); i++) {
 //            printECCO(rootNode.getChildren().get(i));
 //        }
-//    }
-
-//    @Test
-//    public void readMultipleFiles() throws URISyntaxException {
-//        String relativeResourceFolderPath = "C_SPL/multiple_files";
-//        URI resourceFolderUri = Objects.requireNonNull(getClass().getClassLoader().getResource(relativeResourceFolderPath)).toURI();
-//        String resourceFolderPathString = Paths.get(resourceFolderUri).toString();
-//        Path resourceFolderPath = Paths.get(resourceFolderPathString);
-//
-//        Set<Node.Op> nodes = readFolder(resourceFolderPath);
-//        nodes.forEach(this::testSimpleFile);
 //    }
 
     private Set<Node.Op> readFolder(Path folderPath) {
@@ -83,5 +62,39 @@ public class JolieReaderIntegrationTest {
         }
 
         return fileSet.stream().map(dir::relativize).toArray(Path[]::new);
+    }
+
+    private List<Path> listAllFilesInDir(Path path) throws IOException {
+        List<Path> result;
+        try (Stream<Path> walk = Files.walk(path)) {
+            result = walk.filter(Files::isRegularFile)
+                    .collect(Collectors.toList());
+        }
+        return result;
+    }
+
+    private Map<String, String> createHashMapOfTestFiles() {
+        String totalPath = Objects.requireNonNull(getClass().getClassLoader().getResource("jolieTestCode")).toString();
+        totalPath = totalPath.substring(6); // remove "file:/" from start of string
+        totalPath = totalPath.replace("%20", " "); // in getting totalPath all " " are replaced with "%20" so this reverses this
+
+        Map<String, String> res = new HashMap<>();
+        try {
+            Path path = Paths.get(totalPath);
+            List<Path> paths = listAllFilesInDir(path);
+
+            for(Path filePath : paths) {
+                String file = filePath.toString();
+                for (int i = file.length() - 1; i > 0 ; i--) {
+                    if (file.charAt(i) == '\\') {
+                        res.put(file.substring(i + 1), file.substring(0, i));
+                        break;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 }
