@@ -17,12 +17,12 @@ TypeDecl        -> "type" ID (":" ID)? Block?
 ServiceDecl     -> "service" ID ( "(" ID* ")" )? "{" Service* "}" // (p: MyServiceParam),
   Service         -> Execution | Embed | Embedded | InputPort | OutputPort | Init | Main | Courier | DefineProcedure | Line
     Execution       -> "execution" ( ":" ID ) | ( "{" ID "}" )
-    Embed           -> "embed" ID "as" ID
+    Embed           -> "embed" ID "as" ID // embed ID "(" ID* ")" ("in" ID | "as" ID) TODO: change implementation
     Embedded        -> "embedded" Block
     InputPort       -> "inputPort" ID "{" PortLocation? PortProtocol? PortInterfaces? PortAggregates? PortRedirects? "}"
     OutputPort      -> "outputPort" ID "{" PortLocation? PortProtocol? PortInterfaces? "}"
       PortLocation    -> ( "location" | "Location" ) ":" line
-      PortProtocol    -> ( "protocol" | "Protocol" ) ":" line
+      PortProtocol    -> ( "protocol" | "Protocol" ) ":" line ( Line )*
       PortInterfaces  -> ( "interfaces" | "Interfaces" ) ":" Line (, Line )*
       PortAggregates  -> ( "aggregates" | "Aggregates" ) ":" Line (, Line )*
       PortRedirects   -> ( "redirects" | "Redirects" ) ":" Line (, Line )*
@@ -35,7 +35,7 @@ ServiceDecl     -> "service" ID ( "(" ID* ")" )? "{" Service* "}" // (p: MyServi
 // Procedure       -> ID "(" ID? ")" ( "(" ID? ")" )? Block
 
 Block           -> "{" (_* '\n')* "}" ( keep track of "{" and "}" )
-Line            -> _* '\n'
+Line            -> _* ( '\n' | specifiedToken )
 
 // Constants: https://docs.jolie-lang.org/v1.13.x-git/language-tools-and-standard-library/basics/constants/index.html
 // Scope, Install: https://docs.jolie-lang.org/v1.13.x-git/language-tools-and-standard-library/basics/fault-handling/scopes-and-faults/index.html

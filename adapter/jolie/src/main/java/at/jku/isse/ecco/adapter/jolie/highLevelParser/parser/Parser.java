@@ -379,7 +379,7 @@ public class Parser {
     private PortProtocol portProtocol() {
         consume(PROTOCOL, "Expected PROTOCOL token");
         consume(COLON, "Expected COLON token after PROTOCOL in protocol");
-        Line line = readLine(previous().getLine());
+        Line line = readLine(previous().getLine());  // TODO: Can be multiline
         return new PortProtocol(line);
     }
 
@@ -387,7 +387,7 @@ public class Parser {
         consume(INTERFACES, "Expected INTERFACES token");
         consume(COLON, "Expected COLON token after INTERFACES in interfaces");
 
-        ArrayList<JolieToken> arguments = new ArrayList<>();
+        ArrayList<JolieToken> arguments = new ArrayList<>(); // TODO: change to lines instead of IDs (?)
         while (peek().getType() == ID) {
             arguments.add(consumeAndReturn(ID, "Expected ID token as params in interfaces"));
         }
@@ -399,7 +399,7 @@ public class Parser {
         consume(AGGREGATES, "Expected AGGREGATES token");
         consume(COLON, "Expected COLON token after AGGREGATES in aggregates");
 
-        ArrayList<JolieToken> arguments = new ArrayList<>();
+        ArrayList<JolieToken> arguments = new ArrayList<>(); // TODO: change to lines instead of IDs (?)
         while (peek().getType() == ID) {
             arguments.add(consumeAndReturn(ID, "Expected ID token as params in aggregates"));
         }
@@ -411,7 +411,7 @@ public class Parser {
         consume(REDIRECTS, "Expected REDIRECTS token");
         consume(COLON, "Expected COLON token after REDIRECTS in redirects");
 
-        ArrayList<JolieToken> arguments = new ArrayList<>();
+        ArrayList<JolieToken> arguments = new ArrayList<>(); // TODO: change to lines instead of IDs (?)
         while (peek().getType() == ID) {
             arguments.add(consumeAndReturn(ID, "Expected ID token as params in redirects"));
         }

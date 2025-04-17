@@ -13,7 +13,7 @@ Testing:
       - Include
         - ("include" ID(String))
 
-    - InterfaceDecl
+    - InterfaceDecl // missing ("throws" ID) might be better to do Line
       - ("interface" ID "{" RequestResponseDecl "}")
       - ("interface" ID "{" OneWayDecl "}")
       - ("interface" ID "{" RequestResponseDecl OneWayDecl "}")
@@ -31,16 +31,21 @@ Testing:
       - ("type" ID Block)
       - ("type" ID ":" ID)
       - ("type" ID ":" ID Block)
+      - ("type" ID ":" line) // TODO: fail
 
     - ServiceDecl
       - ("service" ID "{" Service* "}")
-      - ("service" ID ( "(" ID* ")" )? "{" Service* "}")
+      - ("service" ID ( "(" ID* ")" ) "{" Service* "}")
+      - ("service" ID "{" Service* "}"), ("service" ID "{" Service* "}")
       - Service
         - Execution
           - ("execution" ":" ID)
           - ("execution" "{" ID "}")
         - Embed
           - "embed" ID "as" ID
+          - "embed" ID "in" ID // TODO: fail
+          - "embed" ID (ID*) "as" ID // TODO: fail
+          - "embed" ID (ID*) "in" ID // TODO: fail
         - Embedded
           - "embedded" Block
         - InputPort
@@ -59,8 +64,10 @@ Testing:
                 - ("location" ":" line)
                 - ("Location" ":" line)
               - PortProtocol
-                - ("protocol"":" line)
+                - ("protocol" ":" line)
                 - ("Protocol" ":" line)
+                - ("protocol" ":" line*) // TODO: fail
+                - ("Protocol" ":" line*) // TODO: fail
               - PortInterfaces
                 - "interfaces" ":" Line
                 - "Interfaces" ":" Line
@@ -84,7 +91,9 @@ Testing:
           - "courier" "<" ID ">" Block
         - DefineProcedure
           - "define" ID Block
-        - Line
+    - Block
+      - Empty
+      - Not empty
     - Line
       - Empty
       - Not empty
@@ -92,6 +101,11 @@ Testing:
       - In line
       - End line
       - Multi line
+    - EOF
+      - one first line
+      - on second line
+      - on same line as end of code
+      - 2 lines after end of code
 
 
 - Other manual
