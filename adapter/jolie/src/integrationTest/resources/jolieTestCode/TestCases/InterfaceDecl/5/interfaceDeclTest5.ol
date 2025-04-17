@@ -1,4 +1,4 @@
-interface extender testId {
+interface extender TestId {
   oneWay:
     *( Id )
 }

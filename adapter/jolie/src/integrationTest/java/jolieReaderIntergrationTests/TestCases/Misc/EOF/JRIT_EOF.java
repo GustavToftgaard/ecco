@@ -1,14 +1,15 @@
-package jolieReaderIntergrationTests.TestCases.InterfaceDecl.RequestResponseDecl;
+package jolieReaderIntergrationTests.TestCases.Misc.EOF;
 
+import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.NodeTypes;
+import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType;
 import at.jku.isse.ecco.tree.Node;
-import jolieReaderIntergrationTests.interfacesAndAbstractClasses.IJolieReaderIntegrationTestCase;
 import jolieReaderIntergrationTests.interfacesAndAbstractClasses.JolieReaderIntegrationTestCase;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JRIT_RequestResponse extends JolieReaderIntegrationTestCase implements IJolieReaderIntegrationTestCase {
+public class JRIT_EOF extends JolieReaderIntegrationTestCase {
     static {
         fileNames.put(" ", 1);
     }

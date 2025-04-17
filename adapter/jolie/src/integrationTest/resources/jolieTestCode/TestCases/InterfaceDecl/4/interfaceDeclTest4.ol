@@ -1,4 +1,4 @@
-interface extender testId {
-  RequestResponse:
+interface extender TestId {
+  requestResponse:
     *( Id )( void )
 }

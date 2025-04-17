@@ -89,7 +89,7 @@ public class Parser {
             JolieToken importID = consumeAndReturn(ID, "Expected ID after IMPORT in import decl");
 
             // check of multiple 'as' statements
-            if (previous().getLine() == peek().getLine()) {
+            if (previous().getLine() == peek().getLine() && peek().getType() != EOF) {
                 Node line = readLine(previous().getLine());
                 return new ImportDecl(new Import(fromID, importID, line));
             } else {
@@ -110,12 +110,15 @@ public class Parser {
         if (peek().getType() == EXTENDER) {
             consume(EXTENDER, "Expected EXTENDER token in interface decl");
         }
+
         JolieToken interfaceID = consumeAndReturn(ID, "Expected ID token in interface decl");
 
         consume(LEFT_BRACE, "Expected LEFT_BRACE token after ID in interface decl");
 
-        ArrayList<RequestResponseElement> requestResponseElements = new ArrayList<>();
+        RequestResponseDecl requestResponseDecl = null;
+
         if (peek().getType() == REQUEST_RESPONSE) {
+            ArrayList<RequestResponseElement> requestResponseElements = new ArrayList<>();
             consume(REQUEST_RESPONSE, "Expected REQUEST_RESPONSE token after ID in interface decl");
             consume(COLON, "Expected COLON token after REQUEST_RESPONSE in interface decl");
             while (peek().getType() == ID) {
@@ -124,10 +127,12 @@ public class Parser {
                     consume(ID, "Expected ID (',') token after IDs from R.R. in interface decl");
                 }
             }
+            requestResponseDecl = new RequestResponseDecl(requestResponseElements);
         }
 
-        ArrayList<OneWayElement> oneWayElements = new ArrayList<>();
+        OneWayDecl oneWayDecl = null;
         if (peek().getType() == ONE_WAY) {
+            ArrayList<OneWayElement> oneWayElements = new ArrayList<>();
             consume(ONE_WAY, "Expected ONE_WAY token after ID or REQUEST_RESPONSE in interface decl");
             consume(COLON, "Expected COLON token after ONE_WAY in interface decl");
             while (peek().getType() == ID) {
@@ -136,21 +141,12 @@ public class Parser {
                     consume(ID, "Expected ID (',') token after IDs from O.W. in interface decl");
                 }
             }
+            oneWayDecl = new OneWayDecl(oneWayElements);
         }
 
         consume(RIGHT_BRACE, "Expected RIGHT_BRACE token in interface decl");
 
-        if (!requestResponseElements.isEmpty() && !oneWayElements.isEmpty()) {
-            return new InterfaceDecl(interfaceID, new RequestResponseDecl(requestResponseElements), new OneWayDecl(oneWayElements));
-
-        } else if (!requestResponseElements.isEmpty()) {
-            return new InterfaceDecl(interfaceID, new RequestResponseDecl(requestResponseElements));
-
-        } else if (!oneWayElements.isEmpty()) {
-            return new InterfaceDecl(interfaceID, new OneWayDecl(oneWayElements));
-        }
-
-        return null; // ERROR
+        return new InterfaceDecl(interfaceID, requestResponseDecl, oneWayDecl);
     }
 
     private RequestResponseElement requestResponseElement() {
@@ -177,16 +173,20 @@ public class Parser {
     private TypeDecl typeDecl() {
         consume(TYPE, "Expected TYPE token");
         JolieToken typeId = consumeAndReturn(ID, "Expected ID token after TYPE in type decl");
+        JolieToken typeTypeId = null;
+        Block block = null;
 
         if (peek().getType() == COLON) {
             consume(COLON, "Expected COLON token after ID in type decl");
-            JolieToken typeTypeId = consumeAndReturn(ID, "Expected ID token after COLON in type decl");
-            return new TypeDecl(typeId, typeTypeId);
-
-        } else {
-            Block block = block();
-            return new TypeDecl(typeId, block);
+            typeTypeId = consumeAndReturn(ID, "Expected ID token after COLON in type decl");
+            // TODO: add ("|" ID)*) to implementation TypeDeclTest4 (use ArrayList<JolieToken> as typeTypeId)
         }
+
+        if (peek().getType() == LEFT_BRACE){
+            block = block();
+        }
+
+        return new TypeDecl(typeId, typeTypeId, block);
     }
 
     // ----

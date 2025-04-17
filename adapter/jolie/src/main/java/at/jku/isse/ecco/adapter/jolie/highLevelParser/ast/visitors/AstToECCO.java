@@ -83,7 +83,8 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
         if (interfaceDecl.getRequestResponse() != null) {
             node.addChild(interfaceDecl.getRequestResponse().accept(this));
-        } else if (interfaceDecl.getOneWay() != null) {
+        }
+        if (interfaceDecl.getOneWay() != null) {
             node.addChild(interfaceDecl.getOneWay().accept(this));
         }
 

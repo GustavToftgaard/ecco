@@ -7,12 +7,12 @@ ImportDecl      -> Import | Include
   Include         -> "include" ID(String)
 
 InterfaceDecl   -> "interface" "extender"? ID "{" RequestResponseDecl? OneWayDecl? "}"
-  RequestResponseDecl     -> "requestResponse" ":" RequestResponseElement ("," RequestResponseElement)*
+  RequestResponseDecl     -> ( "requestResponse" |"RequestResponse" ) ":" RequestResponseElement ("," RequestResponseElement)*
     RequestResponseElement  -> ID "(" ID ")" "(" ID ")"
-  OneWayDecl              -> "oneWay" ":" OneWayElement ("," OneWayElement)*
+  OneWayDecl              -> ( "oneWay" | "OneWay" ) ":" OneWayElement ("," OneWayElement)*
     OneWayElement           -> ID "(" ID ")"
 
-TypeDecl        -> "type" ID (":" ID)? Block?
+TypeDecl        -> "type" ID (":" ID ("|" ID)*)? Block?
 
 ServiceDecl     -> "service" ID ( "(" ID* ")" )? "{" Service* "}" // (p: MyServiceParam),
   Service         -> Execution | Embed | Embedded | InputPort | OutputPort | Init | Main | Courier | DefineProcedure | Line

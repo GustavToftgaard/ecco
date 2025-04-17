@@ -23,15 +23,19 @@ Testing:
         - RequestResponseDecl
           - ("requestResponse" ":" RequestResponseElement)
           - ("requestResponse" ":" RequestResponseElement ("," RequestResponseElement)*)
+          - ("RequestResponse" ":" RequestResponseElement)
+          - ("RequestResponse" ":" RequestResponseElement ("," RequestResponseElement)*)
         - OneWayDecl
           - ("oneWay" ":" OneWayElement)
           - ("oneWay" ":" OneWayElement ("," OneWayElement)*)
+          - ("OneWay" ":" OneWayElement)
+          - ("OneWay" ":" OneWayElement ("," OneWayElement)*)
 
     - TypeDecl
       - ("type" ID Block)
       - ("type" ID ":" ID)
       - ("type" ID ":" ID Block)
-      - ("type" ID ":" line) // TODO: fail
+      - ("type" ID ":" ID ("|" ID)* // TODO: fail
 
     - ServiceDecl
       - ("service" ID "{" Service* "}")

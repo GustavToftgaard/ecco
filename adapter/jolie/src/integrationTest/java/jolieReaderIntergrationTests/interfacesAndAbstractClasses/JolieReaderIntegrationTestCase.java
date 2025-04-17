@@ -23,6 +23,8 @@ public abstract class JolieReaderIntegrationTestCase {
         return new ArrayList<String>(values);
     }
 
+    public abstract void test(Node.Op resultPluginNode, String fileName);
+
     public void checkContextNode(Node.Op node, NodeTypes nodeType, int numberOfChildren) {
         assertInstanceOf(JolieContextArtifactData.class, node.getArtifact().getData());
         JolieContextArtifactData nodeContext = (JolieContextArtifactData) node.getArtifact().getData();

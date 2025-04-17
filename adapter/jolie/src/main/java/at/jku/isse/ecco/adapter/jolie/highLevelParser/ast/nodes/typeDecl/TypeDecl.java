@@ -10,17 +10,17 @@ public class TypeDecl implements Node {
     private final JolieToken secondID; //?
     private final Block block; //?
 
-    public TypeDecl(JolieToken typeID, JolieToken secondID) {
-        this.typeID = typeID;
-        this.secondID = secondID;
-        this.block = null;
-    }
+//    public TypeDecl(JolieToken typeID, JolieToken secondID) {
+//        this.typeID = typeID;
+//        this.secondID = secondID;
+//        this.block = null;
+//    }
 
-    public TypeDecl(JolieToken typeID, Block block) {
-        this.typeID = typeID;
-        this.secondID = null;
-        this.block = block;
-    }
+//    public TypeDecl(JolieToken typeID, Block block) {
+//        this.typeID = typeID;
+//        this.secondID = null;
+//        this.block = block;
+//    }
 
     public TypeDecl(JolieToken typeID, JolieToken secondID, Block block) {
         this.typeID = typeID;

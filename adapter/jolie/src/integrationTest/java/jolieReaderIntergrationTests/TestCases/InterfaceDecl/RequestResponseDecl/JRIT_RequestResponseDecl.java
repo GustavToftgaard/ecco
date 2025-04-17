@@ -1,4 +1,4 @@
-package jolieReaderIntergrationTests.TestCases.InterfaceDecl;
+package jolieReaderIntergrationTests.TestCases.InterfaceDecl.RequestResponseDecl;
 
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.NodeTypes;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType;
@@ -9,14 +9,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JRIT_InterfaceDecl extends JolieReaderIntegrationTestCase {
+public class JRIT_RequestResponseDecl extends JolieReaderIntegrationTestCase {
     static {
-        fileNames.put("interfaceDeclTest1.ol", 1);
-        fileNames.put("interfaceDeclTest2.ol", 2);
-        fileNames.put("interfaceDeclTest3.ol", 3);
-        fileNames.put("interfaceDeclTest4.ol", 4);
-        fileNames.put("interfaceDeclTest5.ol", 5);
-        fileNames.put("interfaceDeclTest6.ol", 6);
+        fileNames.put("requestResponseTest1.ol", 1);
+        fileNames.put("requestResponseTest2.ol", 2);
+        fileNames.put("requestResponseTest3.ol", 3);
+        fileNames.put("requestResponseTest4.ol", 4);
     }
 
     @Override
@@ -36,11 +34,6 @@ public class JRIT_InterfaceDecl extends JolieReaderIntegrationTestCase {
             case 4:
                 test4(node);
                 break;
-            case 5:
-                test5(node);
-                break;
-            case 6:
-                test6(node);
         }
     }
 
@@ -101,20 +94,37 @@ public class JRIT_InterfaceDecl extends JolieReaderIntegrationTestCase {
         node = pluginNodeChildren.get(0).getChildren().get(0);
         checkTokenNode(node, JolieTokenType.ID, "TestAPI", 1);
 
-        // 1.2: ONE_WAY_DECL
+        // 1.2: REQUEST_RESPONSE_DECL
         node = pluginNodeChildren.get(0).getChildren().get(1);
-        checkContextNode(node, NodeTypes.ONE_WAY_DECL, 1);
+        checkContextNode(node, NodeTypes.REQUEST_RESPONSE_DECL, 2);
 
-        // 1.2.1: ONE_WAY_ELEMENT
+        // 1.2.1: REQUEST_RESPONSE_ELEMENT
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0);
-        checkContextNode(node, NodeTypes.ONE_WAY_ELEMENT, 2);
+        checkContextNode(node, NodeTypes.REQUEST_RESPONSE_ELEMENT, 3);
 
         // 1.2.1.*: IDs
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.ID, "test", 3);
+        checkTokenNode(node, JolieTokenType.ID, "testThis", 3);
 
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0).getChildren().get(1);
         checkTokenNode(node, JolieTokenType.ID, "int", 3);
+
+        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0).getChildren().get(2);
+        checkTokenNode(node, JolieTokenType.ID, "int", 3);
+
+        // 1.2.2: REQUEST_RESPONSE_ELEMENT
+        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1);
+        checkContextNode(node, NodeTypes.REQUEST_RESPONSE_ELEMENT, 3);
+
+        // 1.2.2.*: IDs
+        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1).getChildren().get(0);
+        checkTokenNode(node, JolieTokenType.ID, "testThat", 4);
+
+        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1).getChildren().get(1);
+        checkTokenNode(node, JolieTokenType.ID, "int", 4);
+
+        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1).getChildren().get(2);
+        checkTokenNode(node, JolieTokenType.ID, "int", 4);
 
         // 2: EOF
         node = pluginNodeChildren.get(1);
@@ -122,7 +132,7 @@ public class JRIT_InterfaceDecl extends JolieReaderIntegrationTestCase {
 
         // 2.1: EOF
         node = pluginNodeChildren.get(1).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.EOF, "", 4);
+        checkTokenNode(node, JolieTokenType.EOF, "", 5);
     }
 
     private void test3(Node.Op pluginNode) {
@@ -134,7 +144,7 @@ public class JRIT_InterfaceDecl extends JolieReaderIntegrationTestCase {
 
         // 1: INTERFACEDECL
         node = pluginNodeChildren.get(0);
-        checkContextNode(node, NodeTypes.INTERFACEDECL, 3);
+        checkContextNode(node, NodeTypes.INTERFACEDECL, 2);
 
         // 1.1: ID
         node = pluginNodeChildren.get(0).getChildren().get(0);
@@ -158,28 +168,13 @@ public class JRIT_InterfaceDecl extends JolieReaderIntegrationTestCase {
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0).getChildren().get(2);
         checkTokenNode(node, JolieTokenType.ID, "int", 3);
 
-        // 1.3: ONE_WAY_DECL
-        node = pluginNodeChildren.get(0).getChildren().get(2);
-        checkContextNode(node, NodeTypes.ONE_WAY_DECL, 1);
-
-        // 1.3.1: ONE_WAY_ELEMENT
-        node = pluginNodeChildren.get(0).getChildren().get(2).getChildren().get(0);
-        checkContextNode(node, NodeTypes.ONE_WAY_ELEMENT, 2);
-
-        // 1.3.1.*: IDs
-        node = pluginNodeChildren.get(0).getChildren().get(2).getChildren().get(0).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.ID, "test", 5);
-
-        node = pluginNodeChildren.get(0).getChildren().get(2).getChildren().get(0).getChildren().get(1);
-        checkTokenNode(node, JolieTokenType.ID, "int", 5);
-
         // 2: EOF
         node = pluginNodeChildren.get(1);
         checkContextNode(node, NodeTypes.EOF, 1);
 
         // 2.1: EOF
         node = pluginNodeChildren.get(1).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.EOF, "", 6);
+        checkTokenNode(node, JolieTokenType.EOF, "", 4);
     }
 
     private void test4(Node.Op pluginNode) {
@@ -195,11 +190,11 @@ public class JRIT_InterfaceDecl extends JolieReaderIntegrationTestCase {
 
         // 1.1: ID
         node = pluginNodeChildren.get(0).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.ID, "TestId", 1);
+        checkTokenNode(node, JolieTokenType.ID, "TestAPI", 1);
 
         // 1.2: REQUEST_RESPONSE_DECL
         node = pluginNodeChildren.get(0).getChildren().get(1);
-        checkContextNode(node, NodeTypes.REQUEST_RESPONSE_DECL, 1);
+        checkContextNode(node, NodeTypes.REQUEST_RESPONSE_DECL, 2);
 
         // 1.2.1: REQUEST_RESPONSE_ELEMENT
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0);
@@ -207,109 +202,27 @@ public class JRIT_InterfaceDecl extends JolieReaderIntegrationTestCase {
 
         // 1.2.1.*: IDs
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.ID, "*", 3);
+        checkTokenNode(node, JolieTokenType.ID, "testThis", 3);
 
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0).getChildren().get(1);
-        checkTokenNode(node, JolieTokenType.ID, "Id", 3);
+        checkTokenNode(node, JolieTokenType.ID, "int", 3);
 
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0).getChildren().get(2);
-        checkTokenNode(node, JolieTokenType.ID, "void", 3);
+        checkTokenNode(node, JolieTokenType.ID, "int", 3);
 
-        // 2: EOF
-        node = pluginNodeChildren.get(1);
-        checkContextNode(node, NodeTypes.EOF, 1);
-
-        // 2.1: EOF
-        node = pluginNodeChildren.get(1).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.EOF, "", 4);
-    }
-
-    private void test5(Node.Op pluginNode) {
-        List<Node.Op> pluginNodeChildren = (List<Node.Op>) pluginNode.getChildren();
-
-        assertEquals(2, pluginNodeChildren.size());
-
-        Node.Op node;
-
-        // 1: INTERFACEDECL
-        node = pluginNodeChildren.get(0);
-        checkContextNode(node, NodeTypes.INTERFACEDECL, 2);
-
-        // 1.1: ID
-        node = pluginNodeChildren.get(0).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.ID, "TestId", 1);
-
-        // 1.2: ONE_WAY_DECL
-        node = pluginNodeChildren.get(0).getChildren().get(1);
-        checkContextNode(node, NodeTypes.ONE_WAY_DECL, 1);
-
-        // 1.2.1: ONE_WAY_ELEMENT
-        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0);
-        checkContextNode(node, NodeTypes.ONE_WAY_ELEMENT, 2);
-
-        // 1.2.1.*: IDs
-        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.ID, "*", 3);
-
-        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0).getChildren().get(1);
-        checkTokenNode(node, JolieTokenType.ID, "Id", 3);
-
-        // 2: EOF
-        node = pluginNodeChildren.get(1);
-        checkContextNode(node, NodeTypes.EOF, 1);
-
-        // 2.1: EOF
-        node = pluginNodeChildren.get(1).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.EOF, "", 4);
-    }
-
-    private void test6(Node.Op pluginNode) {
-        List<Node.Op> pluginNodeChildren = (List<Node.Op>) pluginNode.getChildren();
-
-        assertEquals(2, pluginNodeChildren.size());
-
-        Node.Op node;
-
-        // 1: INTERFACEDECL
-        node = pluginNodeChildren.get(0);
-        checkContextNode(node, NodeTypes.INTERFACEDECL, 3);
-
-        // 1.1: ID
-        node = pluginNodeChildren.get(0).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.ID, "TestId", 1);
-
-        // 1.2: REQUEST_RESPONSE_DECL
-        node = pluginNodeChildren.get(0).getChildren().get(1);
-        checkContextNode(node, NodeTypes.REQUEST_RESPONSE_DECL, 1);
-
-        // 1.2.1: REQUEST_RESPONSE_ELEMENT
-        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0);
+        // 1.2.2: REQUEST_RESPONSE_ELEMENT
+        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1);
         checkContextNode(node, NodeTypes.REQUEST_RESPONSE_ELEMENT, 3);
 
-        // 1.2.1.*: IDs
-        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.ID, "*", 3);
+        // 1.2.2.*: IDs
+        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1).getChildren().get(0);
+        checkTokenNode(node, JolieTokenType.ID, "testThat", 4);
 
-        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0).getChildren().get(1);
-        checkTokenNode(node, JolieTokenType.ID, "Id", 3);
+        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1).getChildren().get(1);
+        checkTokenNode(node, JolieTokenType.ID, "int", 4);
 
-        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(0).getChildren().get(2);
-        checkTokenNode(node, JolieTokenType.ID, "void", 3);
-
-        // 1.3: ONE_WAY_DECL
-        node = pluginNodeChildren.get(0).getChildren().get(2);
-        checkContextNode(node, NodeTypes.ONE_WAY_DECL, 1);
-
-        // 1.3.1: ONE_WAY_ELEMENT
-        node = pluginNodeChildren.get(0).getChildren().get(2).getChildren().get(0);
-        checkContextNode(node, NodeTypes.ONE_WAY_ELEMENT, 2);
-
-        // 1.3.1.*: IDs
-        node = pluginNodeChildren.get(0).getChildren().get(2).getChildren().get(0).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.ID, "*", 5);
-
-        node = pluginNodeChildren.get(0).getChildren().get(2).getChildren().get(0).getChildren().get(1);
-        checkTokenNode(node, JolieTokenType.ID, "Id", 5);
+        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1).getChildren().get(2);
+        checkTokenNode(node, JolieTokenType.ID, "int", 4);
 
         // 2: EOF
         node = pluginNodeChildren.get(1);
@@ -317,6 +230,6 @@ public class JRIT_InterfaceDecl extends JolieReaderIntegrationTestCase {
 
         // 2.1: EOF
         node = pluginNodeChildren.get(1).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.EOF, "", 6);
+        checkTokenNode(node, JolieTokenType.EOF, "", 5);
     }
 }

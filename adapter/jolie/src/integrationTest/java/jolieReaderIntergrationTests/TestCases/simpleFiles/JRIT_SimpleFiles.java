@@ -3,14 +3,13 @@ package jolieReaderIntergrationTests.TestCases.simpleFiles;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.NodeTypes;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType;
 import at.jku.isse.ecco.tree.Node;
-import jolieReaderIntergrationTests.interfacesAndAbstractClasses.IJolieReaderIntegrationTestCase;
 import jolieReaderIntergrationTests.interfacesAndAbstractClasses.JolieReaderIntegrationTestCase;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JRIT_SimpleFiles extends JolieReaderIntegrationTestCase implements IJolieReaderIntegrationTestCase {
+public class JRIT_SimpleFiles extends JolieReaderIntegrationTestCase {
     static {
         fileNames.put("simpleFile1.ol", 1);
     }
@@ -103,31 +102,35 @@ public class JRIT_SimpleFiles extends JolieReaderIntegrationTestCase implements 
         node = pluginNodeChildren.get(3).getChildren().get(0);
         checkTokenNode(node, JolieTokenType.ID, "NumbersAPI", 9);
 
-        // 4.2: RequestResponse Decl
+        // 4.2: Request_Response_Decl
         node = pluginNodeChildren.get(3).getChildren().get(1);
         checkContextNode(node, NodeTypes.REQUEST_RESPONSE_DECL, 2);
 
-        // 4.2.1
+        // 4.2.1: Request_Response_Element
         node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(0);
         checkContextNode(node, NodeTypes.REQUEST_RESPONSE_ELEMENT, 3);
 
-        // 4.2.1.(1-3)
+        // 4.2.1.*: IDs
         node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(0).getChildren().get(0);
         checkTokenNode(node, JolieTokenType.ID, "sumUpTo", 11);
+
         node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(0).getChildren().get(1);
         checkTokenNode(node, JolieTokenType.ID, "int", 11);
+
         node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(0).getChildren().get(2);
         checkTokenNode(node, JolieTokenType.ID, "int", 11);
 
-        // 4.2.2
+        // 4.2.2: REQUEST_RESPONSE_ELEMENT
         node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(1);
         checkContextNode(node, NodeTypes.REQUEST_RESPONSE_ELEMENT, 3);
 
-        // 4.2.2.(1-3)
+        // 4.2.2.*: IDs
         node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(1).getChildren().get(0);
         checkTokenNode(node, JolieTokenType.ID, "sumBetween", 12);
+
         node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(1).getChildren().get(1);
         checkTokenNode(node, JolieTokenType.ID, "twoArguments", 12);
+
         node = pluginNodeChildren.get(3).getChildren().get(1).getChildren().get(1).getChildren().get(2);
         checkTokenNode(node, JolieTokenType.ID, "int", 12);
 
@@ -215,6 +218,7 @@ public class JRIT_SimpleFiles extends JolieReaderIntegrationTestCase implements 
         checkContextNode(node, NodeTypes.EOF, 1);
 
         // 6.1 EOF
-        checkTokenNode(node.getChildren().get(0), JolieTokenType.EOF, "", 35);
+        node = pluginNodeChildren.get(5).getChildren().get(0);
+        checkTokenNode(node, JolieTokenType.EOF, "", 35);
     }
 }

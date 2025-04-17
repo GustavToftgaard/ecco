@@ -47,7 +47,9 @@ public class JolieScanner {
         keywords.put("type", TYPE);
 
         keywords.put("requestResponse", REQUEST_RESPONSE);
+        keywords.put("RequestResponse", REQUEST_RESPONSE);
         keywords.put("oneWay", ONE_WAY);
+        keywords.put("OneWay", ONE_WAY);
 
         keywords.put("service", SERVICE);
         keywords.put("execution", EXECUTION);
@@ -94,7 +96,7 @@ public class JolieScanner {
             scanToken();
         }
 
-        tokens.add(new JolieToken(EOF, preWhitespace, "", line));
+        tokens.add(new JolieToken(EOF, preWhitespace, "", line - 1));
         return tokens;
     }
 

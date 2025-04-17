@@ -18,18 +18,6 @@ public class InterfaceDecl implements Node {
         this.oneWay = oneWay;
     }
 
-    public InterfaceDecl(JolieToken interfaceID, RequestResponseDecl requestResponse) {
-        this.interfaceID = interfaceID;
-        this.requestResponse = requestResponse;
-        this.oneWay = null;
-    }
-
-    public InterfaceDecl(JolieToken interfaceID, OneWayDecl oneWay) {
-        this.interfaceID = interfaceID;
-        this.requestResponse = null;
-        this.oneWay = oneWay;
-    }
-
     public JolieToken getInterfaceID() {
         return interfaceID;
     }

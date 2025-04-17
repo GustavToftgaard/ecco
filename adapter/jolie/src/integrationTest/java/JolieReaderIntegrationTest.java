@@ -1,7 +1,33 @@
 import at.jku.isse.ecco.adapter.jolie.JolieReader;
 import at.jku.isse.ecco.storage.mem.dao.MemEntityFactory;
 import at.jku.isse.ecco.tree.Node;
+import jolieReaderIntergrationTests.TestCases.ImportDecl.Import.JRIT_Import;
+import jolieReaderIntergrationTests.TestCases.ImportDecl.Include.JRIT_Include;
+import jolieReaderIntergrationTests.TestCases.InterfaceDecl.JRIT_InterfaceDecl;
+import jolieReaderIntergrationTests.TestCases.InterfaceDecl.OneWayDecl.JRIT_OneWayDecl;
+import jolieReaderIntergrationTests.TestCases.InterfaceDecl.RequestResponseDecl.JRIT_RequestResponseDecl;
+import jolieReaderIntergrationTests.TestCases.Misc.Block.JRIT_Block;
+import jolieReaderIntergrationTests.TestCases.Misc.Comments.JRIT_Comments;
+import jolieReaderIntergrationTests.TestCases.Misc.EOF.JRIT_EOF;
+import jolieReaderIntergrationTests.TestCases.Misc.Line.JRIT_Line;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.JRIT_ServiceDecl;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.Courier.JRIT_Courier;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.DefineProcedure.JRIT_DefineProcedure;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.Embed.JRIT_Embed;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.Embedded.JRIT_Embedded;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.Execution.JRIT_Execution;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.Init.JRIT_Init;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.InputPort.JRIT_InputPort;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.Main.JRIT_Main;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.OutputPort.JRIT_OutputPort;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.PortParams.PortAggregates.JRIT_PortAggregates;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.PortParams.PortInterfaces.JRIT_PortInterfaces;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.PortParams.PortLocation.JRIT_PortLocation;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.PortParams.PortProtocol.JRIT_PortProtocol;
+import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.PortParams.PortRedirects.JRIT_PortRedirects;
+import jolieReaderIntergrationTests.TestCases.TypeDecl.JRIT_TypeDecl;
 import jolieReaderIntergrationTests.TestCases.simpleFiles.JRIT_SimpleFiles;
+import jolieReaderIntergrationTests.interfacesAndAbstractClasses.JolieReaderIntegrationTestCase;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -15,24 +41,186 @@ import static org.junit.jupiter.api.Assertions.*;
 public class JolieReaderIntegrationTest {
     private final Map<String, String> filesAndPaths = createHashMapOfTestFiles();
 
+    // ImportDecl - Import
+    @Test
+    public void readImportTest() {
+        testCase(new JRIT_Import());
+    }
+
+    // ImportDecl - Include
+    @Test
+    public void readIncludeTest() {
+        testCase(new JRIT_Include());
+    }
+
+    // InterfaceDecl
+    @Test
+    public void readInterfaceDeclTest() {
+        testCase(new JRIT_InterfaceDecl());
+    }
+
+    // InterfaceDecl - RequestResponseDecl
+    @Test
+    public void readRequestResponseDeclTest() {
+        testCase(new JRIT_RequestResponseDecl());
+    }
+
+    // InterfaceDecl - OneWayDecl
+    @Test
+    public void readOneWayDeclTest() {
+        testCase(new JRIT_OneWayDecl());
+    }
+
+    // TypeDecl
+    @Test // TODO: test 4 fail (parser missing implementation)
+    public void readTypeDeclTest() {
+        testCase(new JRIT_TypeDecl());
+    }
+
+    // ServiceDecl
+    @Test
+    public void readServiceDeclTest() {
+        testCase(new JRIT_ServiceDecl());
+    }
+
+    // ServiceDecl - Execution
+    @Test
+    public void readExecutionTest() {
+        testCase(new JRIT_Execution());
+    }
+
+    // ServiceDecl - Embed
+    @Test
+    public void readEmbedTest() {
+        testCase(new JRIT_Embed());
+    }
+
+    // ServiceDecl - Embedded
+    @Test
+    public void readEmbeddedTest() {
+        testCase(new JRIT_Embedded());
+    }
+
+    // ServiceDecl - InputPort
+    @Test
+    public void readInputPortTest() {
+        testCase(new JRIT_InputPort());
+    }
+
+    // ServiceDecl - OutputPort
+    @Test
+    public void readOutputPortTest() {
+        testCase(new JRIT_OutputPort());
+    }
+
+    // ServiceDecl - Init
+    @Test
+    public void readInitTest() {
+        testCase(new JRIT_Init());
+    }
+
+    // ServiceDecl - DefineProcedure
+    @Test
+    public void readDefineProcedureTest() {
+        testCase(new JRIT_DefineProcedure());
+    }
+
+    // ServiceDecl - Main
+    @Test
+    public void readMainTest() {
+        testCase(new JRIT_Main());
+    }
+
+    // ServiceDecl - Courier
+    @Test
+    public void readCourierTest() {
+        testCase(new JRIT_Courier());
+    }
+
+    // ServiceDecl - PortParameters - PortLocation
+    @Test
+    public void readPortLocationTest() {
+        testCase(new JRIT_PortLocation());
+    }
+
+    // ServiceDecl - PortParameters - PortProtocol
+    @Test
+    public void readPortProtocolTest() {
+        testCase(new JRIT_PortProtocol());
+    }
+
+    // ServiceDecl - PortParameters - PortInterfaces
+    @Test
+    public void readPortInterfacesTest() {
+        testCase(new JRIT_PortInterfaces());
+    }
+
+    // ServiceDecl - PortParameters - PortAggregates
+    @Test
+    public void readPortAggregatesTest() {
+        testCase(new JRIT_PortAggregates());
+    }
+
+    // ServiceDecl - PortParameters - PortRedirects
+    @Test
+    public void readPortRedirectsTest() {
+        testCase(new JRIT_PortRedirects());
+    }
+
+    // Misc - Block
+    @Test
+    public void readBlockTest() {
+        testCase(new JRIT_Block());
+    }
+
+    // Misc - Line
+    @Test
+    public void readLineTest() {
+        testCase(new JRIT_Line());
+    }
+
+    // Misc - Comments
+    @Test
+    public void readCommentsTest() {
+        testCase(new JRIT_Comments());
+    }
+
+    // Misc - EOF
+    @Test
+    public void readEOFTest() {
+        testCase(new JRIT_EOF());
+    }
+
+    // Simple file
     @Test
     public void readSimpleFilesTest() {
-        JRIT_SimpleFiles tester = new JRIT_SimpleFiles();
+        testCase(new JRIT_SimpleFiles());
+    }
 
+    // multiple files
+
+
+    // ----
+
+    private void testCase(JolieReaderIntegrationTestCase tester) {
+        testCase(tester, false);
+    }
+
+    private void testCase(JolieReaderIntegrationTestCase tester, Boolean printTree) {
         for (String fileName : tester.getFileNames()) {
             Set<Node.Op> nodes = readFolder(Paths.get(filesAndPaths.get(fileName)));
             assertEquals(1, nodes.size());
             Node.Op resultPluginNode = nodes.iterator().next();
-            tester.test(resultPluginNode, fileName);
+
+            if (printTree) { // prints ecco tree instead of testing
+                System.out.println("\n");
+                printECCO(resultPluginNode);
+                System.out.println("\n" + "End of " + fileName + "\n\n");
+            } else { // tests ecco tree
+                tester.test(resultPluginNode, fileName);
+            }
         }
     }
-
-//    public void printECCO(Node.Op rootNode) {
-//        System.out.println(rootNode.toString());
-//        for (int i = 0; i < rootNode.getChildren().size(); i++) {
-//            printECCO(rootNode.getChildren().get(i));
-//        }
-//    }
 
     private Set<Node.Op> readFolder(Path folderPath) {
         JolieReader reader = new JolieReader(new MemEntityFactory());
@@ -96,5 +284,12 @@ public class JolieReaderIntegrationTest {
             e.printStackTrace();
         }
         return res;
+    }
+
+    public void printECCO(Node.Op rootNode) {
+        System.out.println(rootNode.toString());
+        for (int i = 0; i < rootNode.getChildren().size(); i++) {
+            printECCO(rootNode.getChildren().get(i));
+        }
     }
 }
