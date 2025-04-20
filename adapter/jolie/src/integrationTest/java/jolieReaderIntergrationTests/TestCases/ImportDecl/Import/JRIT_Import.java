@@ -71,11 +71,11 @@ public class JRIT_Import extends JolieReaderIntegrationTestCase {
 
         // ------
 
-        // 3 EndOfFile
+        // 3: EndOfFile
         node = pluginNodeChildren.get(2);
         checkContextNode(node, NodeTypes.EOF, 1);
 
-        // 3.1 EOF
+        // 3.1: EOF
         node = pluginNodeChildren.get(2).getChildren().get(0);
         checkTokenNode(node, JolieTokenType.EOF, "", 2);
     }

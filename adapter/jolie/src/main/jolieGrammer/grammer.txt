@@ -14,18 +14,18 @@ InterfaceDecl   -> "interface" "extender"? ID "{" RequestResponseDecl? OneWayDec
 
 TypeDecl        -> "type" ID (":" ID ("|" ID)*)? Block?
 
-ServiceDecl     -> "service" ID ( "(" ID* ")" )? "{" Service* "}" // (p: MyServiceParam),
+ServiceDecl     -> "service" ID ( "(" Token* ")" )? "{" Service* "}" // (p: MyServiceParam),
   Service         -> Execution | Embed | Embedded | InputPort | OutputPort | Init | Main | Courier | DefineProcedure | Line
     Execution       -> "execution" ( ":" ID ) | ( "{" ID "}" )
-    Embed           -> "embed" ID "as" ID // embed ID "(" ID* ")" ("in" ID | "as" ID) TODO: change implementation
+    Embed           -> embed ID ( "(" ID* ")" )? ("in" ID | "as" ID) // TODO: check if ID* needs to be switched to Token*
     Embedded        -> "embedded" Block
     InputPort       -> "inputPort" ID "{" PortLocation? PortProtocol? PortInterfaces? PortAggregates? PortRedirects? "}"
     OutputPort      -> "outputPort" ID "{" PortLocation? PortProtocol? PortInterfaces? "}"
-      PortLocation    -> ( "location" | "Location" ) ":" line
-      PortProtocol    -> ( "protocol" | "Protocol" ) ":" line ( Line )*
-      PortInterfaces  -> ( "interfaces" | "Interfaces" ) ":" Line (, Line )*
-      PortAggregates  -> ( "aggregates" | "Aggregates" ) ":" Line (, Line )*
-      PortRedirects   -> ( "redirects" | "Redirects" ) ":" Line (, Line )*
+      PortLocation    -> ( "location" | "Location" ) ":" line // Token*
+      PortProtocol    -> ( "protocol" | "Protocol" ) ":" line ( Line )* // Token*
+      PortInterfaces  -> ( "interfaces" | "Interfaces" ) ":" Line (, Line )* // Token*
+      PortAggregates  -> ( "aggregates" | "Aggregates" ) ":" Line (, Line )* // Token*
+      PortRedirects   -> ( "redirects" | "Redirects" ) ":" Line (, Line )* // Token*
     Init            -> "init" Block
     Main            -> "main" Block
     Courier         -> "courier" "<" ID ">" Block

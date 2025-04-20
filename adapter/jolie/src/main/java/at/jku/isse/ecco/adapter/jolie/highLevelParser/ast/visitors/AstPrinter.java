@@ -224,6 +224,12 @@ public class AstPrinter implements NodeVisitor<String> {
         indentLevel++;
 
         builder.append(indent()).append(embed.getEmbedID().getLexeme()).append("\n");
+        if (embed.getParams() != null) {
+            for (JolieToken token :embed.getParams()) {
+                builder.append(indent()).append(token.getLexeme());
+            }
+            builder.append(indent()).append("\n");
+        }
         builder.append(indent()).append(embed.getAsID().getLexeme()).append("\n");
 
         indentLevel--;
@@ -278,7 +284,9 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("PortLocation").append("\n");
         indentLevel++;
 
-        builder.append(portLocation.getLine().accept(this));
+        for (JolieToken arguments : portLocation.getArguments()) {
+            builder.append(arguments.getLexeme());
+        }
 
         indentLevel--;
         return builder.toString();
@@ -290,7 +298,9 @@ public class AstPrinter implements NodeVisitor<String> {
         builder.append(indent()).append("PortProtocol").append("\n");
         indentLevel++;
 
-        builder.append(portProtocol.getLine().accept(this));
+        for (JolieToken arguments : portProtocol.getArguments()) {
+            builder.append(arguments.getLexeme());
+        }
 
         indentLevel--;
         return builder.toString();

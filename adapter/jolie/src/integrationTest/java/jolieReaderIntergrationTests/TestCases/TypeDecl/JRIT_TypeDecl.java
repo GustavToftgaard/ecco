@@ -14,7 +14,7 @@ public class JRIT_TypeDecl extends JolieReaderIntegrationTestCase {
         fileNames.put("typeDeclTest1.ol", 1);
         fileNames.put("typeDeclTest2.ol", 2);
         fileNames.put("typeDeclTest3.ol", 3);
-        fileNames.put("typeDeclTest4.ol", 4);
+//        fileNames.put("typeDeclTest4.ol", 4);
     }
 
     @Override

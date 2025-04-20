@@ -2,6 +2,8 @@ General:
 - Remember ".iol" files
   - are they still used?
 - Error reporting?
+- documentation and code comments
+- README's include: main structure / navigation, testing, use cases, ...
 
 Testing:
 - IntegrationTest
@@ -47,9 +49,9 @@ Testing:
           - ("execution" "{" ID "}")
         - Embed
           - "embed" ID "as" ID
-          - "embed" ID "in" ID // TODO: fail
-          - "embed" ID (ID*) "as" ID // TODO: fail
-          - "embed" ID (ID*) "in" ID // TODO: fail
+          - "embed" ID "in" ID
+          - "embed" ID (ID*) "as" ID
+          - "embed" ID (ID*) "in" ID
         - Embedded
           - "embedded" Block
         - InputPort
@@ -64,29 +66,30 @@ Testing:
           - ("outputPort" ID "{" PortProtocol "}")
           - ("outputPort" ID "{" PortInterfaces "}")
           - ("outputPort" ID "{" PortLocation PortProtocol PortInterfaces "}")
-              - PortLocation
-                - ("location" ":" line)
-                - ("Location" ":" line)
-              - PortProtocol
-                - ("protocol" ":" line)
-                - ("Protocol" ":" line)
-                - ("protocol" ":" line*) // TODO: fail
-                - ("Protocol" ":" line*) // TODO: fail
-              - PortInterfaces
-                - "interfaces" ":" Line
-                - "Interfaces" ":" Line
-                - "interfaces" ":" Line (, Line )*
-                - "Interfaces" ":" Line (, Line )*
-              - PortAggregates
-                - "aggregates" ":" Line
-                - "Aggregates" ":" Line
-                - "aggregates" ":" Line (, Line )*
-                - "Aggregates" ":" Line (, Line )*
-              - PortRedirects
-                - "redirects" ":" Line
-                - "Redirects" ":" Line
-                - "redirects" ":" Line (, Line )*
-                - "Redirects" ":" Line (, Line )*
+        - PortParams
+          - PortLocation
+            - ("location" ":" Token)
+            - ("Location" ":" Token)
+          - PortProtocol
+            - ("protocol" ":" Token)
+            - ("Protocol" ":" Token)
+            - ("protocol" ":" Token*)
+            - ("Protocol" ":" Token*)
+          - PortInterfaces
+            - ("interfaces" ":" Token)
+            - ("Interfaces" ":" Token)
+            - ("interfaces" ":" Token ( Token )*)
+            - ("Interfaces" ":" Token ( Token )*)
+          - PortAggregates
+            - ("aggregates" ":" Token)
+            - ("Aggregates" ":" Token)
+            - ("aggregates" ":" Token ( Token )*)
+            - ("Aggregates" ":" Token ( Token )*)
+          - PortRedirects
+            - ("redirects" ":" Token)
+            - ("Redirects" ":" Token)
+            - ("redirects" ":" Token ( Token )*)
+            - ("Redirects" ":" Token ( Token )*)
         - Init
           - "init" Block
         - Main

@@ -2,18 +2,19 @@ package at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.serviceDecl.por
 
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.NodeVisitor;
-import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.Line;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
-public class PortProtocol implements Node {
-    private final Line line;
+import java.util.ArrayList;
 
-    public PortProtocol(Line line) {
-        this.line = line;
+public class PortProtocol implements Node {
+    private final ArrayList<JolieToken> arguments;
+
+    public PortProtocol(ArrayList<JolieToken> arguments) {
+        this.arguments = arguments;
     }
 
-    public Line getLine() {
-        return line;
+    public ArrayList<JolieToken> getArguments() {
+        return arguments;
     }
 
     @Override

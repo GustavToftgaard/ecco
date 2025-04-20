@@ -1,5 +1,5 @@
-init {
-    // database connection configuration
+service Test {
+  init {
     config.database << {
       username = ""
       password = ""
@@ -8,3 +8,4 @@ init {
       driver = "sqlite"
     }
   }
+}

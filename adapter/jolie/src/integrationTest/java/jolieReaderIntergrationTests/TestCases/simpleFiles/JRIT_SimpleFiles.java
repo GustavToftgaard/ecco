@@ -164,19 +164,15 @@ public class JRIT_SimpleFiles extends JolieReaderIntegrationTestCase {
         node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(1);
         checkContextNode(node, NodeTypes.PORTLOCATION, 1);
 
-        // 5.3.2.1: Line
+        // 5.3.2.1: String
         node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(1).getChildren().get(0);
-        checkContextNode(node, NodeTypes.LINE, 1);
-
-        // 5.3.2.1.1: LineContents
-        node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(1).getChildren().get(0).getChildren().get(0);
-        checkLineNode(node, " {\n" + "    location: \"local\"\n" + "    ", 19);
+        checkTokenNode(node, JolieTokenType.STRING, "\"local\"", 19);
 
         // 5.3.3: PortInterfaces
         node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(2);
         checkContextNode(node, NodeTypes.PORTINTERFACES, 1);
 
-        // 5.3.3.1: Token
+        // 5.3.3.1: ID
         node = pluginNodeChildren.get(4).getChildren().get(2).getChildren().get(2).getChildren().get(0);
         checkTokenNode(node, JolieTokenType.ID,"NumbersAPI", 20);
 
@@ -219,6 +215,6 @@ public class JRIT_SimpleFiles extends JolieReaderIntegrationTestCase {
 
         // 6.1 EOF
         node = pluginNodeChildren.get(5).getChildren().get(0);
-        checkTokenNode(node, JolieTokenType.EOF, "", 35);
+        checkTokenNode(node, JolieTokenType.EOF, "", 34);
     }
 }

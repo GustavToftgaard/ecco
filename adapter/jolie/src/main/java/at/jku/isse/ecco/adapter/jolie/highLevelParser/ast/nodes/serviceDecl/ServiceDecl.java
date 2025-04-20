@@ -11,12 +11,6 @@ public class ServiceDecl implements Node {
     private final ArrayList<JolieToken> params; // ?
     private final ArrayList<Node> services;
 
-    public ServiceDecl(JolieToken serviceID, ArrayList<Node> services) {
-        this.serviceID = serviceID;
-        this.services = services;
-        this.params = null;
-    }
-
     public ServiceDecl(JolieToken serviceID, ArrayList<Node> services, ArrayList<JolieToken> params) {
         this.serviceID = serviceID;
         this.services = services;

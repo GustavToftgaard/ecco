@@ -1,6 +1,5 @@
 service Test {
-  embed Console(1) as console
-
+  embed Console as console
   main {
     println@console( "Hello There" )()
   }

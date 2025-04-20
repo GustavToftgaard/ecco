@@ -23,6 +23,10 @@ public abstract class JolieReaderIntegrationTestCase {
         return new ArrayList<String>(values);
     }
 
+    public void clearFileNames() {
+        fileNames.clear();
+    }
+
     public abstract void test(Node.Op resultPluginNode, String fileName);
 
     public void checkContextNode(Node.Op node, NodeTypes nodeType, int numberOfChildren) {

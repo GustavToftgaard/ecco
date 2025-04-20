@@ -220,6 +220,7 @@ public class JolieReaderIntegrationTest {
                 tester.test(resultPluginNode, fileName);
             }
         }
+        tester.clearFileNames(); // clear fileNames so that tester ready for next test
     }
 
     private Set<Node.Op> readFolder(Path folderPath) {

@@ -41,6 +41,7 @@ public class JolieScanner {
         keywords.put("import", IMPORT);
         keywords.put("include", INCLUDE);
         keywords.put("as", AS);
+        keywords.put("in", IN);
 
         keywords.put("interface", INTERFACE);
         keywords.put("extender", EXTENDER);
@@ -65,6 +66,10 @@ public class JolieScanner {
         keywords.put("Protocol", PROTOCOL);
         keywords.put("interfaces", INTERFACES);
         keywords.put("Interfaces", INTERFACES);
+        keywords.put("aggregates", AGGREGATES);
+        keywords.put("Aggregates", AGGREGATES);
+        keywords.put("redirects", REDIRECTS);
+        keywords.put("Redirects", REDIRECTS);
 
         keywords.put("init", INIT);
         keywords.put("main", MAIN);
@@ -190,7 +195,10 @@ public class JolieScanner {
     }
 
     private boolean isSeperator(char c) {
-        return c == ':' || c == ';' || c == '(';
+        return c == ':' || c == ';' ||
+                c == '(' || c == ')' ||
+                c == '{' || c == '}' ||
+                c == '<' || c == '>';
     }
 
     // helper function for scanToken

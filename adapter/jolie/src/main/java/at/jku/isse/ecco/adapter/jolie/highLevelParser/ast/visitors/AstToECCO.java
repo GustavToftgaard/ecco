@@ -194,8 +194,17 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitEmbed(Embed embed) {
         at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.EMBED);
+
         node.addChild(createTokenNode(embed.getEmbedID()));
+
+        if (embed.getParams() != null) {
+            for (JolieToken param : embed.getParams()) {
+                node.addChild(createTokenNode(param));
+            }
+        }
+
         node.addChild(createTokenNode(embed.getAsID()));
+
         return node;
     }
 
@@ -233,14 +242,22 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitPortLocation(PortLocation portLocation) {
         at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTLOCATION);
-        node.addChild(portLocation.getLine().accept(this));
+
+        for (JolieToken argument : portLocation.getArguments()) {
+            node.addChild(createTokenNode(argument));
+        }
+
         return node;
     }
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitPortProtocol(PortProtocol portProtocol) {
         at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTPROTOCOL);
-        node.addChild(portProtocol.getLine().accept(this));
+
+        for (JolieToken argument : portProtocol.getArguments()) {
+            node.addChild(createTokenNode(argument));
+        }
+
         return node;
     }
 
