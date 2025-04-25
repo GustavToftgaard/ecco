@@ -1,5 +1,5 @@
 interface NumbersAPI {
   requestResponse:
-    sumUpTo( int )( int )/* Test comment */,
+    sumUpTo( int )( int )/* TestBla comment */,
     sumBetween( twoArguments )( int )
 }

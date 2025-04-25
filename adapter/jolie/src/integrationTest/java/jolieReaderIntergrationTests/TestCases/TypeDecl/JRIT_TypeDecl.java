@@ -14,7 +14,7 @@ public class JRIT_TypeDecl extends JolieReaderIntegrationTestCase {
         fileNames.put("typeDeclTest1.ol", 1);
         fileNames.put("typeDeclTest2.ol", 2);
         fileNames.put("typeDeclTest3.ol", 3);
-//        fileNames.put("typeDeclTest4.ol", 4);
+        fileNames.put("typeDeclTest4.ol", 4);
     }
 
     @Override
@@ -167,7 +167,7 @@ public class JRIT_TypeDecl extends JolieReaderIntegrationTestCase {
         checkTokenNode(node, JolieTokenType.ID, "int", 1);
 
         // 1.3: ID
-        node = pluginNodeChildren.get(1).getChildren().get(2);
+        node = pluginNodeChildren.get(0).getChildren().get(2);
         checkTokenNode(node, JolieTokenType.ID, "string", 1);
 
         // 2: TypeDecl

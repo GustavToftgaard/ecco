@@ -1,1 +1,1 @@
-type testType { }
+type testType {}

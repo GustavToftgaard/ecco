@@ -1,4 +1,4 @@
-service Numbers {
+service Test {
   main {
 
   }

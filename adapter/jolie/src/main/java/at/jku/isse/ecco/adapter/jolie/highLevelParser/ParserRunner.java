@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType.*;
 
@@ -23,16 +25,30 @@ public class ParserRunner {
         errors.clear();
 
         List<String> lineList = null;
+        char lastChar = ' ';
         try {
             lineList = Files.readAllLines(source);
+            char[] charArray = new String(Files.readAllBytes(source)).toCharArray();
+            if (charArray.length > 0) {
+                lastChar = charArray[charArray.length - 1];
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         String[] lines = lineList.toArray(new String[0]);
         StringBuilder scannerInput = new StringBuilder();
-        for (String line : lines) {
-            scannerInput.append(line).append('\n');
+
+//        for (String line : lines) {
+//            scannerInput.append(line).append('\n');
+//        }
+
+        for (int i = 0; i < lines.length; i++) {
+            if (i == lines.length - 1 && !Objects.equals(lines[i], "") && (lastChar != '\n' && lastChar != '\r')) {
+                scannerInput.append(lines[i]);
+            } else {
+                scannerInput.append(lines[i]).append('\n');
+            }
         }
 
         JolieScanner scanner = new JolieScanner(scannerInput.toString());

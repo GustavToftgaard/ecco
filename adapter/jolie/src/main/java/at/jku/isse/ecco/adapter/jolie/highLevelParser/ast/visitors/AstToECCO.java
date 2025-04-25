@@ -139,8 +139,10 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
         at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.TYPEDECL);
         node.addChild(createTokenNode(typeDecl.getTypeID()));
 
-        if (typeDecl.getSecondID() != null) {
-            node.addChild(createTokenNode(typeDecl.getSecondID()));
+        if (typeDecl.getTypeTypesID() != null) {
+            for (JolieToken token : typeDecl.getTypeTypesID()) {
+                node.addChild(createTokenNode(token));
+            }
         }
 
         if (typeDecl.getBlock() != null) {

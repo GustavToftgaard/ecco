@@ -9,6 +9,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class JolieWriterIntegrationTest {
     private final static String autoTestFolder = "src/integrationTest/resources/jolieTestCode/autoTestFolder";
     private final static String fileTestFolder = "src/integrationTest/resources/jolieTestCode";
+    private final Map<String, String> filesAndPaths = createHashMapOfTestFiles();
 
     @BeforeAll
     public static void testPreparation(){
@@ -80,41 +82,7 @@ public class JolieWriterIntegrationTest {
         return directoryToBeDeleted.delete();
     }
 
-//    private static Path getResourceTestFolderPath(){
-//        URI resourceFolderUri = null;
-//        try {
-//            var temp = JolieWriterIntegrationTest.class.getClassLoader().getResource(testFolder);
-//            resourceFolderUri = Objects.requireNonNull(temp).toURI();
-//            String resourceFolderPathString = Paths.get(resourceFolderUri).toString();
-//            Path resourceFolderPath = Paths.get(resourceFolderPathString);
-//            assertNotNull(resourceFolderPath);
-//            return resourceFolderPath;
-//        } catch (Exception e){
-//            throw new RuntimeException(e.getMessage());
-//        }
-//    }
-
-//    private static Path getResourceTestFolderSubpath(String relativePath){
-//        Path testFolderPath = getResourceTestFolderPath();
-//        return testFolderPath.resolve(relativePath);
-//    }
-
-    // copied from CWriterIntegrationTest
     private static String[] fileToStringArray(Path filePath){
-//        List<String> lineList = new LinkedList<>();
-//
-//        try (BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                lineList.add(line);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        String[] lineArray = new String[lineList.size()];
-//        lineList.toArray(lineArray);
-
         List<String> lineList = null;
         try {
             lineList = Files.readAllLines(filePath);
@@ -125,17 +93,232 @@ public class JolieWriterIntegrationTest {
         return lineList.toArray(new String[0]);
     }
 
+    // ----
+
+    // ImportDecl - Import
     @Test
-    public void writeSingleFile() {
+    public void readImportTest() {
+        writeTestCase("importTest1.ol");
+        writeTestCase("importTest2.ol");
+    }
+
+    // ImportDecl - Include
+    @Test
+    public void readIncludeTest() {
+        writeTestCase("includeTest1.ol");
+    }
+
+    // InterfaceDecl
+    @Test
+    public void readInterfaceDeclTest() {
+        writeTestCase("interfaceDeclTest1.ol");
+        writeTestCase("interfaceDeclTest2.ol");
+        writeTestCase("interfaceDeclTest3.ol");
+        writeTestCase("interfaceDeclTest4.ol");
+        writeTestCase("interfaceDeclTest5.ol");
+        writeTestCase("interfaceDeclTest6.ol");
+
+    }
+
+    // InterfaceDecl - RequestResponseDecl
+    @Test
+    public void readRequestResponseDeclTest() {
+        writeTestCase("requestResponseDeclTest1.ol");
+        writeTestCase("requestResponseDeclTest2.ol");
+        writeTestCase("requestResponseDeclTest3.ol");
+        writeTestCase("requestResponseDeclTest4.ol");
+    }
+
+    // InterfaceDecl - OneWayDecl
+    @Test
+    public void readOneWayDeclTest() {
+        writeTestCase("oneWayDeclTest1.ol");
+        writeTestCase("oneWayDeclTest2.ol");
+        writeTestCase("oneWayDeclTest3.ol");
+        writeTestCase("oneWayDeclTest4.ol");
+    }
+
+    // TypeDecl
+    @Test
+    public void readTypeDeclTest() {
+        writeTestCase("typeDeclTest1.ol");
+        writeTestCase("typeDeclTest2.ol");
+        writeTestCase("typeDeclTest3.ol");
+        writeTestCase("typeDeclTest4.ol");
+    }
+
+    // ServiceDecl
+    @Test
+    public void readServiceDeclTest() {
+        writeTestCase("serviceDeclTest1.ol");
+        writeTestCase("serviceDeclTest2.ol");
+        writeTestCase("serviceDeclTest3.ol");
+    }
+
+    // ServiceDecl - Execution
+    @Test
+    public void readExecutionTest() {
+        writeTestCase("executionTest1.ol");
+        writeTestCase("executionTest2.ol");
+    }
+
+    // ServiceDecl - Embed
+    @Test
+    public void readEmbedTest() {
+        writeTestCase("embedTest1.ol");
+        writeTestCase("embedTest2.ol");
+        writeTestCase("embedTest3.ol");
+        writeTestCase("embedTest4.ol");
+    }
+
+    // ServiceDecl - Embedded
+    @Test
+    public void readEmbeddedTest() {
+        writeTestCase("embeddedTest1.ol");
+    }
+
+    // ServiceDecl - InputPort
+    @Test
+    public void readInputPortTest() {
+        writeTestCase("inputPortTest1.ol");
+        writeTestCase("inputPortTest2.ol");
+        writeTestCase("inputPortTest3.ol");
+        writeTestCase("inputPortTest4.ol");
+        writeTestCase("inputPortTest5.ol");
+        writeTestCase("inputPortTest6.ol");
+    }
+
+    // ServiceDecl - OutputPort
+    @Test
+    public void readOutputPortTest() {
+        writeTestCase("outputPortTest1.ol");
+        writeTestCase("outputPortTest2.ol");
+        writeTestCase("outputPortTest3.ol");
+        writeTestCase("outputPortTest4.ol");
+    }
+
+    // ServiceDecl - Init
+    @Test
+    public void readInitTest() {
+        writeTestCase("initTest1.ol");
+    }
+
+    // ServiceDecl - DefineProcedure
+    @Test
+    public void readDefineProcedureTest() {
+        writeTestCase("defineProcedureTest1.ol");
+    }
+
+    // ServiceDecl - Main
+    @Test
+    public void readMainTest() {
+        writeTestCase("mainTest1.ol");
+    }
+
+    // ServiceDecl - Courier
+    @Test
+    public void readCourierTest() {
+        writeTestCase("courierTest1.ol");
+    }
+
+    // ServiceDecl - PortParameters - PortLocation
+    @Test
+    public void readPortLocationTest() {
+        writeTestCase("portLocationTest1.ol");
+        writeTestCase("portLocationTest2.ol");
+    }
+
+    // ServiceDecl - PortParameters - PortProtocol
+    @Test
+    public void readPortProtocolTest() {
+        writeTestCase("portProtocolTest1.ol");
+        writeTestCase("portProtocolTest2.ol");
+        writeTestCase("portProtocolTest3.ol");
+        writeTestCase("portProtocolTest4.ol");
+    }
+
+    // ServiceDecl - PortParameters - PortInterfaces
+    @Test
+    public void readPortInterfacesTest() {
+        writeTestCase("portInterfacesTest1.ol");
+        writeTestCase("portInterfacesTest2.ol");
+        writeTestCase("portInterfacesTest3.ol");
+        writeTestCase("portInterfacesTest4.ol");
+    }
+
+    // ServiceDecl - PortParameters - PortAggregates
+    @Test
+    public void readPortAggregatesTest() {
+        writeTestCase("portAggregatesTest1.ol");
+        writeTestCase("portAggregatesTest2.ol");
+        writeTestCase("portAggregatesTest3.ol");
+        writeTestCase("portAggregatesTest4.ol");
+    }
+
+    // ServiceDecl - PortParameters - PortRedirects
+    @Test
+    public void readPortRedirectsTest() {
+        writeTestCase("portRedirectsTest1.ol");
+        writeTestCase("portRedirectsTest2.ol");
+        writeTestCase("portRedirectsTest3.ol");
+        writeTestCase("portRedirectsTest4.ol");
+    }
+
+    // Misc - Block
+    @Test
+    public void readBlockTest() {
+        writeTestCase("blockTest1.ol");
+        writeTestCase("blockTest2.ol");
+    }
+
+    // Misc - Line
+    @Test
+    public void readLineTest() {
+        writeTestCase("lineTest1.ol");
+        writeTestCase("lineTest2.ol");
+    }
+
+    // Misc - Comments
+    @Test
+    public void readCommentsTest() {
+        writeTestCase("commentsTest1.ol");
+        writeTestCase("commentsTest2.ol");
+        writeTestCase("commentsTest3.ol");
+    }
+
+    // Misc - EOF
+    @Test
+    public void readEOFTest() {
+        writeTestCase("EOFTest1.ol");
+        writeTestCase("EOFTest2.ol");
+        writeTestCase("EOFTest3.ol");
+        writeTestCase("EOFTest4.ol");
+        writeTestCase("EOFTest5.ol");
+    }
+
+    // Simple file
+    @Test
+    public void writeSimpleFile() {
+        writeTestCase("simpleFile1.ol");
+    }
+
+    // Multiple files
+
+    // ----
+
+    public void writeTestCase(String fileName) {
+        writeTestCase(fileName, false);
+    }
+
+    public void writeTestCase(String fileName, boolean printFile) {
         MemEntityFactory factory = new MemEntityFactory();
-        Path testFilePath = Paths.get(autoTestFolder + "/simpleFile1.ol");
+        Path testFilePath = Paths.get(autoTestFolder + "/" + fileName);
 
         // create ecco tree with some line nodes
-        String testCodeFile = "jolieTestCode/simple_file";
         URI resourceFolderUri = null;
 
         try {
-            resourceFolderUri = Objects.requireNonNull(getClass().getClassLoader().getResource(testCodeFile)).toURI();
+            resourceFolderUri = Objects.requireNonNull(getClass().getClassLoader().getResource(filesAndPaths.get(fileName))).toURI();
             String resourceFolderPathString = Paths.get(resourceFolderUri).toString();
             Path resourceFolderPath = Paths.get(resourceFolderPathString);
             Set<Node.Op> nodes = readFolder(resourceFolderPath);
@@ -156,8 +339,16 @@ public class JolieWriterIntegrationTest {
             String[] writtenContent = fileToStringArray(testFilePath);
             String[] originalContent = fileToStringArray(testFilePath);
 
-            for (int i = 0; i < originalContent.length; i++) {
-                assertEquals(originalContent[i], writtenContent[i]);
+            if (printFile) {
+                System.out.println("\n" + fileName + ":\n--- START ---");
+                for (int i = 0; i < originalContent.length; i++) {
+                    System.out.println(writtenContent[i]);
+                }
+                System.out.println("---  END  ---\n");
+            } else {
+                for (int i = 0; i < originalContent.length; i++) {
+                    assertEquals(originalContent[i], writtenContent[i]);
+                }
             }
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -192,5 +383,54 @@ public class JolieWriterIntegrationTest {
         }
 
         return fileSet.stream().map(dir::relativize).toArray(Path[]::new);
+    }
+
+    private Map<String, String> createHashMapOfTestFiles() {
+        String totalPath = Objects.requireNonNull(getClass().getClassLoader().getResource("jolieTestCode")).toString();
+        totalPath = totalPath.substring(6); // remove "file:/" from start of string
+        totalPath = totalPath.replace("%20", " "); // in getting totalPath all " " are replaced with "%20" so this reverses this
+
+        Map<String, String> res = new HashMap<>();
+        try {
+            Path path = Paths.get(totalPath);
+            List<Path> paths = listAllFilesInDir(path);
+
+            for(Path filePath : paths) {
+                String filePathString = filePath.toString();
+                StringBuilder folderName = new StringBuilder();
+
+                for (int i = filePathString.length() - 1; i > 0 ; i--) { // get relative path after "JolieTestCode"
+//                    folderName.append(filePathString.charAt(i));
+                    folderName.insert(0, filePathString.charAt(i));
+                    if (filePathString.charAt(i) == '\\') {
+                        if (folderName.toString().equals("\\jolieTestCode")) {
+                            filePathString = filePathString.substring(i + 1);
+                            break;
+                        } else {
+                            folderName = new StringBuilder();
+                        }
+                    }
+                }
+
+                for (int i = filePathString.length() - 1; i > 0 ; i--) {
+                    if (filePathString.charAt(i) == '\\') {
+                        res.put(filePathString.substring(i + 1), filePathString.substring(0, i));
+                        break;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    private List<Path> listAllFilesInDir(Path path) throws IOException {
+        List<Path> result;
+        try (Stream<Path> walk = Files.walk(path)) {
+            result = walk.filter(Files::isRegularFile)
+                    .collect(Collectors.toList());
+        }
+        return result;
     }
 }

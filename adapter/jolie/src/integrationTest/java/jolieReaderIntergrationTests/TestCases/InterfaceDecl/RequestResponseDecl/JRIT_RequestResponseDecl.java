@@ -11,10 +11,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JRIT_RequestResponseDecl extends JolieReaderIntegrationTestCase {
     static {
-        fileNames.put("requestResponseTest1.ol", 1);
-        fileNames.put("requestResponseTest2.ol", 2);
-        fileNames.put("requestResponseTest3.ol", 3);
-        fileNames.put("requestResponseTest4.ol", 4);
+        fileNames.put("requestResponseDeclTest1.ol", 1);
+        fileNames.put("requestResponseDeclTest2.ol", 2);
+        fileNames.put("requestResponseDeclTest3.ol", 3);
+        fileNames.put("requestResponseDeclTest4.ol", 4);
     }
 
     @Override

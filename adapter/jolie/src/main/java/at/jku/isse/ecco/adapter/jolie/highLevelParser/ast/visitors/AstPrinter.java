@@ -157,9 +157,12 @@ public class AstPrinter implements NodeVisitor<String> {
         indentLevel++;
 
         builder.append(indent()).append(typeDecl.getTypeID().getLexeme()).append("\n");
-        if (typeDecl.getSecondID() != null) {
-            builder.append(indent()).append(typeDecl.getSecondID().getLexeme()).append("\n");
+        if (typeDecl.getTypeTypesID() != null) {
+            for (JolieToken token : typeDecl.getTypeTypesID()) {
+                builder.append(indent()).append(token.getLexeme()).append("\n");
+            }
         }
+
         if (typeDecl.getBlock() != null) {
             builder.append(typeDecl.getBlock().accept(this));
         }

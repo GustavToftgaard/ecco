@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JRIT_DefineProcedure extends JolieReaderIntegrationTestCase {
     static {
-        fileNames.put("defineProcedure1.ol", 1);
+        fileNames.put("defineProcedureTest1.ol", 1);
     }
 
     @Override

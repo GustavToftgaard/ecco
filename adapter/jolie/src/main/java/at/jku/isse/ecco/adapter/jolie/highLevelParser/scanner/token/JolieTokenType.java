@@ -6,10 +6,10 @@ public enum JolieTokenType {
     LEFT_SQUARE_BRACKET, RIGHT_SQUARE_BRACKET,
     LEFT_PAREN, RIGHT_PAREN,
     LESS_THAN, GREATER_THAN,
-    COLON, SEMI_COLON,
+    COLON, SEMI_COLON, VERTICAL_BAR,
 
     // Single-character tokens (white space)
-    SPACE, TAB,
+    SPACE,
 
     // Keywords
     FROM, IMPORT, INCLUDE, AS, IN,

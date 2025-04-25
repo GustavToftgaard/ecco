@@ -5,26 +5,16 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.NodeVisitor
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.Block;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
+import java.util.ArrayList;
+
 public class TypeDecl implements Node {
     private final JolieToken typeID;
-    private final JolieToken secondID; //?
+    private final ArrayList<JolieToken> typeTypesID; //?
     private final Block block; //?
 
-//    public TypeDecl(JolieToken typeID, JolieToken secondID) {
-//        this.typeID = typeID;
-//        this.secondID = secondID;
-//        this.block = null;
-//    }
-
-//    public TypeDecl(JolieToken typeID, Block block) {
-//        this.typeID = typeID;
-//        this.secondID = null;
-//        this.block = block;
-//    }
-
-    public TypeDecl(JolieToken typeID, JolieToken secondID, Block block) {
+    public TypeDecl(JolieToken typeID, ArrayList<JolieToken> typeTypesID, Block block) {
         this.typeID = typeID;
-        this.secondID = secondID;
+        this.typeTypesID = typeTypesID;
         this.block = block;
     }
 
@@ -32,8 +22,8 @@ public class TypeDecl implements Node {
         return typeID;
     }
 
-    public JolieToken getSecondID() {
-        return secondID;
+    public ArrayList<JolieToken> getTypeTypesID() {
+        return typeTypesID;
     }
 
     public Block getBlock() {

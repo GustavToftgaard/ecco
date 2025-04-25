@@ -37,7 +37,7 @@ Testing:
       - ("type" ID Block)
       - ("type" ID ":" ID)
       - ("type" ID ":" ID Block)
-      - ("type" ID ":" ID ("|" ID)* // TODO: fail
+      - ("type" ID ":" ID ("|" ID)*
 
     - ServiceDecl
       - ("service" ID "{" Service* "}")
@@ -108,11 +108,16 @@ Testing:
       - In line
       - End line
       - Multi line
+
+      - start with comment TODO
+      - end with comment TODO
+      - multiple comments in a row TODO
     - EOF
       - one first line
       - on second line
       - on same line as end of code
       - 2 lines after end of code
+      - 3 lines after end of code
 
 
 - Other manual

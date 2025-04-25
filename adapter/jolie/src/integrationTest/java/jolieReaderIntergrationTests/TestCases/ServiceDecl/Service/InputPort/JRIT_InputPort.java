@@ -234,25 +234,31 @@ public class JRIT_InputPort extends JolieReaderIntegrationTestCase {
 
         // 1.2.2: PortLocation
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1);
-        checkContextNode(node, NodeTypes.PORTREDIRECTS, 6);
+        checkContextNode(node, NodeTypes.PORTREDIRECTS, 8);
 
         // 1.2.2.*: ID
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1).getChildren().get(0);
         checkTokenNode(node, JolieTokenType.ID, "Test1", 4);
 
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1).getChildren().get(1);
-        checkTokenNode(node, JolieTokenType.ID, "=>", 4);
+        checkTokenNode(node, JolieTokenType.ID, "=", 4);
 
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1).getChildren().get(2);
-        checkTokenNode(node, JolieTokenType.ID, "Test1Service,", 4);
+        checkTokenNode(node, JolieTokenType.GREATER_THAN, ">", 4);
 
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1).getChildren().get(3);
-        checkTokenNode(node, JolieTokenType.ID, "Test2", 5);
+        checkTokenNode(node, JolieTokenType.ID, "Test1Service,", 4);
 
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1).getChildren().get(4);
-        checkTokenNode(node, JolieTokenType.ID, "=>", 5);
+        checkTokenNode(node, JolieTokenType.ID, "Test2", 5);
 
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1).getChildren().get(5);
+        checkTokenNode(node, JolieTokenType.ID, "=", 5);
+
+        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1).getChildren().get(6);
+        checkTokenNode(node, JolieTokenType.GREATER_THAN, ">", 5);
+
+        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(1).getChildren().get(7);
         checkTokenNode(node, JolieTokenType.ID, "Test2Service", 5);
 
         // 2: EndOfFile
@@ -325,25 +331,31 @@ public class JRIT_InputPort extends JolieReaderIntegrationTestCase {
 
         // 1.2.6: PortRedirects
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(5);
-        checkContextNode(node, NodeTypes.PORTREDIRECTS, 6);
+        checkContextNode(node, NodeTypes.PORTREDIRECTS, 8);
 
         // 1.2.6.*: ID
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(5).getChildren().get(0);
         checkTokenNode(node, JolieTokenType.ID , "Test1", 8);
 
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(5).getChildren().get(1);
-        checkTokenNode(node, JolieTokenType.ID , "=>", 8);
+        checkTokenNode(node, JolieTokenType.ID , "=", 8);
 
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(5).getChildren().get(2);
-        checkTokenNode(node, JolieTokenType.ID , "Test1Service,", 8);
+        checkTokenNode(node, JolieTokenType.GREATER_THAN , ">", 8);
 
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(5).getChildren().get(3);
-        checkTokenNode(node, JolieTokenType.ID , "Test2", 9);
+        checkTokenNode(node, JolieTokenType.ID , "Test1Service,", 8);
 
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(5).getChildren().get(4);
-        checkTokenNode(node, JolieTokenType.ID , "=>", 9);
+        checkTokenNode(node, JolieTokenType.ID , "Test2", 9);
 
         node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(5).getChildren().get(5);
+        checkTokenNode(node, JolieTokenType.ID , "=", 9);
+
+        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(5).getChildren().get(6);
+        checkTokenNode(node, JolieTokenType.GREATER_THAN , ">", 9);
+
+        node = pluginNodeChildren.get(0).getChildren().get(1).getChildren().get(5).getChildren().get(7);
         checkTokenNode(node, JolieTokenType.ID , "Test2Service", 9);
 
         // 2: EndOfFile

@@ -1,4 +1,4 @@
-package jolieReaderIntergrationTests.TestCases.simpleFiles;
+package jolieReaderIntergrationTests.SimpleFiles;
 
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.NodeTypes;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType;

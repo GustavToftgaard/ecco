@@ -26,7 +26,7 @@ import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.PortParams.Por
 import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.PortParams.PortProtocol.JRIT_PortProtocol;
 import jolieReaderIntergrationTests.TestCases.ServiceDecl.Service.PortParams.PortRedirects.JRIT_PortRedirects;
 import jolieReaderIntergrationTests.TestCases.TypeDecl.JRIT_TypeDecl;
-import jolieReaderIntergrationTests.TestCases.simpleFiles.JRIT_SimpleFiles;
+import jolieReaderIntergrationTests.SimpleFiles.JRIT_SimpleFiles;
 import jolieReaderIntergrationTests.interfacesAndAbstractClasses.JolieReaderIntegrationTestCase;
 import org.junit.jupiter.api.Test;
 
@@ -72,7 +72,7 @@ public class JolieReaderIntegrationTest {
     }
 
     // TypeDecl
-    @Test // TODO: test 4 fail (parser missing implementation)
+    @Test
     public void readTypeDeclTest() {
         testCase(new JRIT_TypeDecl());
     }
@@ -197,7 +197,7 @@ public class JolieReaderIntegrationTest {
         testCase(new JRIT_SimpleFiles());
     }
 
-    // multiple files
+    // Multiple files
 
 
     // ----
