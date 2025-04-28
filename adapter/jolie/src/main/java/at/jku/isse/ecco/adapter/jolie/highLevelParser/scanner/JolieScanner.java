@@ -100,12 +100,17 @@ public class JolieScanner {
             start = current;
             scanToken();
         }
-//        if (tokens.isEmpty()) {
-//            tokens.add(new JolieToken(EOF, preWhitespace, "", line));
-//        } else {
-//            tokens.add(new JolieToken(EOF, preWhitespace, "", line - 1));
-//        }
-        tokens.add(new JolieToken(EOF, preWhitespace, "", line));
+
+        if (tokens.isEmpty()) {
+            String newLines = "\n".repeat(line - 1);
+            tokens.add(new JolieToken(EOF, newLines, "", line));
+        } else if (tokens.get(numberOfTokens - 1).getLine() != line) {
+            String newLines = "\n".repeat(line - tokens.get(numberOfTokens - 1).getLine());
+            tokens.add(new JolieToken(EOF, newLines, "", line));
+        } else {
+            tokens.add(new JolieToken(EOF, preWhitespace, "", line));
+        }
+
         return tokens;
     }
 
@@ -167,19 +172,20 @@ public class JolieScanner {
                     addToken(STRING);
 
                 } else if (c == '/' && (peek() == '/' || peek() == '*')) { // comments
+                    int startCommentLine = this.line;
                     char commentChar = c;
                     if (peek() == '/') {
                         while (!isAtEnd() && peek() != '\n') {
                             advance();
                         }
-                        addCommentToToken();
+                        addCommentToToken(startCommentLine);
                     } else {
                         commentChar = advance(); // move past '*'
                         while (!isAtEnd() && (commentChar != '*' || peek() != '/')){ // TODO: add error for no end mult_comment
                             commentChar = advance();
                         }
                         advance(); // to include '/' at the end
-                        addCommentToToken();
+                        addCommentToToken(startCommentLine);
                     }
                 } else { // keywords, identifier
                     while (!isWhiteSpace(peek()) && !isSeperator(peek()) && !isAtEnd()) {
@@ -208,9 +214,12 @@ public class JolieScanner {
         String lexeme = this.source.substring(this.start, this.current);
         String newLines = "";
 
-        if (!tokens.isEmpty() && tokens.get(numberOfTokens - 1).getLine() == this.line){
+        if (numberOfTokens == 1 && tokens.get(0).getType() == COMMENT) {
+            newLines = preWhitespace;
+            preWhitespace =  "\n".repeat(this.line - tokens.get(0).getLine());
+        } else if (!tokens.isEmpty() && tokens.get(numberOfTokens - 1).getLine() == this.line){
             // check if last added token was a comment
-            if (tokens.size() > 1 && tokens.get(numberOfTokens - 1).getType() == COMMENT) {
+            if (numberOfTokens > 1 && tokens.get(numberOfTokens - 1).getType() == COMMENT) {
                 tokens.get(numberOfTokens - 2).addToPostLexeme(preWhitespace);
             } else {
                 tokens.get(numberOfTokens - 1).setPostLexeme(preWhitespace);
@@ -219,7 +228,7 @@ public class JolieScanner {
         } else if (!tokens.isEmpty() && tokens.get(numberOfTokens - 1).getLine() < this.line){
             newLines = "\n".repeat((this.line - tokens.get(numberOfTokens - 1).getLine()));
 
-            if (tokens.size() > 1 && tokens.get(numberOfTokens - 1).getType() == COMMENT) {
+            if (numberOfTokens > 1 && tokens.get(numberOfTokens - 1).getType() == COMMENT) {
                 tokens.get(numberOfTokens - 2).addToPostLexeme(newLines + preWhitespace);
             } else {
                 tokens.get(numberOfTokens - 1).setPostLexeme(newLines + preWhitespace);
@@ -232,21 +241,29 @@ public class JolieScanner {
         }
 
         this.tokens.add(new JolieToken(type, (newLines + preWhitespace), lexeme, this.line));
-
         preWhitespace = "";
         numberOfTokens++;
     }
 
     // helper function for scanToken
-    private void addCommentToToken() {
+    private void addCommentToToken(int startLine) {
+        String lexeme = this.source.substring(this.start, this.current);
         if (!tokens.isEmpty() && tokens.get(numberOfTokens - 1).getLine() == this.line){
-            tokens.get(numberOfTokens - 1).setPostLexeme(preWhitespace + (this.source.substring(this.start, this.current)));
+            if (tokens.size() > 1 && tokens.get(numberOfTokens - 1).getType() == COMMENT) {
+                tokens.get(numberOfTokens - 2).addToPostLexeme(preWhitespace + lexeme);
+            } else {
+                tokens.get(numberOfTokens - 1).setPostLexeme(preWhitespace + lexeme);
+            }
 
         } else if (!tokens.isEmpty() && tokens.get(numberOfTokens - 1).getLine() < this.line){
-            String newLines = "\n".repeat((this.line - tokens.get(numberOfTokens - 1).getLine()));
-            tokens.get(numberOfTokens - 1).setPostLexeme(newLines + preWhitespace + (this.source.substring(this.start, this.current)));
-        } else {
-            // TODO: in case first line is comment
+            String newLines = "\n".repeat((startLine - tokens.get(numberOfTokens - 1).getLine()));
+            if (tokens.size() > 1 && tokens.get(numberOfTokens - 1).getType() == COMMENT) {
+                tokens.get(numberOfTokens - 2).addToPostLexeme(newLines + preWhitespace + lexeme);
+                tokens.get(numberOfTokens - 1).setLine(line);
+            } else {
+                tokens.get(numberOfTokens - 1).setPostLexeme(newLines + preWhitespace + lexeme);
+            }
+
         }
 
         if (!tokens.isEmpty() && tokens.get(numberOfTokens - 1).getType() != COMMENT) {
@@ -255,7 +272,18 @@ public class JolieScanner {
             numberOfTokens++;
         }
 
-        preWhitespace = "";
+        if (tokens.isEmpty()) {
+            String newLines = "\n".repeat(line - 1);
+            preWhitespace +=  newLines + lexeme;
+            this.tokens.add(new JolieToken(COMMENT, "", "", this.line));
+            numberOfTokens++;
+        } else if (numberOfTokens == 1 && tokens.get(0).getType() == COMMENT) {
+            String newLines = "\n".repeat(line - tokens.get(0).getLine());
+            tokens.get(0).setLine(line);
+            preWhitespace +=  newLines + lexeme;
+        } else {
+            preWhitespace = "";
+        }
     }
 
     private char advance() {

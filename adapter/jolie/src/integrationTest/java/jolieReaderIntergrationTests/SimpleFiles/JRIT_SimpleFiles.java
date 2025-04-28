@@ -81,7 +81,7 @@ public class JRIT_SimpleFiles extends JolieReaderIntegrationTestCase {
 
         // 3.2.*: Lines
         checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "{\n  ", 4);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), " {\n  ", 4);
 
         checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
         checkLineNode(node.getChildren().get(1).getChildren().get(0), "m:int\n  ", 5);
@@ -186,7 +186,7 @@ public class JRIT_SimpleFiles extends JolieReaderIntegrationTestCase {
 
         // 5.4.1.*: Lines
         checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "{\n" + "\n" + "    ", 23);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), "\n" + "  }\n" + "\n" + "  main {\n" + "\n" + "    ", 23);
 
         checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
         checkLineNode(node.getChildren().get(1).getChildren().get(0), "[ sumUpTo( n )( response ) {\n" + "      ", 25);

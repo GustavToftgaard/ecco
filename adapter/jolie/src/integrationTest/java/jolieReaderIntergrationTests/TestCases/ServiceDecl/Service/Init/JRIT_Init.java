@@ -50,7 +50,7 @@ public class JRIT_Init extends JolieReaderIntegrationTestCase {
 
         // 1.2.1.*: Lines
         checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "{\n" + "    ", 2);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), " {\n" + "  init {\n" + "    ", 2);
 
         checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
         checkLineNode(node.getChildren().get(1).getChildren().get(0), "config.database << {\n" + "      ", 3);

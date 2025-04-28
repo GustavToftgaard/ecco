@@ -108,10 +108,12 @@ Testing:
       - In line
       - End line
       - Multi line
-
-      - start with comment TODO
-      - end with comment TODO
-      - multiple comments in a row TODO
+      - Start with comment
+      - End with comment
+      - Multiple comments in a row
+      - Single comment after new line char
+      - Multi line comment after new line char
+      - Comment start of file on line 2
     - EOF
       - one first line
       - on second line

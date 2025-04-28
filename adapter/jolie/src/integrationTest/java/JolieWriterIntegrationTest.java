@@ -15,8 +15,9 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class JolieWriterIntegrationTest {
-    private final static String autoTestFolder = "src/integrationTest/resources/jolieTestCode/autoTestFolder";
+    private final static String autoTestFolder = "src/integrationTest/resources/autoTestFolder";
     private final static String fileTestFolder = "src/integrationTest/resources/jolieTestCode";
+    private final static String testFolder = "src/integrationTest/resources";
     private final Map<String, String> filesAndPaths = createHashMapOfTestFiles();
 
     @BeforeAll
@@ -284,6 +285,12 @@ public class JolieWriterIntegrationTest {
         writeTestCase("commentsTest1.ol");
         writeTestCase("commentsTest2.ol");
         writeTestCase("commentsTest3.ol");
+        writeTestCase("commentsTest4.ol");
+        writeTestCase("commentsTest5.ol");
+        writeTestCase("commentsTest6.ol");
+        writeTestCase("commentsTest7.ol");
+        writeTestCase("commentsTest8.ol");
+        writeTestCase("commentsTest9.ol");
     }
 
     // Misc - EOF
@@ -337,7 +344,7 @@ public class JolieWriterIntegrationTest {
 
             // check lines in new file
             String[] writtenContent = fileToStringArray(testFilePath);
-            String[] originalContent = fileToStringArray(testFilePath);
+            String[] originalContent = fileToStringArray(Paths.get(testFolder + "/" + filesAndPaths.get(fileName) + "/" + fileName));
 
             if (printFile) {
                 System.out.println("\n" + fileName + ":\n--- START ---");
@@ -346,6 +353,7 @@ public class JolieWriterIntegrationTest {
                 }
                 System.out.println("---  END  ---\n");
             } else {
+                assertEquals(originalContent.length, writtenContent.length);
                 for (int i = 0; i < originalContent.length; i++) {
                     assertEquals(originalContent[i], writtenContent[i]);
                 }

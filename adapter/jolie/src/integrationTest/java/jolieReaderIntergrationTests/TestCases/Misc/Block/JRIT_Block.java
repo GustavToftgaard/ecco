@@ -50,7 +50,7 @@ public class JRIT_Block extends JolieReaderIntegrationTestCase {
 
         // 1.2.*: Lines
         checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "{" + "}", 1);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), " {" + "}", 1);
 
 
         // 2: EndOfFile
@@ -83,7 +83,7 @@ public class JRIT_Block extends JolieReaderIntegrationTestCase {
 
         // 1.2.*: Lines
         checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "{\n" + "  ", 1);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), " {\n" + "  ", 1);
 
         checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
         checkLineNode(node.getChildren().get(1).getChildren().get(0), "m:int\n" + "  ", 2);

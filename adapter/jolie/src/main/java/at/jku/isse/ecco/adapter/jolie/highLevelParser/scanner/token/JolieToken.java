@@ -5,7 +5,7 @@ public class JolieToken {
     private String preLexeme;
     private final String lexeme;
     private String postLexeme;
-    private final int line;
+    private int line;
 
     public JolieToken(JolieTokenType type, String preWhitespace, String lexeme, String postWhitespace, int line) {
         this.type = type;
@@ -57,6 +57,10 @@ public class JolieToken {
 
     public int getLine() {
         return line;
+    }
+
+    public void setLine(int line) {
+        this.line = line;
     }
 
     public String toString() {

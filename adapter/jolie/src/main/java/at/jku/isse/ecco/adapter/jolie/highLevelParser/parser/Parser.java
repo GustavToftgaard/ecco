@@ -537,7 +537,7 @@ public class Parser {
         StringBuilder line = new StringBuilder();
 
         JolieToken leftBrace = consumeAndReturn(LEFT_BRACE, "Expected LEFT_BRACE token in block");
-        line.append(leftBrace.getLexeme()).append(leftBrace.getPostLexeme());
+        line.append(leftBrace.getPreLexeme()).append(leftBrace.getLexeme()).append(leftBrace.getPostLexeme());
 
         while (peek().getType() != RIGHT_BRACE || openBraces != 0) {
             JolieToken token = advance();
@@ -595,7 +595,9 @@ public class Parser {
         while (peek().getType() != EOF && peek().getLine() == lineNumber) {
             JolieToken token = advance();
             line.append(token.getLexeme());
-            line.append(token.getPostLexeme());
+            if (peek().getType() != EOF && peek().getLine() == lineNumber) {
+                line.append(token.getPostLexeme());
+            }
         }
 
         return new Line(line.toString(), lineNumber);

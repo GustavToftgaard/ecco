@@ -90,7 +90,7 @@ public class JRIT_ServiceDecl extends JolieReaderIntegrationTestCase {
 
         // 1.5.1.*: Lines
         checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "{\n" + "    ", 7);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), "\n" + "\n" + "  main {\n" + "    ", 7);
 
         checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
         checkLineNode(node.getChildren().get(1).getChildren().get(0), "println@console( \"Hello There\" )()\n" + "  ", 8);
@@ -176,7 +176,7 @@ public class JRIT_ServiceDecl extends JolieReaderIntegrationTestCase {
 
         // 1.8.1.*: Lines
         checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "{\n" + "    ", 7);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), "\n" + "\n" + "  main {\n" + "    ", 7);
 
         checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
         checkLineNode(node.getChildren().get(1).getChildren().get(0), "println@console( \"Hello There\" )()\n" + "  ", 8);
@@ -250,7 +250,7 @@ public class JRIT_ServiceDecl extends JolieReaderIntegrationTestCase {
 
         // 1.5.1.*: Lines
         checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "{\n" + "    ", 7);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), "\n" + "\n" + "  main {\n" + "    ", 7);
 
         checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
         checkLineNode(node.getChildren().get(1).getChildren().get(0), "println@console( \"Hello There\" )()\n" + "  ", 8);
@@ -308,7 +308,7 @@ public class JRIT_ServiceDecl extends JolieReaderIntegrationTestCase {
 
         // 2.5.1.*: Lines
         checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "{\n" + "    ", 18);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), "\n" + "\n" + "  main {\n" + "    ", 18);
 
         checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
         checkLineNode(node.getChildren().get(1).getChildren().get(0), "println@console( \"General Kenobi\" )()\n" + "  ", 19);
