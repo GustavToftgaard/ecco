@@ -10,7 +10,6 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
     implementation project(':ecco-service')
     testImplementation platform('org.junit:junit-bom:5.9.1')
@@ -21,3 +20,12 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+//jar {
+//    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+//}
+//
+//ospackage {
+//    requires('ecco-base', version, EQUAL)
+//    requires('ecco-service', version, EQUAL)
+//}

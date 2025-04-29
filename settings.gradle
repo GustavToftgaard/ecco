@@ -5,7 +5,7 @@ include 'service'
 include 'cli'
 include 'gui'
 include 'web'
-include 'rest'
+// include 'rest'
 
 include 'adapter-file'
 include 'adapter-text'
