@@ -5,6 +5,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.NodeVisitor
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.Line;
 
 public class Service implements Node {
+    private String postLexeme = "";
     private final Node node;
     private final Line line;
 
@@ -24,6 +25,16 @@ public class Service implements Node {
 
     public Line getLine() {
         return line;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

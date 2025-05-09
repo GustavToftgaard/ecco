@@ -44,7 +44,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitImportDecl(ImportDecl importDecl) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.IMPORTDECL);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.IMPORTDECL, importDecl.getPostLexeme());
 
         if (importDecl.getImportE() != null) {
             node.addChild(importDecl.getImportE().accept(this));
@@ -57,7 +57,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitImport(Import importE) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.IMPORT);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.IMPORT, importE.getPostLexeme());
 
         node.addChild(createTokenNode(importE.getFromID()));
         node.addChild(createTokenNode(importE.getImportID()));
@@ -71,14 +71,14 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitInclude(Include include) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.INCLUDE);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.INCLUDE, include.getPostLexeme());
         node.addChild(createTokenNode(include.getIncludeID()));
         return node;
     }
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitInterfaceDecl(InterfaceDecl interfaceDecl) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.INTERFACEDECL);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.INTERFACEDECL, interfaceDecl.getPostLexeme());
         node.addChild(createTokenNode(interfaceDecl.getInterfaceID()));
 
         if (interfaceDecl.getRequestResponse() != null) {
@@ -93,7 +93,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitRequestResponseDecl(RequestResponseDecl requestResponseDecl) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.REQUEST_RESPONSE_DECL);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.REQUEST_RESPONSE_DECL, requestResponseDecl.getPostLexeme());
 
         for (RequestResponseElement element : requestResponseDecl.getRequestResponseElements()) {
             node.addChild(element.accept(this));
@@ -104,7 +104,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitRequestResponseElement(RequestResponseElement requestResponseElement) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.REQUEST_RESPONSE_ELEMENT);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.REQUEST_RESPONSE_ELEMENT, requestResponseElement.getPostLexeme());
 
         node.addChild(createTokenNode(requestResponseElement.getFunctionID()));
         node.addChild(createTokenNode(requestResponseElement.getRequestID()));
@@ -115,7 +115,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitOneWayDecl(OneWayDecl oneWayDecl) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.ONE_WAY_DECL);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.ONE_WAY_DECL, oneWayDecl.getPostLexeme());
 
         for (OneWayElement element : oneWayDecl.getOneWayElements()) {
             node.addChild(element.accept(this));
@@ -126,7 +126,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitOneWayElement(OneWayElement oneWayElement) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.ONE_WAY_ELEMENT);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.ONE_WAY_ELEMENT, oneWayElement.getPostLexeme());
 
         node.addChild(createTokenNode(oneWayElement.getFunctionID()));
         node.addChild(createTokenNode(oneWayElement.getRequestID()));
@@ -136,7 +136,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitTypeDecl(TypeDecl typeDecl) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.TYPEDECL);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.TYPEDECL, typeDecl.getPostLexeme());
         node.addChild(createTokenNode(typeDecl.getTypeID()));
 
         if (typeDecl.getTypeTypesID() != null) {
@@ -154,7 +154,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitServiceDecl(ServiceDecl serviceDecl) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.SERVICEDECL);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.SERVICEDECL, serviceDecl.getPostLexeme());
 
         node.addChild(createTokenNode(serviceDecl.getServiceID()));
 
@@ -173,7 +173,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitService(Service service) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.SERVICE);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.SERVICE, service.getPostLexeme());
 
         if (service.getNode() != null) {
             node.addChild(service.getNode().accept(this));
@@ -186,7 +186,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitExecution(Execution execution) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.EXECUTION);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.EXECUTION, execution.getPostLexeme());
 
         node.addChild(createTokenNode(execution.getExecutionID()));
 
@@ -195,7 +195,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitEmbed(Embed embed) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.EMBED);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.EMBED, embed.getPostLexeme());
 
         node.addChild(createTokenNode(embed.getEmbedID()));
 
@@ -212,14 +212,14 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitEmbedded(Embedded embedded) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.EMBEDDED);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.EMBEDDED, embedded.getPostLexeme());
         node.addChild(embedded.getBlock().accept(this));
         return node;
     }
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitInputPort(InputPort inputPort) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.INPUTPORT);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.INPUTPORT, inputPort.getPostLexeme());
         node.addChild(createTokenNode(inputPort.getInputPortID()));
 
         for (Node service : inputPort.getPortParameters()) {
@@ -231,7 +231,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitOutputPort(OutputPort outputPort) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.OUTPUTPORT);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.OUTPUTPORT, outputPort.getPostLexeme());
         node.addChild(createTokenNode(outputPort.getOutputPortID()));
 
         for (Node service : outputPort.getPortParameters()) {
@@ -243,7 +243,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitPortLocation(PortLocation portLocation) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTLOCATION);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTLOCATION, portLocation.getPostLexeme());
 
         for (JolieToken argument : portLocation.getArguments()) {
             node.addChild(createTokenNode(argument));
@@ -254,7 +254,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitPortProtocol(PortProtocol portProtocol) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTPROTOCOL);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTPROTOCOL, portProtocol.getPostLexeme());
 
         for (JolieToken argument : portProtocol.getArguments()) {
             node.addChild(createTokenNode(argument));
@@ -265,7 +265,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitPortInterfaces(PortInterfaces portInterfaces) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTINTERFACES);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTINTERFACES, portInterfaces.getPostLexeme());
 
         for (JolieToken token : portInterfaces.getArguments()) {
             node.addChild(createTokenNode(token));
@@ -276,7 +276,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitPortAggregates(PortAggregates portAggregates) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTAGGREGATES);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTAGGREGATES, portAggregates.getPostLexeme());
 
         for (JolieToken token : portAggregates.getArguments()) {
             node.addChild(createTokenNode(token));
@@ -287,7 +287,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitPortRedirects(PortRedirects portRedirects) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTREDIRECTS);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.PORTREDIRECTS, portRedirects.getPostLexeme());
 
         for (JolieToken token : portRedirects.getArguments()) {
             node.addChild(createTokenNode(token));
@@ -298,21 +298,21 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitInit(Init init) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.INIT);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.INIT, init.getPostLexeme());
         node.addChild(init.getBlock().accept(this));
         return node;
     }
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitMain(Main main) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.MAIN);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.MAIN, main.getPostLexeme());
         node.addChild(main.getBlock().accept(this));
         return node;
     }
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitCourier(Courier courier) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.COURIER);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.COURIER, courier.getPostLexeme());
         node.addChild(createTokenNode(courier.getCourierInterfaceID()));
         node.addChild(courier.getBlock().accept(this));
         return node;
@@ -320,7 +320,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitDefineProcedure(DefineProcedure defineProcedure) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.DEFINEPROCEDURE);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.DEFINEPROCEDURE, defineProcedure.getPostLexeme());
         node.addChild(createTokenNode(defineProcedure.getDefineID()));
         node.addChild(defineProcedure.getBlock().accept(this));
         return node;
@@ -328,7 +328,7 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitBlock(Block block) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.BLOCK);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.BLOCK, block.getPostLexeme());
 
         for (Line line : block.getContents()) {
             node.addChild(line.accept(this));
@@ -339,16 +339,16 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitLine(Line line) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.LINE);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.LINE, line.getPostLexeme());
 
-        node.addChild(createLineNode(line.getLineContents(), line.getLine()));
+        node.addChild(createLineNode(line.getLineContents(), line.getLine(), line.getPostLexeme()));
 
         return node;
     }
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitEndOfFile(EndOfFile endOfFile) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.EOF);
+        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.EOF, endOfFile.getPostLexeme());
 
         node.addChild(createTokenNode(endOfFile.getEndOfFileToken()));
 
@@ -363,15 +363,15 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
         return this.entityFactory.createOrderedNode(tokenArtifactData);
     }
 
-    private at.jku.isse.ecco.tree.Node.Op createLineNode(String lineContents, int line) {
+    private at.jku.isse.ecco.tree.Node.Op createLineNode(String lineContents, int line, String postLexeme) {
         Artifact.Op<JolieLineArtifactData> lineArtifactData =
-                this.entityFactory.createArtifact(new JolieLineArtifactData(lineContents, line));
+                this.entityFactory.createArtifact(new JolieLineArtifactData(lineContents, line, postLexeme));
         return this.entityFactory.createOrderedNode(lineArtifactData);
     }
 
-    private at.jku.isse.ecco.tree.Node.Op createContextNode(NodeTypes type) {
+    private at.jku.isse.ecco.tree.Node.Op createContextNode(NodeTypes type, String postLexeme) {
         Artifact.Op<JolieContextArtifactData> contextArtifactData =
-                this.entityFactory.createArtifact(new JolieContextArtifactData(type));
+                this.entityFactory.createArtifact(new JolieContextArtifactData(type, postLexeme));
         return this.entityFactory.createOrderedNode(contextArtifactData);
     }
 }

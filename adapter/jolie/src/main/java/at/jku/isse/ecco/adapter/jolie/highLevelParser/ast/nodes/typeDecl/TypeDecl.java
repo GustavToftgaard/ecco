@@ -8,6 +8,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 import java.util.ArrayList;
 
 public class TypeDecl implements Node {
+    private String postLexeme = "";
     private final JolieToken typeID;
     private final ArrayList<JolieToken> typeTypesID; //?
     private final Block block; //?
@@ -28,6 +29,16 @@ public class TypeDecl implements Node {
 
     public Block getBlock() {
         return block;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

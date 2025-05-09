@@ -4,17 +4,13 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.NodeVisitor;
 
 public class ImportDecl implements Node {
+    private String postLexeme = "";
     private final Import importE;
     private final Include include;
 
-    public ImportDecl(Import importE) {
+    public ImportDecl(Import importE, Include include) {
         this.importE = importE;
-        this.include = null;
-    }
-
-    public ImportDecl(Include include) {
         this.include = include;
-        this.importE = null;
     }
 
     public Import getImportE() {
@@ -23,6 +19,16 @@ public class ImportDecl implements Node {
 
     public Include getInclude() {
         return include;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

@@ -8,6 +8,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 import java.util.ArrayList;
 
 public class InterfaceDecl implements Node {
+    private String postLexeme = "";
     private final JolieToken interfaceID;
     private final RequestResponseDecl requestResponse;
     private final OneWayDecl oneWay;
@@ -28,6 +29,16 @@ public class InterfaceDecl implements Node {
 
     public OneWayDecl getOneWay() {
         return oneWay;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

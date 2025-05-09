@@ -5,6 +5,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.NodeVisitor
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
 public class EndOfFile implements Node {
+    private String postLexeme = "";
     private final JolieToken endOfFileToken;
 
     public EndOfFile(JolieToken endOfFileToken) {
@@ -13,6 +14,16 @@ public class EndOfFile implements Node {
 
     public JolieToken getEndOfFileToken() {
         return endOfFileToken;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

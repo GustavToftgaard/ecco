@@ -7,12 +7,14 @@ import at.jku.isse.ecco.artifact.ArtifactData;
 import java.util.Objects;
 
 public class JolieLineArtifactData implements ArtifactData {
-    public final String lineContents;
-    public final int line;
+    private final String lineContents;
+    private final int line;
+    private final String postLexeme;
 
-    public JolieLineArtifactData(String lineContents, int line) {
+    public JolieLineArtifactData(String lineContents, int line, String postLexeme) {
         this.lineContents = lineContents;
         this.line = line;
+        this.postLexeme = postLexeme;
     }
 
     public String getLineContents() {
@@ -21,6 +23,10 @@ public class JolieLineArtifactData implements ArtifactData {
 
     public int getLine() {
         return line;
+    }
+
+    public String getPostLexeme() {
+        return postLexeme;
     }
 
     @Override

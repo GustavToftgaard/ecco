@@ -7,6 +7,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 import java.util.ArrayList;
 
 public class Embed implements Node {
+    private String postLexeme = "";
     public final JolieToken embedID;
     public final ArrayList<JolieToken> params;
     public final JolieToken asID;
@@ -27,6 +28,16 @@ public class Embed implements Node {
 
     public JolieToken getAsID() {
         return asID;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

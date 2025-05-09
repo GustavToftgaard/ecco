@@ -19,6 +19,11 @@ public class ECCOToString {
             res.append(convertNode(node));
         }
 
+        if (isContextNode(rootNode)) {
+            JolieContextArtifactData contextNode = toContextNode(rootNode);
+            res.append(contextNode.getPostLexeme());
+        }
+
         return res.toString();
     }
 
@@ -29,14 +34,16 @@ public class ECCOToString {
             for (Node.Op childNode : node.getChildren()) {
                 res.append(convertNode(childNode));
             }
+            JolieContextArtifactData contextNode = toContextNode(node);
+            res.append(contextNode.getPostLexeme());
 
         } else if (isTokenNode(node)) {
             JolieTokenArtifactData tokenNode = toTokenNode(node);
-            res.append(tokenNode.getPreWhitespace()).append(tokenNode.getLexeme());
+            res.append(tokenNode.getPreWhitespace()).append(tokenNode.getLexeme()).append(tokenNode.getPostWhitespace());
 
         } else if (isLineNode(node)) {
             JolieLineArtifactData lineNode = toLineNode(node);
-            res.append(lineNode.lineContents);
+            res.append(lineNode.getLineContents());
         }
 
         return res.toString();

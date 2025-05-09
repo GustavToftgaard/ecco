@@ -83,13 +83,13 @@ public class JRIT_Block extends JolieReaderIntegrationTestCase {
 
         // 1.2.*: Lines
         checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), " {\n" + "  ", 1);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), " {\n", 1);
 
         checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(1).getChildren().get(0), "m:int\n" + "  ", 2);
+        checkLineNode(node.getChildren().get(1).getChildren().get(0), "  " + "m:int\n", 2);
 
         checkContextNode(node.getChildren().get(2), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(2).getChildren().get(0), "n:int\n", 3);
+        checkLineNode(node.getChildren().get(2).getChildren().get(0), "  " + "n:int\n", 3);
 
         checkContextNode(node.getChildren().get(3), NodeTypes.LINE, 1);
         checkLineNode(node.getChildren().get(3).getChildren().get(0), "}", 4);

@@ -2,10 +2,10 @@ package at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.importDecl;
 
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.NodeVisitor;
-import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.Line;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
 public class Import implements Node {
+    private String postLexeme = "";
     private final JolieToken fromID;
     private final JolieToken importID;
     private final Node line; //?
@@ -32,6 +32,16 @@ public class Import implements Node {
 
     public Node getLine() {
         return line;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

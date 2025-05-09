@@ -31,8 +31,12 @@ public class JolieToken {
         this.postLexeme = postLexeme;
     }
 
-    public void addToPreLexeme(String preLexeme) {
-        this.preLexeme += preLexeme;
+    public void addToEndPreLexeme(String preLexeme) {
+        setPreLexeme(this.preLexeme + preLexeme);
+    }
+
+    public void addToStartPreLexeme(String preLexeme) {
+        setPreLexeme(preLexeme + this.preLexeme);
     }
 
     public void addToPostLexeme(String postLexeme) {

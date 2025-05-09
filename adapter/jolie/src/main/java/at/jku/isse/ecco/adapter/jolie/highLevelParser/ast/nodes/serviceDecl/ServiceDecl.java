@@ -7,6 +7,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 import java.util.ArrayList;
 
 public class ServiceDecl implements Node {
+    private String postLexeme = "";
     private final JolieToken serviceID;
     private final ArrayList<JolieToken> params; // ?
     private final ArrayList<Node> services;
@@ -27,6 +28,16 @@ public class ServiceDecl implements Node {
 
     public ArrayList<Node> getServices() {
         return services;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

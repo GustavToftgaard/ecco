@@ -7,6 +7,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 import java.util.ArrayList;
 
 public class OneWayElement implements Node {
+    private String postLexeme = "";
     private final JolieToken functionID;
     private final JolieToken requestID;
 
@@ -21,6 +22,16 @@ public class OneWayElement implements Node {
 
     public JolieToken getRequestID() {
         return requestID;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

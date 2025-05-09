@@ -19,6 +19,8 @@ import static at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.Jolie
 public class Parser {
     private final List<JolieToken> tokens;
     private int current = 0;
+    private JolieToken lastConsumedAndReturnedToken = null;
+    private String savedLexeme = "";
     private final List<Node> ast = new LinkedList<>();
 
     public List<Node> getAst() {
@@ -43,6 +45,7 @@ public class Parser {
                 System.out.println(e.getMessage()); // temp
             }
         }
+        peek().addToStartPreLexeme(savedLexeme);
         ast.add(new EndOfFile(peek()));
     }
 
@@ -81,7 +84,21 @@ public class Parser {
 
     // ----
 
+    // TODO: move
+    private void endNode(Node node) {
+        if (lastConsumedAndReturnedToken == null) {
+            node.setPostLexeme(savedLexeme);
+            savedLexeme = "";
+        } else {
+            lastConsumedAndReturnedToken = null;
+        }
+    }
+
     private ImportDecl importDecl() {
+        lastConsumedAndReturnedToken = null;
+
+        Import importE = null;
+        Include include = null;
         if (peek().getType() == FROM) {
             consume(FROM, "Expected FROM token in import decl");
             JolieToken fromID = consumeAndReturn(ID, "Expected ID after FROM in import decl");
@@ -91,20 +108,29 @@ public class Parser {
             // check of multiple 'as' statements
             if (previous().getLine() == peek().getLine() && peek().getType() != EOF) {
                 Node line = readLine(previous().getLine());
-                return new ImportDecl(new Import(fromID, importID, line));
+                importE = new Import(fromID, importID, line);
+//                return new ImportDecl(new Import(fromID, importID, line));
             } else {
-                return new ImportDecl(new Import(fromID, importID));
+                importE = new Import(fromID, importID);
+//                return new ImportDecl(new Import(fromID, importID));
             }
         } else {
             consume(INCLUDE, "Expected INCLUDE token in import decl");
             JolieToken id = consumeAndReturn(STRING, "Expected string as ID after INCLUDE in import decl");
-            return new ImportDecl(new Include(id));
+            include = new Include((id));
+//            return new ImportDecl(new Include(id));
         }
+
+        ImportDecl importDecl = new ImportDecl(importE, include);
+        endNode(importDecl);
+        return importDecl;
     }
 
     // ----
 
     private InterfaceDecl interfaceDecl() {
+        lastConsumedAndReturnedToken = null;
+
         consume(INTERFACE, "Expected INTERFACE token");
 
         if (peek().getType() == EXTENDER) {
@@ -117,7 +143,7 @@ public class Parser {
 
         RequestResponseDecl requestResponseDecl = null;
 
-        if (peek().getType() == REQUEST_RESPONSE) {
+        if (peek().getType() == REQUEST_RESPONSE) { // TODO: change to own function
             ArrayList<RequestResponseElement> requestResponseElements = new ArrayList<>();
             consume(REQUEST_RESPONSE, "Expected REQUEST_RESPONSE token after ID in interface decl");
             consume(COLON, "Expected COLON token after REQUEST_RESPONSE in interface decl");
@@ -131,7 +157,7 @@ public class Parser {
         }
 
         OneWayDecl oneWayDecl = null;
-        if (peek().getType() == ONE_WAY) {
+        if (peek().getType() == ONE_WAY) { // TODO: change to own function
             ArrayList<OneWayElement> oneWayElements = new ArrayList<>();
             consume(ONE_WAY, "Expected ONE_WAY token after ID or REQUEST_RESPONSE in interface decl");
             consume(COLON, "Expected COLON token after ONE_WAY in interface decl");
@@ -146,10 +172,14 @@ public class Parser {
 
         consume(RIGHT_BRACE, "Expected RIGHT_BRACE token in interface decl");
 
-        return new InterfaceDecl(interfaceID, requestResponseDecl, oneWayDecl);
+        InterfaceDecl interfaceDecl = new InterfaceDecl(interfaceID, requestResponseDecl, oneWayDecl);
+        endNode(interfaceDecl);
+        return interfaceDecl;
     }
 
     private RequestResponseElement requestResponseElement() {
+        lastConsumedAndReturnedToken = null;
+
         JolieToken functionID = consumeAndReturn(ID, "Expected ID token in R.R. element");
         consume(LEFT_PAREN, "Expected LEFT_PAREN token after ID in R.R. element");
         JolieToken requestID = consumeAndReturn(ID, "Expected ID token after LEFT_PAREN in R.R. element 1");
@@ -157,20 +187,30 @@ public class Parser {
         consume(LEFT_PAREN, "Expected LEFT_PAREN token after RIGHT_PAREN in R.R. element");
         JolieToken responseID = consumeAndReturn(ID, "Expected ID token after LEFT_PAREN in R.R. element 2");
         consume(RIGHT_PAREN, "Expected RIGHT_PAREN token after ID in R.R. element");
-        return new RequestResponseElement(functionID, requestID, responseID);
+
+        RequestResponseElement requestResponseElement = new RequestResponseElement(functionID, requestID, responseID);
+        endNode(requestResponseElement);
+        return requestResponseElement;
     }
 
     private OneWayElement oneWayElement() {
+        lastConsumedAndReturnedToken = null;
+
         JolieToken functionID = consumeAndReturn(ID, "Expected ID token in O.W. element");
         consume(LEFT_PAREN, "Expected LEFT_PAREN token after ID in O.W. element");
         JolieToken requestID = consumeAndReturn(ID, "Expected ID token after LEFT_PAREN in O.W. element");
         consume(RIGHT_PAREN, "Expected RIGHT_PAREN token after ID in O.W. element");
-        return new OneWayElement(functionID, requestID);
+
+        OneWayElement oneWayElement = new OneWayElement(functionID, requestID);
+        endNode(oneWayElement);
+        return oneWayElement;
     }
 
     // ----
 
     private TypeDecl typeDecl() {
+        lastConsumedAndReturnedToken = null;
+
         consume(TYPE, "Expected TYPE token");
         JolieToken typeId = consumeAndReturn(ID, "Expected ID token after TYPE in type decl");
         ArrayList<JolieToken> typeTypesId = new ArrayList<>();
@@ -190,12 +230,16 @@ public class Parser {
             block = block();
         }
 
-        return new TypeDecl(typeId, typeTypesId, block);
+        TypeDecl typeDecl = new TypeDecl(typeId, typeTypesId, block);
+        endNode(typeDecl);
+        return typeDecl;
     }
 
     // ----
 
     private ServiceDecl serviceDecl() {
+        lastConsumedAndReturnedToken = null;
+
         consume(SERVICE, "Expected SERVICE token");
         JolieToken serviceId = consumeAndReturn(ID, "Expected ID token after SERVICE in service decl");
 
@@ -216,10 +260,14 @@ public class Parser {
         }
         consume(RIGHT_BRACE, "Expected RIGHT_BRACE token in service decl");
 
-        return new ServiceDecl(serviceId, services, params);
+        ServiceDecl serviceDecl = new ServiceDecl(serviceId, services, params);
+        endNode(serviceDecl);
+        return serviceDecl;
     }
 
     private Node service() {
+        lastConsumedAndReturnedToken = null;
+
         Node res;
         JolieToken token = peek();
         switch (token.getType()) {
@@ -263,10 +311,13 @@ public class Parser {
                 res = readLine(token.getLine());
                 break;
         }
+
         return res;
     }
 
     private Execution execution() {
+        lastConsumedAndReturnedToken = null;
+
         consume(EXECUTION, "Expected EXECUTION token");
 
         JolieToken executionId;
@@ -281,10 +332,14 @@ public class Parser {
             consume(RIGHT_BRACE, "Expected RIGHT_BRACE token after ID in execution");
         }
 
-        return new Execution(executionId);
+        Execution execution = new Execution(executionId);
+        endNode(execution);
+        return execution;
     }
 
     private Embed embed() {
+        lastConsumedAndReturnedToken = null;
+
         consume(EMBED, "Expected EMBED token");
         JolieToken embedId = consumeAndReturn(ID, "Expected ID token after EMBED in embed");
 
@@ -304,16 +359,26 @@ public class Parser {
             consume(IN, "Expected IN token after ID in embed");
         }
         JolieToken asId = consumeAndReturn(ID, "Expected ID token after AS in embed");
-        return new Embed(embedId, asId, params);
+
+        Embed embed = new Embed(embedId, asId, params);
+        endNode(embed);
+        return embed;
     }
 
     private Embedded embedded() {
+        lastConsumedAndReturnedToken = null;
+
         consume(EMBEDDED, "Expected EMBEDDED token");
         Block block = block();
-        return new Embedded(block);
+
+        Embedded embedded = new Embedded(block);
+        endNode(embedded);
+        return embedded;
     }
 
     private InputPort inputPort() {
+        lastConsumedAndReturnedToken = null;
+
         consume(INPUTPORT, "Expected INPUTPORT token");
         JolieToken inputPortId = consumeAndReturn(ID, "Expected ID token after INPUTPORT in inputPort");
 
@@ -349,11 +414,17 @@ public class Parser {
                     break;
             }
         }
+
         consume(RIGHT_BRACE, "Expected RIGHT_BRACE token after port params in inputPort");
-        return new InputPort(inputPortId, portParams);
+
+        InputPort inputPort = new InputPort(inputPortId, portParams);
+        endNode(inputPort);
+        return inputPort;
     }
 
     private OutputPort outputPort() {
+        lastConsumedAndReturnedToken = null;
+
         consume(OUTPUTPORT, "Expected OUTPUTPORT token");
         JolieToken outputPortId = consumeAndReturn(ID, "Expected ID token after OUTPUTPORT in outputPort");
 
@@ -380,12 +451,17 @@ public class Parser {
             }
         }
         consume(RIGHT_BRACE, "Expected RIGHT_BRACE token after port params in outputPort");
-        return new OutputPort(outputPortId, portParams);
+
+        OutputPort outputPort = new OutputPort(outputPortId, portParams);
+        endNode(outputPort);
+        return outputPort;
     }
 
     // ----
 
     private PortLocation portLocation() {
+        lastConsumedAndReturnedToken = null;
+
         consume(LOCATION, "Expected LOCATION token");
         consume(COLON, "Expected COLON token after LOCATION in location");
 
@@ -400,10 +476,14 @@ public class Parser {
             }
         }
 
-        return new PortLocation(arguments);
+        PortLocation portLocation = new PortLocation(arguments);
+        endNode(portLocation);
+        return portLocation;
     }
 
     private PortProtocol portProtocol() {
+        lastConsumedAndReturnedToken = null;
+
         consume(PROTOCOL, "Expected PROTOCOL token");
         consume(COLON, "Expected COLON token after PROTOCOL in protocol");
 
@@ -418,10 +498,14 @@ public class Parser {
             }
         }
 
-        return new PortProtocol(arguments);
+        PortProtocol portProtocol = new PortProtocol(arguments);
+        endNode(portProtocol);
+        return portProtocol;
     }
 
     private PortInterfaces portInterfaces() {
+        lastConsumedAndReturnedToken = null;
+
         consume(INTERFACES, "Expected INTERFACES token");
         consume(COLON, "Expected COLON token after INTERFACES in interfaces");
 
@@ -436,10 +520,14 @@ public class Parser {
             }
         }
 
-        return new PortInterfaces(arguments);
+        PortInterfaces portInterfaces = new PortInterfaces(arguments);
+        endNode(portInterfaces);
+        return portInterfaces;
     }
 
     private PortAggregates portAggregates() {
+        lastConsumedAndReturnedToken = null;
+
         consume(AGGREGATES, "Expected AGGREGATES token");
         consume(COLON, "Expected COLON token after AGGREGATES in aggregates");
 
@@ -454,10 +542,14 @@ public class Parser {
             }
         }
 
-        return new PortAggregates(arguments);
+        PortAggregates portAggregates = new PortAggregates(arguments);
+        endNode(portAggregates);
+        return portAggregates;
     }
 
     private PortRedirects portRedirects() {
+        lastConsumedAndReturnedToken = null;
+
         consume(REDIRECTS, "Expected REDIRECTS token");
         consume(COLON, "Expected COLON token after REDIRECTS in redirects");
 
@@ -472,7 +564,9 @@ public class Parser {
             }
         }
 
-        return new PortRedirects(arguments);
+        PortRedirects portRedirects = new PortRedirects(arguments);
+        endNode(portRedirects);
+        return portRedirects;
     }
 
     // helper function
@@ -501,36 +595,116 @@ public class Parser {
     // ----
 
     private Init init() {
+        lastConsumedAndReturnedToken = null;
+
         consume(INIT, "Expected INIT token");
         Block block = block();
-        return new Init(block);
+
+        Init init = new Init(block);
+        endNode(init);
+        return init;
     }
 
     private Main mainE() {
+        lastConsumedAndReturnedToken = null;
+
         consume(MAIN, "Expected MAIN token");
         Block block = block();
-        return new Main(block);
+
+        Main main = new Main(block);
+        endNode(main);
+        return main;
     }
 
     private Courier courier() {
+        lastConsumedAndReturnedToken = null;
+
         consume(COURIER, "Expected COURIER token");
         consume(LESS_THAN, "Expected LESS_THAN token after COURIER in courier");
         JolieToken courierId = consumeAndReturn(ID, "Expected ID token after LESS_THAN in courier");
         consume(GREATER_THAN, "Expected GREATER_THAN token after ID in courier");
         Block block = block();
-        return new Courier(courierId, block);
+
+        Courier courier = new Courier(courierId, block);
+        endNode(courier);
+        return courier;
     }
 
     private DefineProcedure defineProcedure() {
+        lastConsumedAndReturnedToken = null;
+
         consume(DEFINE, "Expected DEFINE token");
         JolieToken defineProcedureId = consumeAndReturn(ID, "Expected ID token after DEFINE in defineProcedure");
         Block block = block();
-        return new DefineProcedure(defineProcedureId, block);
+
+        DefineProcedure defineProcedure = new DefineProcedure(defineProcedureId, block);
+        endNode(defineProcedure);
+        return defineProcedure;
     }
 
     // ----
 
+//    private Block block() {
+//        lastConsumedAndReturnedToken = null;
+//
+//        ArrayList<Line> contents = new ArrayList<>();
+//        int openBraces = 0;
+//        int lineNumber = peek().getLine();
+//        StringBuilder line = new StringBuilder();
+//
+//        JolieToken leftBrace = consumeAndReturn(LEFT_BRACE, "Expected LEFT_BRACE token in block");
+//        line.append(leftBrace.getPreLexeme()).append(leftBrace.getLexeme()).append(leftBrace.getPostLexeme());
+//
+//        while (peek().getType() != RIGHT_BRACE || openBraces != 0) {
+//            JolieToken token = advance();
+//
+//            if (token.getType() == LEFT_BRACE) {
+//                openBraces++;
+//
+//            } else if (token.getType() == RIGHT_BRACE) {
+//                openBraces--;
+//            }
+//
+//            if (token.getType() == RIGHT_BRACE && openBraces == 0) { // check if last token
+//                if (peek().getLine() != lineNumber) { // check if RIGHT_BRACE is on a different line
+//                    contents.add(new Line(line.toString(), lineNumber));
+//                    line = new StringBuilder();
+//                    lineNumber = token.getLine();
+//                    line.append(token.getLexeme()).append(token.getPostLexeme());
+//
+//                } else {
+//                    line.append(token.getLexeme()).append(token.getPostLexeme());
+//                }
+//
+//            } else if (token.getLine() != lineNumber) { // add line to contents and start new line if token in on a new line
+//                contents.add(new Line(line.toString(), lineNumber));
+//                line = new StringBuilder();
+//                lineNumber = token.getLine();
+//                line.append(token.getLexeme()).append(token.getPostLexeme());
+//
+//            } else {
+//                line.append(token.getLexeme()).append(token.getPostLexeme());
+//            }
+//        }
+//
+//        if (peek().getLine() != lineNumber) { // check if RIGHT_BRACE is on a different line
+//            contents.add(new Line(line.toString(), lineNumber));
+//            line = new StringBuilder();
+//            lineNumber = peek().getLine();
+//            line.append(consumeAndReturn(RIGHT_BRACE, "Expected RIGHT_BRACE token in block").getLexeme());
+//
+//        } else {
+//            line.append(consumeAndReturn(RIGHT_BRACE, "Expected RIGHT_BRACE token in block").getLexeme());
+//        }
+//
+//        contents.add(new Line(line.toString(), lineNumber));
+//
+//        return new Block(contents);
+//    }
+
     private Block block() {
+        lastConsumedAndReturnedToken = null;
+
         ArrayList<Line> contents = new ArrayList<>();
         int openBraces = 0;
         int lineNumber = peek().getLine();
@@ -548,62 +722,102 @@ public class Parser {
             } else if (token.getType() == RIGHT_BRACE) {
                 openBraces--;
             }
+//            if (token.getType() == RIGHT_BRACE && openBraces == 0) { // check if last token
+//                if (peek().getLine() != lineNumber) { // check if RIGHT_BRACE is on a different line
+//                    contents.add(new Line(line.toString(), lineNumber));
+//                    line = new StringBuilder();
+//                    lineNumber = token.getLine();
+//                    line.append(token.getPreLexeme()).append(token.getLexeme()).append(token.getPostLexeme());
+//
+//                } else {
+//                    line.append(token.getPreLexeme()).append(token.getLexeme()).append(token.getPostLexeme());
+//                }
+//
+//            } else if (token.getLine() != lineNumber) { // add line to contents and start new line if token in on a new line
+//                contents.add(new Line(line.toString(), lineNumber));
+//                line = new StringBuilder();
+//                lineNumber = token.getLine();
+//                line.append(token.getPreLexeme()).append(token.getLexeme()).append(token.getPostLexeme());
+//
+//            } else {
+//                line.append(token.getPreLexeme()).append(token.getLexeme()).append(token.getPostLexeme());
+//            }
 
-            if (token.getType() == RIGHT_BRACE && openBraces == 0) { // check if last token
-                if (peek().getLine() != lineNumber) { // check if RIGHT_BRACE is on a different line
-                    contents.add(new Line(line.toString(), lineNumber));
-                    line = new StringBuilder();
-                    lineNumber = token.getLine();
-                    line.append(token.getLexeme()).append(token.getPostLexeme());
-
-                } else {
-                    line.append(token.getLexeme()).append(token.getPostLexeme());
-                }
-
-            } else if (token.getLine() != lineNumber) { // add line to contents and start new line if token in on a new line
+            if (token.getLine() != lineNumber || (token.getType() == RIGHT_BRACE && openBraces == 0 && peek().getLine() != lineNumber)) {
                 contents.add(new Line(line.toString(), lineNumber));
                 line = new StringBuilder();
                 lineNumber = token.getLine();
-                line.append(token.getLexeme()).append(token.getPostLexeme());
-
-            } else {
-                line.append(token.getLexeme()).append(token.getPostLexeme());
             }
+            line.append(token.getPreLexeme()).append(token.getLexeme()).append(token.getPostLexeme());
         }
 
         if (peek().getLine() != lineNumber) { // check if RIGHT_BRACE is on a different line
             contents.add(new Line(line.toString(), lineNumber));
             line = new StringBuilder();
             lineNumber = peek().getLine();
-            line.append(consumeAndReturn(RIGHT_BRACE, "Expected RIGHT_BRACE token in block").getLexeme());
-
-        } else {
-            line.append(consumeAndReturn(RIGHT_BRACE, "Expected RIGHT_BRACE token in block").getLexeme());
         }
 
-//        line.append(consumeAndReturn(RIGHT_BRACE, "Expected RIGHT_BRACE token in block").getLexeme());
+        JolieToken rightBrace = consumeAndReturn(RIGHT_BRACE, "Expected RIGHT_BRACE token in block");
+        line.append(rightBrace.getPreLexeme()).append(rightBrace.getLexeme()).append(rightBrace.getPostLexeme());
+
         contents.add(new Line(line.toString(), lineNumber));
 
-        return new Block(contents);
+        Block block = new Block(contents);
+        endNode(block);
+        return block;
     }
 
+//    private Line readLine(int lineNumber) {
+//        lastConsumedAndReturnedToken = null;
+//
+//        StringBuilder line = new StringBuilder();
+//        if (peek().getType() != EOF && peek().getLine() == lineNumber) {
+//            line.append(peek().getPreLexeme());
+//        }
+//        while (peek().getType() != EOF && peek().getLine() == lineNumber) {
+//            JolieToken token = advance();
+//            line.append(token.getLexeme());
+//            if (peek().getType() != EOF && peek().getLine() == lineNumber) {
+//                line.append(token.getPostLexeme());
+//            }
+//        }
+//
+//        return new Line(line.toString(), lineNumber);
+//    }
+
     private Line readLine(int lineNumber) {
+        lastConsumedAndReturnedToken = null;
+
         StringBuilder line = new StringBuilder();
-        if (peek().getType() != EOF && peek().getLine() == lineNumber) {
-            line.append(peek().getPreLexeme());
-        }
+//        if (peek().getType() != EOF && peek().getLine() == lineNumber) {
+//            line.append(peek().getPreLexeme());
+//        }
         while (peek().getType() != EOF && peek().getLine() == lineNumber) {
             JolieToken token = advance();
-            line.append(token.getLexeme());
-            if (peek().getType() != EOF && peek().getLine() == lineNumber) {
-                line.append(token.getPostLexeme());
-            }
+            line.append(token.getPreLexeme()).append(token.getLexeme()).append(token.getPostLexeme());
         }
 
-        return new Line(line.toString(), lineNumber);
+        Line lineE = new Line(line.toString(), lineNumber);
+        endNode(lineE);
+        return lineE;
     }
 
     //---------------------------------------------------------------
+
+//    private void consume(JolieTokenType type, String message) {
+//        if (peek().getType() == COMMENT) { // skip comment tokens
+//            advance();
+//        }
+//
+//        if (match(type)) {
+//            JolieToken nextToken = peek();
+//            JolieToken token = previous();
+//            String fullNewLexeme = token.getPreLexeme() + token.getLexeme() + token.getPostLexeme();
+//            nextToken.addToEndPreLexeme(fullNewLexeme);
+//        } else {
+//            throw error(previous(), message);
+//        }
+//    }
 
     private void consume(JolieTokenType type, String message) {
         if (peek().getType() == COMMENT) { // skip comment tokens
@@ -611,10 +825,13 @@ public class Parser {
         }
 
         if (match(type)) {
-            JolieToken nextToken = peek();
             JolieToken token = previous();
             String fullNewLexeme = token.getPreLexeme() + token.getLexeme() + token.getPostLexeme();
-            nextToken.setPreLexeme(fullNewLexeme);
+            if (lastConsumedAndReturnedToken == null) {
+                savedLexeme += fullNewLexeme;
+            } else {
+                lastConsumedAndReturnedToken.addToPostLexeme(fullNewLexeme);
+            }
         } else {
             throw error(previous(), message);
         }
@@ -626,6 +843,11 @@ public class Parser {
         }
 
         if (match(type)) {
+            if (lastConsumedAndReturnedToken == null) {
+                previous().addToStartPreLexeme(savedLexeme);
+                savedLexeme = "";
+            }
+            this.lastConsumedAndReturnedToken = previous();
             return previous();
         }
 
@@ -638,6 +860,11 @@ public class Parser {
         }
 
         advance();
+        if (lastConsumedAndReturnedToken == null) {
+            previous().addToStartPreLexeme(savedLexeme);
+            savedLexeme = "";
+        }
+        this.lastConsumedAndReturnedToken = previous();
         return previous();
     }
 

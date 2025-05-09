@@ -6,6 +6,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.Block;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
 public class Courier implements Node {
+    private String postLexeme = "";
     private final JolieToken courierInterfaceID;
     private final Block block;
 
@@ -20,6 +21,16 @@ public class Courier implements Node {
 
     public Block getBlock() {
         return block;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

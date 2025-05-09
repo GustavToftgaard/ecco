@@ -109,7 +109,7 @@ public class JRIT_Import extends JolieReaderIntegrationTestCase {
 
         // 1.1.3.1 LineContents
         node = pluginNodeChildren.get(0).getChildren().get(0).getChildren().get(2).getChildren().get(0);
-        checkLineNode(node, " as alias_1", 1);
+        checkLineNode(node, " as alias_1\n", 1);
 
         // ------
 

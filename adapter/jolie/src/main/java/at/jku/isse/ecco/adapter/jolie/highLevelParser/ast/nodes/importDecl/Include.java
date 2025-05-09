@@ -5,6 +5,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.NodeVisitor
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
 public class Include implements Node {
+    private String postLexeme = "";
     private final JolieToken includeID;
 
     public Include(JolieToken includeID) {
@@ -13,6 +14,16 @@ public class Include implements Node {
 
     public JolieToken getIncludeID() {
         return includeID;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

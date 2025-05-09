@@ -5,6 +5,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.NodeVisitor
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.Block;
 
 public class Main implements Node {
+    private String postLexeme = "";
     private final Block block;
 
     public Main(Block block) {
@@ -13,6 +14,16 @@ public class Main implements Node {
 
     public Block getBlock() {
         return block;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

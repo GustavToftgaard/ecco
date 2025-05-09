@@ -7,6 +7,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 import java.util.ArrayList;
 
 public class Line implements Node {
+    private String postLexeme = "";
     private final String lineContents;
     private final int line;
 
@@ -21,6 +22,16 @@ public class Line implements Node {
 
     public int getLine() {
         return line;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

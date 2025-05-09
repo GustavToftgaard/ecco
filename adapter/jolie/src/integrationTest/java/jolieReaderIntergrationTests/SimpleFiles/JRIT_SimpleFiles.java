@@ -81,16 +81,16 @@ public class JRIT_SimpleFiles extends JolieReaderIntegrationTestCase {
 
         // 3.2.*: Lines
         checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), " {\n  ", 4);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), " {\n", 4);
 
         checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(1).getChildren().get(0), "m:int\n  ", 5);
+        checkLineNode(node.getChildren().get(1).getChildren().get(0), "  m:int\n", 5);
 
         checkContextNode(node.getChildren().get(2), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(2).getChildren().get(0), "n:int\n", 6);
+        checkLineNode(node.getChildren().get(2).getChildren().get(0), "  n:int\n", 6);
 
         checkContextNode(node.getChildren().get(3), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(3).getChildren().get(0), "}", 7);
+        checkLineNode(node.getChildren().get(3).getChildren().get(0), "}\n\n", 7);
 
         // ------
 
@@ -186,28 +186,28 @@ public class JRIT_SimpleFiles extends JolieReaderIntegrationTestCase {
 
         // 5.4.1.*: Lines
         checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "\n" + "  }\n" + "\n" + "  main {\n" + "\n" + "    ", 23);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), "  main {\n" + "\n", 23);
 
         checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(1).getChildren().get(0), "[ sumUpTo( n )( response ) {\n" + "      ", 25);
+        checkLineNode(node.getChildren().get(1).getChildren().get(0), "    " + "[ sumUpTo( n )( response ) {\n", 25);
 
         checkContextNode(node.getChildren().get(2), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(2).getChildren().get(0), "...\n" + "    ", 26);
+        checkLineNode(node.getChildren().get(2).getChildren().get(0), "      " + "...\n", 26);
 
         checkContextNode(node.getChildren().get(3), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(3).getChildren().get(0), "} ]\n" + "\n" + "    ", 27);
+        checkLineNode(node.getChildren().get(3).getChildren().get(0), "    " + "} ]\n" + "\n", 27);
 
         checkContextNode(node.getChildren().get(4), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(4).getChildren().get(0), "[ sumBetween( request )( response ) {\n" + "      ", 29);
+        checkLineNode(node.getChildren().get(4).getChildren().get(0), "    " + "[ sumBetween( request )( response ) {\n", 29);
 
         checkContextNode(node.getChildren().get(5), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(5).getChildren().get(0), "...\n" + "    ", 30);
+        checkLineNode(node.getChildren().get(5).getChildren().get(0), "      " + "...\n", 30);
 
         checkContextNode(node.getChildren().get(6), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(6).getChildren().get(0), "} ]\n" + "\n" + "  ", 31);
+        checkLineNode(node.getChildren().get(6).getChildren().get(0), "    " + "} ]\n" + "\n", 31);
 
         checkContextNode(node.getChildren().get(7), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(7).getChildren().get(0), "}", 33);
+        checkLineNode(node.getChildren().get(7).getChildren().get(0), "  " + "}\n", 33);
 
         // 6 EndOfFile
         node = pluginNodeChildren.get(5);

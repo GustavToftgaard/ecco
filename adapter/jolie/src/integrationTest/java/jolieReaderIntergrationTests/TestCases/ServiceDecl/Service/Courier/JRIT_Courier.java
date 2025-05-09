@@ -53,31 +53,28 @@ public class JRIT_Courier extends JolieReaderIntegrationTestCase {
 
         // 1.3.2.*: Lines
         checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "> {\n" + "    ", 2);
+        checkLineNode(node.getChildren().get(0).getChildren().get(0), " {\n", 2);
 
         checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(1).getChildren().get(0), "[ testOperationRR( request )( response ) ] {\n" + "      ", 3);
+        checkLineNode(node.getChildren().get(1).getChildren().get(0), "    " + "[ testOperationRR( request )( response ) ] {\n", 3);
 
         checkContextNode(node.getChildren().get(2), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(2).getChildren().get(0), "some code\n" + "    ", 4);
+        checkLineNode(node.getChildren().get(2).getChildren().get(0), "      " + "some code\n", 4);
 
         checkContextNode(node.getChildren().get(3), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(3).getChildren().get(0), "}\n\n" + "    ", 5);
-
-//        checkContextNode(node.getChildren().get(4), NodeTypes.LINE, 1);
-//        checkLineNode(node.getChildren().get(4).getChildren().get(0), "\n" + "    ", 6);
+        checkLineNode(node.getChildren().get(3).getChildren().get(0), "    " + "}\n\n", 5);
 
         checkContextNode(node.getChildren().get(4), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(4).getChildren().get(0), "[ testOperationOW( request ) ] {\n" + "      ", 7);
+        checkLineNode(node.getChildren().get(4).getChildren().get(0), "    " + "[ testOperationOW( request ) ] {\n", 7);
 
         checkContextNode(node.getChildren().get(5), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(5).getChildren().get(0), "some code\n" + "    ", 8);
+        checkLineNode(node.getChildren().get(5).getChildren().get(0), "      " + "some code\n", 8);
 
         checkContextNode(node.getChildren().get(6), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(6).getChildren().get(0), "}\n" + "  ", 9);
+        checkLineNode(node.getChildren().get(6).getChildren().get(0), "    " + "}\n", 9);
 
         checkContextNode(node.getChildren().get(7), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(7).getChildren().get(0), "}", 10); // TODO!!!
+        checkLineNode(node.getChildren().get(7).getChildren().get(0), "  " + "}\n", 10);
 
         // 2: EndOfFile
         node = pluginNodeChildren.get(1);

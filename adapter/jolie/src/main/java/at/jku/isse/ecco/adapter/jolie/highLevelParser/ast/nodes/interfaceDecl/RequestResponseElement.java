@@ -2,10 +2,10 @@ package at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.interfaceDecl;
 
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.NodeVisitor;
-import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.nodes.Block;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
 public class RequestResponseElement implements Node {
+    private String postLexeme = "";
     private final JolieToken functionID;
     private final JolieToken requestID;
     private final JolieToken responseID;
@@ -26,6 +26,16 @@ public class RequestResponseElement implements Node {
 
     public JolieToken getResponseID() {
         return responseID;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

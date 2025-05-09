@@ -6,6 +6,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.NodeVisitor
 import java.util.ArrayList;
 
 public class OneWayDecl  implements Node {
+    private String postLexeme = "";
     private final ArrayList<OneWayElement> oneWayElements;
 
     public OneWayDecl(ArrayList<OneWayElement> oneWayElements) {
@@ -14,6 +15,16 @@ public class OneWayDecl  implements Node {
 
     public ArrayList<OneWayElement> getOneWayElements() {
         return oneWayElements;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override

@@ -8,6 +8,7 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 import java.util.ArrayList;
 
 public class InputPort implements Node {
+    private String postLexeme = "";
     private final JolieToken inputPortID;
     private final ArrayList<Node> portParameters;
 
@@ -22,6 +23,16 @@ public class InputPort implements Node {
 
     public ArrayList<Node> getPortParameters() {
         return portParameters;
+    }
+
+    @Override
+    public String getPostLexeme() {
+        return postLexeme;
+    }
+
+    @Override
+    public void setPostLexeme(String postLexeme) {
+        this.postLexeme = postLexeme;
     }
 
     @Override
