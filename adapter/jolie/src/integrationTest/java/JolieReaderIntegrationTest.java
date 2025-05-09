@@ -214,14 +214,14 @@ public class JolieReaderIntegrationTest {
             Node.Op resultPluginNode = nodes.iterator().next();
 
             if (printTree) { // prints ecco tree instead of testing
-                System.out.println("\n");
+                System.out.println("\n" + fileName + ":\n--- START ---");
                 printECCO(resultPluginNode);
-                System.out.println("\n" + "End of " + fileName + "\n\n");
+                System.out.println("---  END  ---\n");
             } else { // tests ecco tree
                 tester.test(resultPluginNode, fileName);
             }
         }
-        tester.clearFileNames(); // clear fileNames so that tester ready for next test
+        tester.clearFileNames(); // clear fileNames so that tester is ready for next test
     }
 
     private Set<Node.Op> readFolder(Path folderPath) {
@@ -255,44 +255,47 @@ public class JolieReaderIntegrationTest {
         return fileSet.stream().map(dir::relativize).toArray(Path[]::new);
     }
 
-    private List<Path> listAllFilesInDir(Path path) throws IOException {
-        List<Path> result = new LinkedList<>();
-        try (Stream<Path> walk = Files.walk(path)) {
-            result = walk.filter(Files::isRegularFile)
-                    .collect(Collectors.toList());
-        }
-        return result;
-    }
-
     private Map<String, String> createHashMapOfTestFiles() {
-        // String totalPath =
-        // Objects.requireNonNull(getClass().getClassLoader().getResource("jolieTestCode")).toString();
-        // totalPath = totalPath.substring(6); // remove "file:/" from start of string
-        // totalPath = totalPath.replace("%20", " "); // in getting totalPath all " "
-        // are replaced with "%20" so this reverses this
         String totalPath = System.getProperty("user.dir") + "/build/resources/integrationTest/jolieTestCode";
         Map<String, String> res = new HashMap<>();
-        // try {
-        // List<Path> paths = listAllFilesInDir(path);
         List<String> paths = extractFilesFromPath(totalPath);
 
         for (String file : paths) {
-            // String file = filePath.toString();
-            // System.out.println("iterated file: " + file);
-            // for (int i = file.length() - 1; i > 0; i--) {
-            //     if (file.charAt(i) == '\\') {
-            //         res.put(file.substring(i + 1), file.substring(0, i));
-            //         break;
-            //     }
-            // }
             int index = file.lastIndexOf(File.separator);
             res.put(file.substring(index + 1), file.substring(0, index) );
         }
-        // } catch (IOException e) {
-        // e.printStackTrace();
-        // }
         return res;
     }
+
+//    private Map<String, String> createHashMapOfTestFiles() {
+//        // String totalPath =
+//        // Objects.requireNonNull(getClass().getClassLoader().getResource("jolieTestCode")).toString();
+//        // totalPath = totalPath.substring(6); // remove "file:/" from start of string
+//        // totalPath = totalPath.replace("%20", " "); // in getting totalPath all " "
+//        // are replaced with "%20" so this reverses this
+//        String totalPath = System.getProperty("user.dir") + "/build/resources/integrationTest/jolieTestCode";
+//        Map<String, String> res = new HashMap<>();
+//        // try {
+//        // List<Path> paths = listAllFilesInDir(path);
+//        List<String> paths = extractFilesFromPath(totalPath);
+//
+//        for (String file : paths) {
+//            // String file = filePath.toString();
+//            // System.out.println("iterated file: " + file);
+//            // for (int i = file.length() - 1; i > 0; i--) {
+//            //     if (file.charAt(i) == '\\') {
+//            //         res.put(file.substring(i + 1), file.substring(0, i));
+//            //         break;
+//            //     }
+//            // }
+//            int index = file.lastIndexOf(File.separator);
+//            res.put(file.substring(index + 1), file.substring(0, index) );
+//        }
+//        // } catch (IOException e) {
+//        // e.printStackTrace();
+//        // }
+//        return res;
+//    }
 
     public void printECCO(Node.Op rootNode) {
         System.out.println(rootNode.toString());
