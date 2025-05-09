@@ -30,8 +30,10 @@ import jolieReaderIntergrationTests.SimpleFiles.JRIT_SimpleFiles;
 import jolieReaderIntergrationTests.interfacesAndAbstractClasses.JolieReaderIntegrationTestCase;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -199,7 +201,6 @@ public class JolieReaderIntegrationTest {
 
     // Multiple files
 
-
     // ----
 
     private void testCase(JolieReaderIntegrationTestCase tester) {
@@ -213,14 +214,14 @@ public class JolieReaderIntegrationTest {
             Node.Op resultPluginNode = nodes.iterator().next();
 
             if (printTree) { // prints ecco tree instead of testing
-                System.out.println("\n");
+                System.out.println("\n" + fileName + ":\n--- START ---");
                 printECCO(resultPluginNode);
-                System.out.println("\n" + "End of " + fileName + "\n\n");
+                System.out.println("---  END  ---\n");
             } else { // tests ecco tree
                 tester.test(resultPluginNode, fileName);
             }
         }
-        tester.clearFileNames(); // clear fileNames so that tester ready for next test
+        tester.clearFileNames(); // clear fileNames so that tester is ready for next test
     }
 
     private Set<Node.Op> readFolder(Path folderPath) {
@@ -229,7 +230,7 @@ public class JolieReaderIntegrationTest {
         return reader.read(folderPath, relativeFiles);
     }
 
-    private Path[] getRelativeDirContent(JolieReader reader, Path dir){
+    private Path[] getRelativeDirContent(JolieReader reader, Path dir) {
         Map<Integer, String[]> prioritizedPatterns = reader.getPrioritizedPatterns();
         String[] patterns = prioritizedPatterns.values().iterator().next();
         Collection<PathMatcher> pathMatcher = new ArrayList<>();
@@ -240,7 +241,7 @@ public class JolieReaderIntegrationTest {
 
         Set<Path> fileSet = new HashSet<>();
         try (Stream<Path> pathStream = Files.walk(dir)) {
-            pathStream.forEach( path -> {
+            pathStream.forEach(path -> {
                 Boolean applicableFile = pathMatcher.stream().map(pm -> pm.matches(path)).reduce(Boolean::logicalOr).get();
                 if (applicableFile) {
                     fileSet.add(path);
@@ -253,36 +254,14 @@ public class JolieReaderIntegrationTest {
         return fileSet.stream().map(dir::relativize).toArray(Path[]::new);
     }
 
-    private List<Path> listAllFilesInDir(Path path) throws IOException {
-        List<Path> result;
-        try (Stream<Path> walk = Files.walk(path)) {
-            result = walk.filter(Files::isRegularFile)
-                    .collect(Collectors.toList());
-        }
-        return result;
-    }
-
     private Map<String, String> createHashMapOfTestFiles() {
-        String totalPath = Objects.requireNonNull(getClass().getClassLoader().getResource("jolieTestCode")).toString();
-        totalPath = totalPath.substring(6); // remove "file:/" from start of string
-        totalPath = totalPath.replace("%20", " "); // in getting totalPath all " " are replaced with "%20" so this reverses this
-
+        String totalPath = System.getProperty("user.dir") + "/build/resources/integrationTest/jolieTestCode";
         Map<String, String> res = new HashMap<>();
-        try {
-            Path path = Paths.get(totalPath);
-            List<Path> paths = listAllFilesInDir(path);
+        List<String> paths = extractFilesFromPath(totalPath);
 
-            for(Path filePath : paths) {
-                String file = filePath.toString();
-                for (int i = file.length() - 1; i > 0 ; i--) {
-                    if (file.charAt(i) == '\\') {
-                        res.put(file.substring(i + 1), file.substring(0, i));
-                        break;
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (String file : paths) {
+            int index = file.lastIndexOf(File.separator);
+            res.put(file.substring(index + 1), file.substring(0, index) );
         }
         return res;
     }
@@ -292,5 +271,64 @@ public class JolieReaderIntegrationTest {
         for (int i = 0; i < rootNode.getChildren().size(); i++) {
             printECCO(rootNode.getChildren().get(i));
         }
+    }
+
+    /**
+     * @author sandragreiner <greiner@imada.sdu.dk>
+     */
+    public List<String> extractFilesFromPath(String path) {
+        List<String> filesToScan = new LinkedList<String>();
+        // get all files in directory
+        FileIterator<Path> fiMV = new FileIterator<Path>();
+        try {
+            Files.walkFileTree(Paths.get(path), fiMV);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // store the files
+        for (Path srcFile : fiMV.getRegFiles()) {
+            filesToScan.add(srcFile.toString());
+        }
+        return filesToScan;
+    }
+}
+
+/**
+ * @author sandragreiner <greiner@imada.sdu.dk>
+ */
+class FileIterator<T> implements FileVisitor<Path> {
+    private List<Path> regFiles = new LinkedList<Path>();
+
+    @Override
+    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attr) throws IOException {
+        if (attr.isSymbolicLink()) {
+            System.out.format("Symbolic link: %s ", file);
+        } else if (attr.isRegularFile()) {
+            regFiles.add(file);
+        } else {
+            System.out.format("Other: %s ", file);
+        }
+        return FileVisitResult.CONTINUE;
+
+    }
+
+    public List<Path> getRegFiles() {
+        return regFiles;
+    }
+
+    @Override
+    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+        return FileVisitResult.CONTINUE;
+
     }
 }

@@ -9,14 +9,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class JolieWriterIntegrationTest {
     private final static String autoTestFolder = "src/integrationTest/resources/autoTestFolder";
-    private final static String fileTestFolder = "src/integrationTest/resources/jolieTestCode";
     private final static String testFolder = "src/integrationTest/resources";
     private final Map<String, String> filesAndPaths = createHashMapOfTestFiles();
 
@@ -394,51 +392,34 @@ public class JolieWriterIntegrationTest {
     }
 
     private Map<String, String> createHashMapOfTestFiles() {
-        String totalPath = Objects.requireNonNull(getClass().getClassLoader().getResource("jolieTestCode")).toString();
-        totalPath = totalPath.substring(6); // remove "file:/" from start of string
-        totalPath = totalPath.replace("%20", " "); // in getting totalPath all " " are replaced with "%20" so this reverses this
-
+        String totalPath = System.getProperty("user.dir") + "/build/resources/integrationTest/jolieTestCode";
         Map<String, String> res = new HashMap<>();
-        try {
-            Path path = Paths.get(totalPath);
-            List<Path> paths = listAllFilesInDir(path);
+        List<String> paths = extractFilesFromPath(totalPath);
 
-            for(Path filePath : paths) {
-                String filePathString = filePath.toString();
-                StringBuilder folderName = new StringBuilder();
-
-                for (int i = filePathString.length() - 1; i > 0 ; i--) { // get relative path after "JolieTestCode"
-//                    folderName.append(filePathString.charAt(i));
-                    folderName.insert(0, filePathString.charAt(i));
-                    if (filePathString.charAt(i) == '\\') {
-                        if (folderName.toString().equals("\\jolieTestCode")) {
-                            filePathString = filePathString.substring(i + 1);
-                            break;
-                        } else {
-                            folderName = new StringBuilder();
-                        }
-                    }
-                }
-
-                for (int i = filePathString.length() - 1; i > 0 ; i--) {
-                    if (filePathString.charAt(i) == '\\') {
-                        res.put(filePathString.substring(i + 1), filePathString.substring(0, i));
-                        break;
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (String file : paths) {
+            int index = file.lastIndexOf(File.separator);
+            int startIndex = file.indexOf("jolieTestCode");
+            res.put(file.substring(index + 1), file.substring(startIndex, index) );
         }
         return res;
     }
 
-    private List<Path> listAllFilesInDir(Path path) throws IOException {
-        List<Path> result;
-        try (Stream<Path> walk = Files.walk(path)) {
-            result = walk.filter(Files::isRegularFile)
-                    .collect(Collectors.toList());
+    /**
+     * @author sandragreiner <greiner@imada.sdu.dk>
+     */
+    public List<String> extractFilesFromPath(String path) {
+        List<String> filesToScan = new LinkedList<String>();
+        // get all files in directory
+        FileIterator<Path> fiMV = new FileIterator<Path>();
+        try {
+            Files.walkFileTree(Paths.get(path), fiMV);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return result;
+        // store the files
+        for (Path srcFile : fiMV.getRegFiles()) {
+            filesToScan.add(srcFile.toString());
+        }
+        return filesToScan;
     }
 }
