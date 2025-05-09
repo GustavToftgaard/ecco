@@ -242,8 +242,7 @@ public class JolieReaderIntegrationTest {
         Set<Path> fileSet = new HashSet<>();
         try (Stream<Path> pathStream = Files.walk(dir)) {
             pathStream.forEach(path -> {
-                Boolean applicableFile = pathMatcher.stream().map(pm -> pm.matches(path)).reduce(Boolean::logicalOr)
-                        .get();
+                Boolean applicableFile = pathMatcher.stream().map(pm -> pm.matches(path)).reduce(Boolean::logicalOr).get();
                 if (applicableFile) {
                     fileSet.add(path);
                 }
@@ -266,36 +265,6 @@ public class JolieReaderIntegrationTest {
         }
         return res;
     }
-
-//    private Map<String, String> createHashMapOfTestFiles() {
-//        // String totalPath =
-//        // Objects.requireNonNull(getClass().getClassLoader().getResource("jolieTestCode")).toString();
-//        // totalPath = totalPath.substring(6); // remove "file:/" from start of string
-//        // totalPath = totalPath.replace("%20", " "); // in getting totalPath all " "
-//        // are replaced with "%20" so this reverses this
-//        String totalPath = System.getProperty("user.dir") + "/build/resources/integrationTest/jolieTestCode";
-//        Map<String, String> res = new HashMap<>();
-//        // try {
-//        // List<Path> paths = listAllFilesInDir(path);
-//        List<String> paths = extractFilesFromPath(totalPath);
-//
-//        for (String file : paths) {
-//            // String file = filePath.toString();
-//            // System.out.println("iterated file: " + file);
-//            // for (int i = file.length() - 1; i > 0; i--) {
-//            //     if (file.charAt(i) == '\\') {
-//            //         res.put(file.substring(i + 1), file.substring(0, i));
-//            //         break;
-//            //     }
-//            // }
-//            int index = file.lastIndexOf(File.separator);
-//            res.put(file.substring(index + 1), file.substring(0, index) );
-//        }
-//        // } catch (IOException e) {
-//        // e.printStackTrace();
-//        // }
-//        return res;
-//    }
 
     public void printECCO(Node.Op rootNode) {
         System.out.println(rootNode.toString());
