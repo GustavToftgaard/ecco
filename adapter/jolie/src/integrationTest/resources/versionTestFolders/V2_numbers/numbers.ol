@@ -1,7 +1,4 @@
-from console import Console
-from string_utils import StringUtils
-
-interface NumbersAPI { 
+interface NumbersAPI {
   requestResponse:
     factorial( int )( int ),
     fibonacci( int )( int )

@@ -1,10 +1,7 @@
-from console import Console
-from string_utils import StringUtils
-
-interface NumbersAPI { 
+interface NumbersAPI {
   requestResponse:
-    triangular( int )( int ),
-    hexagonal( int )( int )
+    sumUpTo( int )( int ),
+    factorial( int )( int )
 }
 
 service Numbers {
@@ -17,17 +14,17 @@ service Numbers {
 
   main {
 
-    [ triangular( n )( response ) {
-      response = 0
-      var = 0
-      while( var < n ) {
-        response += ( var + 1 )
-        var++
+    [ sumUpTo( n )( response ) {
+      for( i = 0, i < n, i++ ) {
+        response += i
       }
     } ]
 
-    [ hexagonal( n )( response ) {
-      response = n * (2 * n - 1)
+    [ factorial( n )( response ) {
+      response = n
+      for( i = n - 1, i > 0, i-- ) {
+        response *= ( n - i )
+      }
     } ]
   }
 }

@@ -1,7 +1,4 @@
-from console import Console
-from string_utils import StringUtils
-
-type twoArguments { 
+type twoArguments {
   m:int 
   n:int 
 }
