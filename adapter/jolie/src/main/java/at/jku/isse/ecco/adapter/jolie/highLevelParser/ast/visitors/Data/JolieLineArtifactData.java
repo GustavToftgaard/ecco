@@ -43,8 +43,7 @@ public class JolieLineArtifactData implements ArtifactData {
         if (object == null || getClass() != object.getClass()) return false;
 
         JolieLineArtifactData that = (JolieLineArtifactData) object; // cast
-        return Objects.equals(getLineContents(), that.getLineContents()) &&
-                getLine() == that.getLine();
+        return Objects.equals(getLineContents(), that.getLineContents());
     }
 
     @Override

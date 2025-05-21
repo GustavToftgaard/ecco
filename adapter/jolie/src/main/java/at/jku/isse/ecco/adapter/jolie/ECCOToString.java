@@ -6,16 +6,16 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.visitors.Data.JolieTok
 import at.jku.isse.ecco.tree.Node;
 
 public class ECCOToString {
-    private final Node.Op rootNode;
+    private final Node rootNode;
 
-    public ECCOToString(Node.Op rootNode) {
+    public ECCOToString(Node rootNode) {
         this.rootNode = rootNode;
     }
 
     public String convert() {
         StringBuilder res = new StringBuilder();
 
-        for (Node.Op node : rootNode.getChildren()) {
+        for (Node node : rootNode.getChildren()) {
             res.append(convertNode(node));
         }
 
@@ -27,11 +27,11 @@ public class ECCOToString {
         return res.toString();
     }
 
-    private String convertNode(Node.Op node) {
+    private String convertNode(Node node) {
         StringBuilder res = new StringBuilder();
 
         if (isContextNode(node)) {
-            for (Node.Op childNode : node.getChildren()) {
+            for (Node childNode : node.getChildren()) {
                 res.append(convertNode(childNode));
             }
             JolieContextArtifactData contextNode = toContextNode(node);
@@ -51,27 +51,27 @@ public class ECCOToString {
 
     // ----
 
-    private boolean isContextNode(Node.Op node) {
+    private boolean isContextNode(Node node) {
         return (node.getArtifact().getData() instanceof JolieContextArtifactData);
     }
 
-    private boolean isTokenNode(Node.Op node) {
+    private boolean isTokenNode(Node node) {
         return (node.getArtifact().getData() instanceof JolieTokenArtifactData);
     }
 
-    private boolean isLineNode(Node.Op node) {
+    private boolean isLineNode(Node node) {
         return (node.getArtifact().getData() instanceof JolieLineArtifactData);
     }
 
-    private JolieContextArtifactData toContextNode(Node.Op node) {
+    private JolieContextArtifactData toContextNode(Node node) {
         return (JolieContextArtifactData) node.getArtifact().getData();
     }
 
-    private JolieTokenArtifactData toTokenNode(Node.Op node) {
+    private JolieTokenArtifactData toTokenNode(Node node) {
         return (JolieTokenArtifactData) node.getArtifact().getData();
     }
 
-    private JolieLineArtifactData toLineNode(Node.Op node) {
+    private JolieLineArtifactData toLineNode(Node node) {
         return (JolieLineArtifactData) node.getArtifact().getData();
     }
 }

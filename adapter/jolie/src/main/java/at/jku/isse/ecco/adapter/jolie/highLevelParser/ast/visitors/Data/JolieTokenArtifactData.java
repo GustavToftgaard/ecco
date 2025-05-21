@@ -61,8 +61,7 @@ public class JolieTokenArtifactData implements ArtifactData {
         return getType() == that.getType() &&
                 Objects.equals(getPreWhitespace(), that.getPreWhitespace()) &&
                 Objects.equals(getLexeme(), that.getLexeme()) &&
-                Objects.equals(getPostWhitespace(), that.getPostWhitespace()) &&
-                getLine() == that.getLine();
+                Objects.equals(getPostWhitespace(), that.getPostWhitespace());
     }
 
     @Override

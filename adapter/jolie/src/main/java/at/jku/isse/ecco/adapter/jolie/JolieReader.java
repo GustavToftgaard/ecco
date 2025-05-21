@@ -22,8 +22,12 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
     private List<ReadListener> listeners = new LinkedList<>();
     private final EntityFactory entityFactory;
 
-    private static final Map<Integer, String[]> prioritizedPatterns =
-            Collections.singletonMap(0, new String[]{"**.ol"});
+    private static Map<Integer, String[]> prioritizedPatterns;
+
+    static {
+        prioritizedPatterns = new HashMap<>();
+        prioritizedPatterns.put(Integer.MAX_VALUE, new String[]{"**.ol"});
+    }
 
     @Inject
     public JolieReader(EntityFactory entityFactory) {

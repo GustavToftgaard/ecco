@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 public class JolieWriter implements ArtifactWriter<Set<Node>, Path> {
+
     private List<WriteListener> listeners = new LinkedList<>();
 
     @Override
@@ -50,10 +51,11 @@ public class JolieWriter implements ArtifactWriter<Set<Node>, Path> {
         try (BufferedWriter bw = Files.newBufferedWriter(filePath)) {
 
             for (Node node : orderedNode.getChildren()){
-                ECCOToString eccoToString = new ECCOToString((Node.Op) node);
+                ECCOToString eccoToString = new ECCOToString(node);
                 String jolieFileCode = eccoToString.convert();
                 bw.write(jolieFileCode);
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
