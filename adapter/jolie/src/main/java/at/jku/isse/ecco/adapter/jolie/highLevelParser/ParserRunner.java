@@ -1,15 +1,14 @@
 package at.jku.isse.ecco.adapter.jolie.highLevelParser;
 
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node;
+import at.jku.isse.ecco.adapter.jolie.highLevelParser.parser.JolieParser;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.JolieScanner;
-import at.jku.isse.ecco.adapter.jolie.highLevelParser.parser.Parser;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,7 +19,7 @@ public class ParserRunner {
     public static boolean hadError = false;
     public static List<String> errors = new ArrayList<>();
 
-    public List<Node> parse(Path source) { // List<String>
+    public List<Node> parse(Path source) {
         hadError = false;
         errors.clear();
 
@@ -39,10 +38,6 @@ public class ParserRunner {
         String[] lines = lineList.toArray(new String[0]);
         StringBuilder scannerInput = new StringBuilder();
 
-//        for (String line : lines) {
-//            scannerInput.append(line).append('\n');
-//        }
-
         for (int i = 0; i < lines.length; i++) {
             if (i == lines.length - 1 && !Objects.equals(lines[i], "") && (lastChar != '\n' && lastChar != '\r')) {
                 scannerInput.append(lines[i]);
@@ -57,33 +52,17 @@ public class ParserRunner {
 
         List<JolieToken> parserInput = new ArrayList<>();
         for (JolieToken token : tokens) {
-            if (token.getType() != SPACE && token.getType() != COMMENT && token.getType() != MULTILINE_COMMENT) {
+            if (token.getType() != COMMENT) {
                 parserInput.add(token);
             }
         }
 
-        Parser parser = new Parser(parserInput);
-        List<Node> statements = parser.parse();
+        JolieParser jolieParser = new JolieParser(parserInput);
+        List<Node> statements = jolieParser.parse();
         // if (hadError) return errors;
 
         return statements;
     }
-
-//    public static void error(JolieToken token, String message, String errorType) {
-//        report(token.line, message, errorType);
-//    }
-//
-//    public static void error(int line, String message, String errorType) {
-//        report(line, message, errorType);
-//    }
-//
-//    private static void report(int line, String message, String errorType) {
-//        var error = errorType + ", line " + line + " " + message;
-//        errors.add(error);
-//        System.err.println(error);
-//        hadError = true;
-//    }
-
 }
 
 

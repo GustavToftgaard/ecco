@@ -1,42 +1,34 @@
-
 Program         -> Decl* EOF
-Decl            -> ImportDecl | InterfaceDecl | TypeDecl | ServiceDecl | Service | Line
+Decl            -> ImportDecl | InterfaceDecl | TypeDecl | ServiceDecl | Line
 
 ImportDecl      -> Import | Include
   Import          -> "from" ID "import" ID Line?
   Include         -> "include" ID(String)
 
 InterfaceDecl   -> "interface" "extender"? ID "{" RequestResponseDecl? OneWayDecl? "}"
-  RequestResponseDecl     -> ( "requestResponse" |"RequestResponse" ) ":" RequestResponseElement ("," RequestResponseElement)*
+  RequestResponseDecl     -> ( "requestResponse" | "RequestResponse" ) ":" RequestResponseElement ("," RequestResponseElement)*
     RequestResponseElement  -> ID "(" ID ")" "(" ID ")"
   OneWayDecl              -> ( "oneWay" | "OneWay" ) ":" OneWayElement ("," OneWayElement)*
     OneWayElement           -> ID "(" ID ")"
 
 TypeDecl        -> "type" ID (":" ID ("|" ID)*)? Block?
 
-ServiceDecl     -> "service" ID ( "(" Token* ")" )? "{" Service* "}" // (p: MyServiceParam),
+ServiceDecl     -> "service" ID ( "(" Token* ")" )? "{" Service* "}"
   Service         -> Execution | Embed | Embedded | InputPort | OutputPort | Init | Main | Courier | DefineProcedure | Line
     Execution       -> "execution" ( ":" ID ) | ( "{" ID "}" )
-    Embed           -> embed ID ( "(" ID* ")" )? ("in" ID | "as" ID) // TODO: check if ID* needs to be switched to Token*
+    Embed           -> embed ID ( "(" ID* ")" )? ("in" ID | "as" ID)
     Embedded        -> "embedded" Block
     InputPort       -> "inputPort" ID "{" PortLocation? PortProtocol? PortInterfaces? PortAggregates? PortRedirects? "}"
     OutputPort      -> "outputPort" ID "{" PortLocation? PortProtocol? PortInterfaces? "}"
-      PortLocation    -> ( "location" | "Location" ) ":" line // Token*
-      PortProtocol    -> ( "protocol" | "Protocol" ) ":" line ( Line )* // Token*
-      PortInterfaces  -> ( "interfaces" | "Interfaces" ) ":" Line (, Line )* // Token*
-      PortAggregates  -> ( "aggregates" | "Aggregates" ) ":" Line (, Line )* // Token*
-      PortRedirects   -> ( "redirects" | "Redirects" ) ":" Line (, Line )* // Token*
+      PortLocation    -> ( "location" | "Location" ) ":" Token*
+      PortProtocol    -> ( "protocol" | "Protocol" ) ":" Token*
+      PortInterfaces  -> ( "interfaces" | "Interfaces" ) ":" Token*
+      PortAggregates  -> ( "aggregates" | "Aggregates" ) ":" Token*
+      PortRedirects   -> ( "redirects" | "Redirects" ) ":" Token*
     Init            -> "init" Block
     Main            -> "main" Block
     Courier         -> "courier" "<" ID ">" Block
     DefineProcedure -> "define" ID Block
 
-// Main            -> "main" ( "{" ( "[" Procedure "]" )* | Procedure "}" ) | Block
-// Procedure       -> ID "(" ID? ")" ( "(" ID? ")" )? Block
-
-Block           -> "{" (_* '\n')* "}" ( keep track of "{" and "}" )
+Block           -> "{" (_* '\n'?)* "}" // keep track of open and close curly braces
 Line            -> _* ( '\n' | specifiedToken )
-
-// Constants: https://docs.jolie-lang.org/v1.13.x-git/language-tools-and-standard-library/basics/constants/index.html
-// Scope, Install: https://docs.jolie-lang.org/v1.13.x-git/language-tools-and-standard-library/basics/fault-handling/scopes-and-faults/index.html
-//

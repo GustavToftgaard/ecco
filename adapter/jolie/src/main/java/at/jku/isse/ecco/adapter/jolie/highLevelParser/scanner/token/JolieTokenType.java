@@ -8,9 +8,6 @@ public enum JolieTokenType {
     LESS_THAN, GREATER_THAN,
     COLON, SEMI_COLON, VERTICAL_BAR,
 
-    // Single-character tokens (white space)
-    SPACE,
-
     // Keywords
     FROM, IMPORT, INCLUDE, AS, IN,
     INTERFACE, EXTENDER, TYPE,
@@ -26,7 +23,7 @@ public enum JolieTokenType {
     STRING,
 
     // Comments
-    COMMENT, MULTILINE_COMMENT,
+    COMMENT,
 
     // Identifier
     ID,
