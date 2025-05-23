@@ -68,6 +68,6 @@ public class JolieToken {
     }
 
     public String toString() {
-        return "<" + type + "," + lexeme + "> " + ", Line: " + line;
+        return "<" + type + "," + preLexeme + lexeme + postLexeme + "> " + ", Line: " + line;
     }
 }

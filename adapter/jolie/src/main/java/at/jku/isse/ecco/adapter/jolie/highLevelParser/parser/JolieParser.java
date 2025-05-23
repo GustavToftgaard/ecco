@@ -16,7 +16,7 @@ import java.util.List;
 
 import static at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType.*;
 
-public class Parser {
+public class JolieParser {
     private final List<JolieToken> tokens;
     private int current = 0;
     private JolieToken lastConsumedAndReturnedToken = null;
@@ -27,7 +27,7 @@ public class Parser {
         return ast;
     }
 
-    public Parser(List<JolieToken> tokens) {
+    public JolieParser(List<JolieToken> tokens) {
         this.tokens = tokens;
     }
 
@@ -73,8 +73,6 @@ public class Parser {
                 res = serviceDecl();
                 break;
 
-            // TODO: Missing case for going around serviceDecl to service
-
             default:
                 res = readLine(token.getLine());
                 break;
@@ -84,21 +82,11 @@ public class Parser {
 
     // ----
 
-    // TODO: move
-    private void endNode(Node node) {
-        if (lastConsumedAndReturnedToken == null) {
-            node.setPostLexeme(savedLexeme);
-            savedLexeme = "";
-        } else {
-            lastConsumedAndReturnedToken = null;
-        }
-    }
-
     private ImportDecl importDecl() {
         lastConsumedAndReturnedToken = null;
-
         Import importE = null;
         Include include = null;
+
         if (peek().getType() == FROM) {
             consume(FROM, "Expected FROM token in import decl");
             JolieToken fromID = consumeAndReturn(ID, "Expected ID after FROM in import decl");
@@ -109,16 +97,15 @@ public class Parser {
             if (previous().getLine() == peek().getLine() && peek().getType() != EOF) {
                 Node line = readLine(previous().getLine());
                 importE = new Import(fromID, importID, line);
-//                return new ImportDecl(new Import(fromID, importID, line));
+
             } else {
                 importE = new Import(fromID, importID);
-//                return new ImportDecl(new Import(fromID, importID));
             }
+
         } else {
             consume(INCLUDE, "Expected INCLUDE token in import decl");
             JolieToken id = consumeAndReturn(STRING, "Expected string as ID after INCLUDE in import decl");
             include = new Include((id));
-//            return new ImportDecl(new Include(id));
         }
 
         ImportDecl importDecl = new ImportDecl(importE, include);
@@ -143,7 +130,7 @@ public class Parser {
 
         RequestResponseDecl requestResponseDecl = null;
 
-        if (peek().getType() == REQUEST_RESPONSE) { // TODO: change to own function
+        if (peek().getType() == REQUEST_RESPONSE) {
             ArrayList<RequestResponseElement> requestResponseElements = new ArrayList<>();
             consume(REQUEST_RESPONSE, "Expected REQUEST_RESPONSE token after ID in interface decl");
             consume(COLON, "Expected COLON token after REQUEST_RESPONSE in interface decl");
@@ -157,7 +144,7 @@ public class Parser {
         }
 
         OneWayDecl oneWayDecl = null;
-        if (peek().getType() == ONE_WAY) { // TODO: change to own function
+        if (peek().getType() == ONE_WAY) {
             ArrayList<OneWayElement> oneWayElements = new ArrayList<>();
             consume(ONE_WAY, "Expected ONE_WAY token after ID or REQUEST_RESPONSE in interface decl");
             consume(COLON, "Expected COLON token after ONE_WAY in interface decl");
@@ -644,64 +631,6 @@ public class Parser {
 
     // ----
 
-//    private Block block() {
-//        lastConsumedAndReturnedToken = null;
-//
-//        ArrayList<Line> contents = new ArrayList<>();
-//        int openBraces = 0;
-//        int lineNumber = peek().getLine();
-//        StringBuilder line = new StringBuilder();
-//
-//        JolieToken leftBrace = consumeAndReturn(LEFT_BRACE, "Expected LEFT_BRACE token in block");
-//        line.append(leftBrace.getPreLexeme()).append(leftBrace.getLexeme()).append(leftBrace.getPostLexeme());
-//
-//        while (peek().getType() != RIGHT_BRACE || openBraces != 0) {
-//            JolieToken token = advance();
-//
-//            if (token.getType() == LEFT_BRACE) {
-//                openBraces++;
-//
-//            } else if (token.getType() == RIGHT_BRACE) {
-//                openBraces--;
-//            }
-//
-//            if (token.getType() == RIGHT_BRACE && openBraces == 0) { // check if last token
-//                if (peek().getLine() != lineNumber) { // check if RIGHT_BRACE is on a different line
-//                    contents.add(new Line(line.toString(), lineNumber));
-//                    line = new StringBuilder();
-//                    lineNumber = token.getLine();
-//                    line.append(token.getLexeme()).append(token.getPostLexeme());
-//
-//                } else {
-//                    line.append(token.getLexeme()).append(token.getPostLexeme());
-//                }
-//
-//            } else if (token.getLine() != lineNumber) { // add line to contents and start new line if token in on a new line
-//                contents.add(new Line(line.toString(), lineNumber));
-//                line = new StringBuilder();
-//                lineNumber = token.getLine();
-//                line.append(token.getLexeme()).append(token.getPostLexeme());
-//
-//            } else {
-//                line.append(token.getLexeme()).append(token.getPostLexeme());
-//            }
-//        }
-//
-//        if (peek().getLine() != lineNumber) { // check if RIGHT_BRACE is on a different line
-//            contents.add(new Line(line.toString(), lineNumber));
-//            line = new StringBuilder();
-//            lineNumber = peek().getLine();
-//            line.append(consumeAndReturn(RIGHT_BRACE, "Expected RIGHT_BRACE token in block").getLexeme());
-//
-//        } else {
-//            line.append(consumeAndReturn(RIGHT_BRACE, "Expected RIGHT_BRACE token in block").getLexeme());
-//        }
-//
-//        contents.add(new Line(line.toString(), lineNumber));
-//
-//        return new Block(contents);
-//    }
-
     private Block block() {
         lastConsumedAndReturnedToken = null;
 
@@ -722,26 +651,6 @@ public class Parser {
             } else if (token.getType() == RIGHT_BRACE) {
                 openBraces--;
             }
-//            if (token.getType() == RIGHT_BRACE && openBraces == 0) { // check if last token
-//                if (peek().getLine() != lineNumber) { // check if RIGHT_BRACE is on a different line
-//                    contents.add(new Line(line.toString(), lineNumber));
-//                    line = new StringBuilder();
-//                    lineNumber = token.getLine();
-//                    line.append(token.getPreLexeme()).append(token.getLexeme()).append(token.getPostLexeme());
-//
-//                } else {
-//                    line.append(token.getPreLexeme()).append(token.getLexeme()).append(token.getPostLexeme());
-//                }
-//
-//            } else if (token.getLine() != lineNumber) { // add line to contents and start new line if token in on a new line
-//                contents.add(new Line(line.toString(), lineNumber));
-//                line = new StringBuilder();
-//                lineNumber = token.getLine();
-//                line.append(token.getPreLexeme()).append(token.getLexeme()).append(token.getPostLexeme());
-//
-//            } else {
-//                line.append(token.getPreLexeme()).append(token.getLexeme()).append(token.getPostLexeme());
-//            }
 
             if (token.getLine() != lineNumber || (token.getType() == RIGHT_BRACE && openBraces == 0 && peek().getLine() != lineNumber)) {
                 contents.add(new Line(line.toString(), lineNumber));
@@ -767,31 +676,10 @@ public class Parser {
         return block;
     }
 
-//    private Line readLine(int lineNumber) {
-//        lastConsumedAndReturnedToken = null;
-//
-//        StringBuilder line = new StringBuilder();
-//        if (peek().getType() != EOF && peek().getLine() == lineNumber) {
-//            line.append(peek().getPreLexeme());
-//        }
-//        while (peek().getType() != EOF && peek().getLine() == lineNumber) {
-//            JolieToken token = advance();
-//            line.append(token.getLexeme());
-//            if (peek().getType() != EOF && peek().getLine() == lineNumber) {
-//                line.append(token.getPostLexeme());
-//            }
-//        }
-//
-//        return new Line(line.toString(), lineNumber);
-//    }
-
     private Line readLine(int lineNumber) {
         lastConsumedAndReturnedToken = null;
-
         StringBuilder line = new StringBuilder();
-//        if (peek().getType() != EOF && peek().getLine() == lineNumber) {
-//            line.append(peek().getPreLexeme());
-//        }
+
         while (peek().getType() != EOF && peek().getLine() == lineNumber) {
             JolieToken token = advance();
             line.append(token.getPreLexeme()).append(token.getLexeme()).append(token.getPostLexeme());
@@ -804,26 +692,16 @@ public class Parser {
 
     //---------------------------------------------------------------
 
-//    private void consume(JolieTokenType type, String message) {
-//        if (peek().getType() == COMMENT) { // skip comment tokens
-//            advance();
-//        }
-//
-//        if (match(type)) {
-//            JolieToken nextToken = peek();
-//            JolieToken token = previous();
-//            String fullNewLexeme = token.getPreLexeme() + token.getLexeme() + token.getPostLexeme();
-//            nextToken.addToEndPreLexeme(fullNewLexeme);
-//        } else {
-//            throw error(previous(), message);
-//        }
-//    }
+    private void endNode(Node node) {
+        if (lastConsumedAndReturnedToken == null) {
+            node.setPostLexeme(savedLexeme);
+            savedLexeme = "";
+        } else {
+            lastConsumedAndReturnedToken = null;
+        }
+    }
 
     private void consume(JolieTokenType type, String message) {
-        if (peek().getType() == COMMENT) { // skip comment tokens
-            advance();
-        }
-
         if (match(type)) {
             JolieToken token = previous();
             String fullNewLexeme = token.getPreLexeme() + token.getLexeme() + token.getPostLexeme();
@@ -838,10 +716,6 @@ public class Parser {
     }
 
     private JolieToken consumeAndReturn(JolieTokenType type, String message) {
-        if (peek().getType() == COMMENT) { // skip comment tokens
-            advance();
-        }
-
         if (match(type)) {
             if (lastConsumedAndReturnedToken == null) {
                 previous().addToStartPreLexeme(savedLexeme);
@@ -899,7 +773,7 @@ public class Parser {
     }
 
     private ParseError error(JolieToken token, String message) {
-        // TODO: error handling
+        // TODO: error handling (throw new EccoException(" ? ");)
         System.out.println(token + " | " + message);
         return new ParseError();
     }

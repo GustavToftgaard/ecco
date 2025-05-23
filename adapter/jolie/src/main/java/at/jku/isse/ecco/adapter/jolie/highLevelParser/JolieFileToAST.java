@@ -1,8 +1,8 @@
 package at.jku.isse.ecco.adapter.jolie.highLevelParser;
 
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node;
+import at.jku.isse.ecco.adapter.jolie.highLevelParser.parser.JolieParser;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.JolieScanner;
-import at.jku.isse.ecco.adapter.jolie.highLevelParser.parser.Parser;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 
 import java.io.IOException;
@@ -52,13 +52,13 @@ public class JolieFileToAST {
 
         List<JolieToken> parserInput = new ArrayList<>();
         for (JolieToken token : tokens) {
-            if (token.getType() != SPACE && token.getType() != COMMENT && token.getType() != MULTILINE_COMMENT) {
+            if (token.getType() != COMMENT) {
                 parserInput.add(token);
             }
         }
 
-        Parser parser = new Parser(parserInput);
-        List<Node> statements = parser.parse();
+        JolieParser jolieParser = new JolieParser(parserInput);
+        List<Node> statements = jolieParser.parse();
         // if (hadError) return errors;
 
         return statements;
