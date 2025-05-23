@@ -1,16 +1,14 @@
 package at.jku.isse.ecco.adapter.jolie;
 
-import at.jku.isse.ecco.EccoException;
 import at.jku.isse.ecco.adapter.ArtifactReader;
 import at.jku.isse.ecco.adapter.dispatch.PluginArtifactData;
+import at.jku.isse.ecco.adapter.jolie.highLevelParser.JolieFileToAST;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.visitors.AstToECCO;
 import at.jku.isse.ecco.artifact.Artifact;
 import at.jku.isse.ecco.dao.EntityFactory;
 import at.jku.isse.ecco.service.listener.ReadListener;
 import at.jku.isse.ecco.tree.Node;
 import com.google.inject.Inject;
-
-import at.jku.isse.ecco.adapter.jolie.highLevelParser.ParserRunner;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,8 +77,8 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
 
     private Node.Op parseJolieFile(Path resolvedPath, Path path) {
         Node.Op pluginNode = createPluginNode(path); // root node
-        ParserRunner parserRunner = new ParserRunner();
-        List<at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node> ast = parserRunner.parse(resolvedPath);
+        JolieFileToAST jolieFileToAST = new JolieFileToAST();
+        List<at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.interfaces.Node> ast = jolieFileToAST.scanAndParse(resolvedPath);
         AstToECCO translator = new AstToECCO(pluginNode, this.entityFactory, path);
         return translator.translate(ast);
     }

@@ -9,18 +9,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import static at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType.*;
 
 
-public class ParserRunner {
+public class JolieFileToAST {
     public static boolean hadError = false;
     public static List<String> errors = new ArrayList<>();
 
-    public List<Node> parse(Path source) { // List<String>
+    public List<Node> scanAndParse(Path source) { // List<String>
         hadError = false;
         errors.clear();
 
@@ -38,10 +37,6 @@ public class ParserRunner {
 
         String[] lines = lineList.toArray(new String[0]);
         StringBuilder scannerInput = new StringBuilder();
-
-//        for (String line : lines) {
-//            scannerInput.append(line).append('\n');
-//        }
 
         for (int i = 0; i < lines.length; i++) {
             if (i == lines.length - 1 && !Objects.equals(lines[i], "") && (lastChar != '\n' && lastChar != '\r')) {
@@ -68,22 +63,6 @@ public class ParserRunner {
 
         return statements;
     }
-
-//    public static void error(JolieToken token, String message, String errorType) {
-//        report(token.line, message, errorType);
-//    }
-//
-//    public static void error(int line, String message, String errorType) {
-//        report(line, message, errorType);
-//    }
-//
-//    private static void report(int line, String message, String errorType) {
-//        var error = errorType + ", line " + line + " " + message;
-//        errors.add(error);
-//        System.err.println(error);
-//        hadError = true;
-//    }
-
 }
 
 
