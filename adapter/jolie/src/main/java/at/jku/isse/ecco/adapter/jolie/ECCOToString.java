@@ -19,10 +19,10 @@ public class ECCOToString {
             res.append(convertNode(node));
         }
 
-        if (isContextNode(rootNode)) {
-            JolieContextArtifactData contextNode = toContextNode(rootNode);
-            res.append(contextNode.getPostLexeme());
-        }
+//        if (isContextNode(rootNode)) {
+//            JolieContextArtifactData contextNode = toContextNode(rootNode);
+//            res.append(contextNode.getPostLexeme());
+//        }
 
         return res.toString();
     }

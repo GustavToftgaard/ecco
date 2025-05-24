@@ -50,11 +50,15 @@ public class JolieWriter implements ArtifactWriter<Set<Node>, Path> {
     private Path writeJolieFile(Path filePath, Node orderedNode){
         try (BufferedWriter bw = Files.newBufferedWriter(filePath)) {
 
-            for (Node node : orderedNode.getChildren()){
-                ECCOToString eccoToString = new ECCOToString(node);
-                String jolieFileCode = eccoToString.convert();
-                bw.write(jolieFileCode);
-            }
+//            for (Node node : orderedNode.getChildren()){
+//                ECCOToString eccoToString = new ECCOToString(node);
+//                String jolieFileCode = eccoToString.convert();
+//                bw.write(jolieFileCode);
+//            }
+
+            ECCOToString eccoToString = new ECCOToString(orderedNode);
+            String jolieFileCode = eccoToString.convert();
+            bw.write(jolieFileCode);
 
         } catch (IOException e) {
             e.printStackTrace();
