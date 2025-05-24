@@ -1,9 +1,9 @@
-Program         -> Decl* EOF
-Decl            -> ImportDecl | InterfaceDecl | TypeDecl | ServiceDecl | Line
+Program       -> Decl* EOF
+Decl            -> ImportDecl | InterfaceDecl | TypeDecl | ServiceDecl
 
 ImportDecl      -> Import | Include
   Import          -> "from" ID "import" ID Line?
-  Include         -> "include" ID(String)
+  Include         -> "include" STRING
 
 InterfaceDecl   -> "interface" "extender"? ID "{" RequestResponseDecl? OneWayDecl? "}"
   RequestResponseDecl     -> ( "requestResponse" | "RequestResponse" ) ":" RequestResponseElement ("," RequestResponseElement)*
@@ -13,22 +13,22 @@ InterfaceDecl   -> "interface" "extender"? ID "{" RequestResponseDecl? OneWayDec
 
 TypeDecl        -> "type" ID (":" ID ("|" ID)*)? Block?
 
-ServiceDecl     -> "service" ID ( "(" Token* ")" )? "{" Service* "}"
+ServiceDecl     -> "service" ID ( "(" anyToken* ")" )? "{" Service* "}"
   Service         -> Execution | Embed | Embedded | InputPort | OutputPort | Init | Main | Courier | DefineProcedure | Line
     Execution       -> "execution" ( ":" ID ) | ( "{" ID "}" )
     Embed           -> embed ID ( "(" ID* ")" )? ("in" ID | "as" ID)
     Embedded        -> "embedded" Block
     InputPort       -> "inputPort" ID "{" PortLocation? PortProtocol? PortInterfaces? PortAggregates? PortRedirects? "}"
     OutputPort      -> "outputPort" ID "{" PortLocation? PortProtocol? PortInterfaces? "}"
-      PortLocation    -> ( "location" | "Location" ) ":" Token*
-      PortProtocol    -> ( "protocol" | "Protocol" ) ":" Token*
-      PortInterfaces  -> ( "interfaces" | "Interfaces" ) ":" Token*
-      PortAggregates  -> ( "aggregates" | "Aggregates" ) ":" Token*
-      PortRedirects   -> ( "redirects" | "Redirects" ) ":" Token*
+      PortLocation    -> ( "location" | "Location" ) ":" anyToken*
+      PortProtocol    -> ( "protocol" | "Protocol" ) ":" anyToken*
+      PortInterfaces  -> ( "interfaces" | "Interfaces" ) ":" anyToken*
+      PortAggregates  -> ( "aggregates" | "Aggregates" ) ":" anyToken*
+      PortRedirects   -> ( "redirects" | "Redirects" ) ":" anyToken*
     Init            -> "init" Block
     Main            -> "main" Block
     Courier         -> "courier" "<" ID ">" Block
     DefineProcedure -> "define" ID Block
 
-Block           -> "{" (_* '\n'?)* "}" // keep track of open and close curly braces
-Line            -> _* ( '\n' | specifiedToken )
+Block           -> "{" Line* "}" // keep track of open and close curly braces
+Line            -> _* ( '\n' | specifiedToken ) // '_' means any character
