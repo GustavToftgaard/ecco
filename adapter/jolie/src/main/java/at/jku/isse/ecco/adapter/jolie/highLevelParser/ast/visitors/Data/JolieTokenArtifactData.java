@@ -11,14 +11,12 @@ public class JolieTokenArtifactData implements ArtifactData {
     public final String preWhitespace;
     public final String lexeme;
     public final String postWhitespace;
-    public final int line;
 
     public JolieTokenArtifactData(JolieToken token) {
         this.type = token.getType();
         this.preWhitespace = token.getPreLexeme();
         this.lexeme = token.getLexeme();
         this.postWhitespace = token.getPostLexeme();
-        this.line = token.getLine();
     }
 
     public JolieTokenType getType() {
@@ -37,9 +35,6 @@ public class JolieTokenArtifactData implements ArtifactData {
         return postWhitespace;
     }
 
-    public int getLine() {
-        return line;
-    }
 
     @Override
     public String toString() {
@@ -48,7 +43,6 @@ public class JolieTokenArtifactData implements ArtifactData {
                 "   preWhitespace: " + this.preWhitespace + "\n" +
                 "   lexeme: " + this.lexeme + "\n" +
                 "   postWhitespace: " + this.postWhitespace + "\n" +
-                "   line: " +  this.line + "\n" +
                 "}";
     }
 
@@ -66,7 +60,7 @@ public class JolieTokenArtifactData implements ArtifactData {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getType(), getPreWhitespace(), getLexeme(), getPostWhitespace(), getLine());
+        return Objects.hash(getType(), getPreWhitespace(), getLexeme(), getPostWhitespace());
     }
 
 }
