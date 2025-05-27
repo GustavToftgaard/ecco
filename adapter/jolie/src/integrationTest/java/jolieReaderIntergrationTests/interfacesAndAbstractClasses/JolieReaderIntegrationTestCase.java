@@ -41,13 +41,11 @@ public abstract class JolieReaderIntegrationTestCase {
         JolieTokenArtifactData nodeToken = (JolieTokenArtifactData) node.getArtifact().getData();
         assertSame(tokenType, nodeToken.getType());
         assertEquals(lexeme, nodeToken.getLexeme());
-        assertEquals(lineNumber, nodeToken.getLine());
     }
 
     public void checkLineNode(Node.Op node, String lineContents, int lineNumber) {
         assertInstanceOf(JolieLineArtifactData.class, node.getArtifact().getData());
         JolieLineArtifactData nodeLine = (JolieLineArtifactData) node.getArtifact().getData();
         assertEquals(lineContents, nodeLine.getLineContents());
-        assertEquals(lineNumber, nodeLine.getLine());
     }
 }

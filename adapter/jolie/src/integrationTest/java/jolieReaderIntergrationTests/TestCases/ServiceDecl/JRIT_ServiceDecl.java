@@ -89,14 +89,11 @@ public class JRIT_ServiceDecl extends JolieReaderIntegrationTestCase {
         checkContextNode(node, NodeTypes.BLOCK, 3);
 
         // 1.5.1.*: Lines
-        checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "  main {\n", 7);
+        checkLineNode(node.getChildren().get(0), "  main {\n", 7);
 
-        checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(1).getChildren().get(0), "    " + "println@console( \"Hello There\" )()\n", 8);
+        checkLineNode(node.getChildren().get(1), "    " + "println@console( \"Hello There\" )()\n", 8);
 
-        checkContextNode(node.getChildren().get(2), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(2).getChildren().get(0), "  " + "}\n", 9);
+        checkLineNode(node.getChildren().get(2), "  " + "}\n", 9);
 
         // 2: EndOfFile
         node = pluginNodeChildren.get(1);
@@ -175,14 +172,11 @@ public class JRIT_ServiceDecl extends JolieReaderIntegrationTestCase {
         checkContextNode(node, NodeTypes.BLOCK, 3);
 
         // 1.8.1.*: Lines
-        checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "  main {\n", 7);
+        checkLineNode(node.getChildren().get(0), "  main {\n", 7);
 
-        checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(1).getChildren().get(0), "    " + "println@console( \"Hello There\" )()\n", 8);
+        checkLineNode(node.getChildren().get(1), "    " + "println@console( \"Hello There\" )()\n", 8);
 
-        checkContextNode(node.getChildren().get(2), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(2).getChildren().get(0), "  " + "}\n", 9);
+        checkLineNode(node.getChildren().get(2), "  " + "}\n", 9);
 
         // 2: EndOfFile
         node = pluginNodeChildren.get(1);
@@ -249,14 +243,11 @@ public class JRIT_ServiceDecl extends JolieReaderIntegrationTestCase {
         checkContextNode(node, NodeTypes.BLOCK, 3);
 
         // 1.5.1.*: Lines
-        checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "  main {\n", 7);
+        checkLineNode(node.getChildren().get(0), "  main {\n", 7);
 
-        checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(1).getChildren().get(0), "    " + "println@console( \"Hello There\" )()\n", 8);
+        checkLineNode(node.getChildren().get(1), "    " + "println@console( \"Hello There\" )()\n", 8);
 
-        checkContextNode(node.getChildren().get(2), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(2).getChildren().get(0), "  " + "}\n", 9);
+        checkLineNode(node.getChildren().get(2), "  " + "}\n", 9);
 
         // 2: ServiceDecl
         node = pluginNodeChildren.get(1);
@@ -307,14 +298,11 @@ public class JRIT_ServiceDecl extends JolieReaderIntegrationTestCase {
         checkContextNode(node, NodeTypes.BLOCK, 3);
 
         // 2.5.1.*: Lines
-        checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "  main {\n", 18);
+        checkLineNode(node.getChildren().get(0), "  main {\n", 18);
 
-        checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(1).getChildren().get(0), "    " + "println@console( \"General Kenobi\" )()\n", 19);
+        checkLineNode(node.getChildren().get(1), "    " + "println@console( \"General Kenobi\" )()\n", 19);
 
-        checkContextNode(node.getChildren().get(2), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(2).getChildren().get(0), "  " + "}\n", 20);
+        checkLineNode(node.getChildren().get(2), "  " + "}\n", 20);
 
         // 3: EndOfFile
         node = pluginNodeChildren.get(2);

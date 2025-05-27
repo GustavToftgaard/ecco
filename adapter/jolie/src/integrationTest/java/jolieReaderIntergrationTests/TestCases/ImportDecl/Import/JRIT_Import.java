@@ -103,12 +103,8 @@ public class JRIT_Import extends JolieReaderIntegrationTestCase {
         node = pluginNodeChildren.get(0).getChildren().get(0).getChildren().get(1);
         checkTokenNode(node, JolieTokenType.ID, "Console", 1);
 
-        // 1.1.3: Line
+        // 1.1.3 LineContents
         node = pluginNodeChildren.get(0).getChildren().get(0).getChildren().get(2);
-        checkContextNode(node, NodeTypes.LINE, 1);
-
-        // 1.1.3.1 LineContents
-        node = pluginNodeChildren.get(0).getChildren().get(0).getChildren().get(2).getChildren().get(0);
         checkLineNode(node, " as alias_1\n", 1);
 
         // ------
@@ -129,12 +125,8 @@ public class JRIT_Import extends JolieReaderIntegrationTestCase {
         node = pluginNodeChildren.get(1).getChildren().get(0).getChildren().get(1);
         checkTokenNode(node, JolieTokenType.ID, "StringUtils", 2);
 
-        // 2.1.3: Line
+        // 2.1.3 LineContents
         node = pluginNodeChildren.get(1).getChildren().get(0).getChildren().get(2);
-        checkContextNode(node, NodeTypes.LINE, 1);
-
-        // 2.1.3.1 LineContents
-        node = pluginNodeChildren.get(1).getChildren().get(0).getChildren().get(2).getChildren().get(0);
         checkLineNode(node, " as alias_2", 2);
 
         // ------

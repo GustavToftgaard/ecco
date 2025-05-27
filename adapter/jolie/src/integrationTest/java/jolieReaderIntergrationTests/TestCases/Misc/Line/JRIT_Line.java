@@ -53,11 +53,9 @@ public class JRIT_Line extends JolieReaderIntegrationTestCase {
         checkContextNode(node, NodeTypes.BLOCK, 2);
 
         // 1.2.1.*: Lines
-        checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "  main {\n" + "\n", 2);
+        checkLineNode(node.getChildren().get(0), "  main {\n" + "\n", 2);
 
-        checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(1).getChildren().get(0), "  " + "}\n", 4);
+        checkLineNode(node.getChildren().get(1), "  " + "}\n", 4);
 
         // 2: EndOfFile
         node = pluginNodeChildren.get(1);
@@ -92,17 +90,13 @@ public class JRIT_Line extends JolieReaderIntegrationTestCase {
         checkContextNode(node, NodeTypes.BLOCK, 4);
 
         // 1.2.1.*: Lines
-        checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "  main {\n", 2);
+        checkLineNode(node.getChildren().get(0), "  main {\n", 2);
 
-        checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(1).getChildren().get(0), "    " + "testLine1\n", 3);
+        checkLineNode(node.getChildren().get(1), "    " + "testLine1\n", 3);
 
-        checkContextNode(node.getChildren().get(2), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(2).getChildren().get(0), "    " + "testLine2\n", 4);
+        checkLineNode(node.getChildren().get(2), "    " + "testLine2\n", 4);
 
-        checkContextNode(node.getChildren().get(3), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(3).getChildren().get(0), "  " + "}\n", 5);
+        checkLineNode(node.getChildren().get(3), "  " + "}\n", 5);
 
         // 2: EndOfFile
         node = pluginNodeChildren.get(1);

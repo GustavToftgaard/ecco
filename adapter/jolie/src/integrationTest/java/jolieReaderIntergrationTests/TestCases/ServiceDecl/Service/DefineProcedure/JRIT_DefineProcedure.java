@@ -53,14 +53,11 @@ public class JRIT_DefineProcedure extends JolieReaderIntegrationTestCase {
         checkContextNode(node, NodeTypes.BLOCK, 3);
 
         // 1.2.2.*: Lines
-        checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), " {\n", 2);
+        checkLineNode(node.getChildren().get(0), " {\n", 2);
 
-        checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(1).getChildren().get(0), "    " + "some code\n", 3);
+        checkLineNode(node.getChildren().get(1), "    " + "some code\n", 3);
 
-        checkContextNode(node.getChildren().get(2), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(2).getChildren().get(0), "  " + "}\n", 4);
+        checkLineNode(node.getChildren().get(2), "  " + "}\n", 4);
 
         // 2: EndOfFile
         node = pluginNodeChildren.get(1);

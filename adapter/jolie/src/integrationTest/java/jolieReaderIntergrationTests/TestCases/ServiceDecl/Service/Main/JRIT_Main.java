@@ -60,14 +60,11 @@ public class JRIT_Main extends JolieReaderIntegrationTestCase {
         checkContextNode(node, NodeTypes.BLOCK, 3);
 
         // 1.3.1.*: Lines
-        checkContextNode(node.getChildren().get(0), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(0).getChildren().get(0), "  main {\n", 3);
+        checkLineNode(node.getChildren().get(0), "  main {\n", 3);
 
-        checkContextNode(node.getChildren().get(1), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(1).getChildren().get(0), "    " + "println@console( \"Hello There\" )()\n", 4);
+        checkLineNode(node.getChildren().get(1), "    " + "println@console( \"Hello There\" )()\n", 4);
 
-        checkContextNode(node.getChildren().get(2), NodeTypes.LINE, 1);
-        checkLineNode(node.getChildren().get(2).getChildren().get(0), "  " + "}\n", 5);
+        checkLineNode(node.getChildren().get(2), "  " + "}\n", 5);
 
         // 2: EndOfFile
         node = pluginNodeChildren.get(1);
