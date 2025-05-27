@@ -339,11 +339,13 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitLine(Line line) {
-        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.LINE, line.getPostLexeme());
-
-        node.addChild(createLineNode(line.getLineContents(), line.getLine(), line.getPostLexeme()));
-
-        return node;
+//        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.LINE, line.getPostLexeme());
+//
+//        node.addChild(createLineNode(line.getLineContents(), line.getPostLexeme()));
+//
+//        return node;
+        
+        return createLineNode(line.getLineContents(), line.getPostLexeme());
     }
 
     @Override
@@ -363,9 +365,9 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
         return this.entityFactory.createOrderedNode(tokenArtifactData);
     }
 
-    private at.jku.isse.ecco.tree.Node.Op createLineNode(String lineContents, int line, String postLexeme) {
+    private at.jku.isse.ecco.tree.Node.Op createLineNode(String lineContents, String postLexeme) {
         Artifact.Op<JolieLineArtifactData> lineArtifactData =
-                this.entityFactory.createArtifact(new JolieLineArtifactData(lineContents, line, postLexeme));
+                this.entityFactory.createArtifact(new JolieLineArtifactData(lineContents, postLexeme));
         return this.entityFactory.createOrderedNode(lineArtifactData);
     }
 

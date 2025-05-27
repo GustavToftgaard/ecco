@@ -42,7 +42,7 @@ public class JolieParser {
             try {
                 ast.add(decl());
             } catch (ParseError e) {
-                System.out.println(e.getMessage()); // temp
+                System.out.println(e.getMessage()); // TODO: temp better error handling?
             }
         }
         peek().addToStartPreLexeme(savedLexeme);
@@ -74,7 +74,8 @@ public class JolieParser {
                 break;
 
             default:
-                res = readLine(token.getLine());
+                res = null;
+                // TODO: ECCO Error here
                 break;
         }
         return res;

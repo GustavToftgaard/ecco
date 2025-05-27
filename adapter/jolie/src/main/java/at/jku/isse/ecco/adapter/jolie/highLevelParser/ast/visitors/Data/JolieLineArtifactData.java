@@ -8,21 +8,15 @@ import java.util.Objects;
 
 public class JolieLineArtifactData implements ArtifactData {
     private final String lineContents;
-    private final int line;
     private final String postLexeme;
 
-    public JolieLineArtifactData(String lineContents, int line, String postLexeme) {
+    public JolieLineArtifactData(String lineContents, String postLexeme) {
         this.lineContents = lineContents;
-        this.line = line;
         this.postLexeme = postLexeme;
     }
 
     public String getLineContents() {
         return lineContents;
-    }
-
-    public int getLine() {
-        return line;
     }
 
     public String getPostLexeme() {
@@ -33,7 +27,6 @@ public class JolieLineArtifactData implements ArtifactData {
     public String toString() {
         return "LineArtifactData{" + "\n" +
                 "   lineContents: " + this.lineContents + "\n" +
-                "   line: " +  this.line + "\n" +
                 "}";
     }
 
@@ -48,7 +41,7 @@ public class JolieLineArtifactData implements ArtifactData {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getLineContents(), getLine());
+        return Objects.hash(getLineContents());
     }
 
 }
