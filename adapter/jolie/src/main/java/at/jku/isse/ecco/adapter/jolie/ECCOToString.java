@@ -39,7 +39,7 @@ public class ECCOToString {
 
         } else if (isTokenNode(node)) {
             JolieTokenArtifactData tokenNode = toTokenNode(node);
-            res.append(tokenNode.getPreWhitespace()).append(tokenNode.getLexeme()).append(tokenNode.getPostWhitespace());
+            res.append(tokenNode.getPreLexeme()).append(tokenNode.getLexeme()).append(tokenNode.getPostLexeme());
 
         } else if (isLineNode(node)) {
             JolieLineArtifactData lineNode = toLineNode(node);

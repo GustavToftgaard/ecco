@@ -167,6 +167,7 @@ public class JolieScanner {
                         advance(); // to include '/' at the end
                         addCommentToToken(startCommentLine);
                     }
+
                 } else { // keywords, identifier
                     while (!isWhiteSpace(peek()) && !isSeparator(peek()) && !isAtEnd()) {
                         advance();
@@ -204,9 +205,10 @@ public class JolieScanner {
             if (tokens.get(numberOfTokens - 1).getLine() < this.line) {
                 tokens.get(numberOfTokens - 1).setLine(line);
             }
+
         } else if (!tokens.isEmpty() && tokens.get(numberOfTokens - 1).getType() != COMMENT) {
             tokens.get(numberOfTokens - 1).addToPostLexeme(preLexeme + lexeme);
-            // added COMMENT token so later tokens do not override postLexeme
+            // added COMMENT token so later tokens add to postLexeme of token before comment token
             this.tokens.add(new JolieToken(COMMENT, "", "", this.line));
             numberOfTokens++;
         }
@@ -233,7 +235,7 @@ public class JolieScanner {
 
             } else if (numberOfTokens >= 2 && tokens.get(numberOfTokens - 1).getType() == COMMENT) {
                 tokens.get(numberOfTokens - 2).addToPostLexeme(preLexeme + '\n');
-                // preWhitespace = ""; // add?
+
             } else {
                 tokens.get(numberOfTokens - 1).addToPostLexeme(preLexeme + '\n');
                 preLexeme = "";

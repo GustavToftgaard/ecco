@@ -8,16 +8,16 @@ import java.util.Objects;
 
 public class JolieTokenArtifactData implements ArtifactData {
     public final JolieTokenType type;
-    public final String preWhitespace;
+    public final String preLexeme;
     public final String lexeme;
-    public final String postWhitespace;
+    public final String postLexeme;
     public final int line;
 
     public JolieTokenArtifactData(JolieToken token) {
         this.type = token.getType();
-        this.preWhitespace = token.getPreLexeme();
+        this.preLexeme = token.getPreLexeme();
         this.lexeme = token.getLexeme();
-        this.postWhitespace = token.getPostLexeme();
+        this.postLexeme = token.getPostLexeme();
         this.line = token.getLine();
     }
 
@@ -25,16 +25,16 @@ public class JolieTokenArtifactData implements ArtifactData {
         return type;
     }
 
-    public String getPreWhitespace() {
-        return preWhitespace;
+    public String getPreLexeme() {
+        return preLexeme;
     }
 
     public String getLexeme() {
         return lexeme;
     }
 
-    public String getPostWhitespace() {
-        return postWhitespace;
+    public String getPostLexeme() {
+        return postLexeme;
     }
 
     public int getLine() {
@@ -45,9 +45,9 @@ public class JolieTokenArtifactData implements ArtifactData {
     public String toString() {
         return "TokenArtifactData{" + "\n" +
                 "   tokenType: " + this.type + "\n" +
-                "   preWhitespace: " + this.preWhitespace + "\n" +
+                "   preWhitespace: " + this.preLexeme + "\n" +
                 "   lexeme: " + this.lexeme + "\n" +
-                "   postWhitespace: " + this.postWhitespace + "\n" +
+                "   postWhitespace: " + this.postLexeme + "\n" +
                 "   line: " +  this.line + "\n" +
                 "}";
     }
@@ -59,14 +59,14 @@ public class JolieTokenArtifactData implements ArtifactData {
 
         JolieTokenArtifactData that = (JolieTokenArtifactData) object; // cast
         return getType() == that.getType() &&
-                Objects.equals(getPreWhitespace(), that.getPreWhitespace()) &&
+                Objects.equals(getPreLexeme(), that.getPreLexeme()) &&
                 Objects.equals(getLexeme(), that.getLexeme()) &&
-                Objects.equals(getPostWhitespace(), that.getPostWhitespace());
+                Objects.equals(getPostLexeme(), that.getPostLexeme());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getType(), getPreWhitespace(), getLexeme(), getPostWhitespace(), getLine());
+        return Objects.hash(getType(), getPreLexeme(), getLexeme(), getPostLexeme(), getLine());
     }
 
 }
