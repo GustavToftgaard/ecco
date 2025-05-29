@@ -2,6 +2,7 @@ package at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner;
 
 import static at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType.*;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
@@ -68,11 +69,21 @@ public class JolieScanner {
     private int numberOfTokens = 0;
     private String preLexeme = "";
 
+    /**
+     * JolieScanner is the class constructor.
+     * Expects Jolie source code as input
+     *
+     * @param source Jolie source code
+     */
     public JolieScanner(String source) {
         this.source = source;
     }
 
-    // Scan tokens
+    /**
+     * Scans source and turns it into JolieTokens.
+     *
+     * @return A list of JolieTokens
+     */
     public List<JolieToken> scanTokens() {
         while (!isAtEnd()) {
             // beginning of the next lexeme.

@@ -307,8 +307,6 @@ public class JolieWriterIntegrationTest {
         writeTestCase("simpleFile1.ol");
     }
 
-    // Multiple files
-
     // ----
 
     public void writeTestCase(String fileName) {

@@ -14,7 +14,10 @@ import java.util.Objects;
 
 import static at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType.*;
 
-
+/**
+ * JolieFileToAST converts a given file of Jolie code
+ * into an AST representing the given code.
+ */
 public class JolieFileToAST {
     public static boolean hadError = false;
     public static List<String> errors = new ArrayList<>();
@@ -23,6 +26,7 @@ public class JolieFileToAST {
         hadError = false;
         errors.clear();
 
+        // extract lines for file
         List<String> lineList = null;
         char lastChar = ' ';
         try {
@@ -39,6 +43,7 @@ public class JolieFileToAST {
         StringBuilder scannerInput = new StringBuilder();
 
         for (int i = 0; i < lines.length; i++) {
+            // check if last line or not
             if (i == lines.length - 1 && !Objects.equals(lines[i], "") && (lastChar != '\n' && lastChar != '\r')) {
                 scannerInput.append(lines[i]);
             } else {
@@ -50,6 +55,7 @@ public class JolieFileToAST {
         List<JolieToken> tokens = scanner.scanTokens();
         // if (hadError) return errors;
 
+        // remove COMMENT tokens before parsing
         List<JolieToken> parserInput = new ArrayList<>();
         for (JolieToken token : tokens) {
             if (token.getType() != COMMENT) {

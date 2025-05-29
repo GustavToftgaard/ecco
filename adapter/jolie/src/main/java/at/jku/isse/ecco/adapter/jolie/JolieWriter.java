@@ -5,7 +5,6 @@ import at.jku.isse.ecco.adapter.ArtifactWriter;
 import at.jku.isse.ecco.adapter.dispatch.PluginArtifactData;
 import at.jku.isse.ecco.artifact.Artifact;
 import at.jku.isse.ecco.artifact.ArtifactData;
-import at.jku.isse.ecco.service.listener.ReadListener;
 import at.jku.isse.ecco.service.listener.WriteListener;
 import at.jku.isse.ecco.tree.Node;
 
@@ -49,12 +48,6 @@ public class JolieWriter implements ArtifactWriter<Set<Node>, Path> {
 
     private Path writeJolieFile(Path filePath, Node orderedNode){
         try (BufferedWriter bw = Files.newBufferedWriter(filePath)) {
-
-//            for (Node node : orderedNode.getChildren()){
-//                ECCOToString eccoToString = new ECCOToString(node);
-//                String jolieFileCode = eccoToString.convert();
-//                bw.write(jolieFileCode);
-//            }
 
             ECCOToString eccoToString = new ECCOToString(orderedNode);
             String jolieFileCode = eccoToString.convert();

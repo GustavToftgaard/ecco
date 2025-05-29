@@ -16,6 +16,10 @@ import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * JolieReader implements ArtifactReader<Path, Set<Node.Op>>
+ * Turns Jolie source code into artifact trees.
+ */
 public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
     private List<ReadListener> listeners = new LinkedList<>();
     private final EntityFactory entityFactory;
@@ -75,6 +79,9 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
         return nodes;
     }
 
+    /**
+     * read helper function
+     */
     private Node.Op parseJolieFile(Path resolvedPath, Path path) {
         Node.Op pluginNode = createPluginNode(path); // root node
         JolieFileToAST jolieFileToAST = new JolieFileToAST();
@@ -83,6 +90,9 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
         return translator.translate(ast);
     }
 
+    /**
+     * parseJolieFile helper function
+     */
     private Node.Op createPluginNode(Path path) {
         Artifact.Op<PluginArtifactData> pluginArtifactData =
                 this.entityFactory.createArtifact(new PluginArtifactData(this.getPluginId(), path));

@@ -4,7 +4,7 @@ import at.jku.isse.ecco.adapter.ArtifactPlugin;
 import com.google.inject.Module;
 
 public class JoliePlugin extends ArtifactPlugin {
-    public static final String DESCRIPTION = "Adds support for Jolie artifacts";
+    public static final String DESCRIPTION = "Jolie Artifacts Plugin";
 
     private final JolieModule module = new JolieModule();
 

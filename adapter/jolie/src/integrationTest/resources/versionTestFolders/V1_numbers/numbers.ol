@@ -31,7 +31,6 @@ service Numbers {
 
       upToN = n * ( n - 1 ) / 2
       upToM = m * ( m - 1 ) / 2
-      response = upToN - upToM
 
       if( m < n ) {
         response = upToN - upToM

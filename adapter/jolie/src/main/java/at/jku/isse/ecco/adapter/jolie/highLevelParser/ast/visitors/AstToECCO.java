@@ -24,7 +24,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
-    private at.jku.isse.ecco.tree.Node.Op rootNode;
+    private final at.jku.isse.ecco.tree.Node.Op rootNode;
     private final EntityFactory entityFactory;
     private final Path path;
 
@@ -339,12 +339,6 @@ public class AstToECCO implements NodeVisitor<at.jku.isse.ecco.tree.Node.Op> {
 
     @Override
     public at.jku.isse.ecco.tree.Node.Op visitLine(Line line) {
-//        at.jku.isse.ecco.tree.Node.Op node = createContextNode(NodeTypes.LINE, line.getPostLexeme());
-//
-//        node.addChild(createLineNode(line.getLineContents(), line.getPostLexeme()));
-//
-//        return node;
-        
         return createLineNode(line.getLineContents(), line.getPostLexeme());
     }
 
