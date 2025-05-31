@@ -15,8 +15,21 @@ import java.util.Objects;
 import static at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType.*;
 
 /**
- * JolieFileToAST converts a given file of Jolie code
- * into an AST representing the given code.
+ * The {@code JolieFileToAST} class provides functionality for converting Jolie source code
+ * into an AST.
+ *
+ * <p>
+ * Example usage:
+ * <pre>{@code
+ * JolieFileToAST scannerParser = new JolieFileToAST();
+ * Path jolieFile = Paths.get("example.ol");
+ * List<Node> ast = scannerParser.scanAndParse(jolieFile);
+ * }</pre>
+ * </p>
+ *
+ * @see at.jku.isse.ecco.adapter.jolie.JolieReader
+ *
+ * @author Gustav Toftgaard <gustav@familientoftgaard.dk>
  */
 public class JolieFileToAST {
     public static boolean hadError = false;
@@ -53,7 +66,6 @@ public class JolieFileToAST {
 
         JolieScanner scanner = new JolieScanner(scannerInput.toString());
         List<JolieToken> tokens = scanner.scanTokens();
-        // if (hadError) return errors;
 
         // remove COMMENT tokens before parsing
         List<JolieToken> parserInput = new ArrayList<>();
@@ -65,7 +77,6 @@ public class JolieFileToAST {
 
         JolieParser jolieParser = new JolieParser(parserInput);
         List<Node> statements = jolieParser.parse();
-        // if (hadError) return errors;
 
         return statements;
     }

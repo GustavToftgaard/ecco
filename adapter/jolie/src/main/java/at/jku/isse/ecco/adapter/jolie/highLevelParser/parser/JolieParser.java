@@ -16,6 +16,23 @@ import java.util.List;
 
 import static at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType.*;
 
+
+/**
+ * The {@code JolieParser} class provides functionality
+ * for converting a list of {@link JolieToken} into an AST.
+ *
+ * <p>
+ * Example usage:
+ * <pre>{@code
+ * JolieParser jolieParser = new JolieParser(???); // List of JolieToken
+ * List<Node> statements = jolieParser.parse();
+ * }</pre>
+ * </p>
+ *
+ * @see at.jku.isse.ecco.adapter.jolie.highLevelParser.JolieFileToAST
+ *
+ * @author Gustav Toftgaard <gustav@familientoftgaard.dk>
+ */
 public class JolieParser {
     private final List<JolieToken> tokens;
     private int current = 0;
@@ -42,7 +59,7 @@ public class JolieParser {
             try {
                 ast.add(decl());
             } catch (ParseError e) {
-                System.out.println(e.getMessage()); // TODO: temp better error handling?
+                System.out.println(e.getMessage());
             }
         }
         peek().addToStartPreLexeme(savedLexeme);
@@ -75,7 +92,6 @@ public class JolieParser {
 
             default:
                 res = null;
-                // TODO: ECCO Error here
                 break;
         }
         return res;
@@ -774,7 +790,6 @@ public class JolieParser {
     }
 
     private ParseError error(JolieToken token, String message) {
-        // TODO: error handling (throw new EccoException(" ? ");)
         System.out.println(token + " | " + message);
         return new ParseError();
     }

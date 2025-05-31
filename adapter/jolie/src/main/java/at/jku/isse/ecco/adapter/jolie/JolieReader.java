@@ -17,8 +17,22 @@ import java.util.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * JolieReader implements ArtifactReader<Path, Set<Node.Op>>
- * Turns Jolie source code into artifact trees.
+ * The {@code JolieReader} class implements {@link ArtifactReader}.
+ * It provides functionality for converting Jolie source code files
+ * into the corresponding artifact tree.
+ *
+ * <p>
+ * Example usage:
+ * <pre>{@code
+ * JolieReader reader = new JolieReader(new MemEntityFactory());
+ * Path[] relativePathToFiles = ???; // Get list of relative paths to files
+ * Set<Node.Op> jolieArtifactTrees = reader.read(relativePathToFiles);
+ * }</pre>
+ * </p>
+ *
+ * @see JolieWriter
+ *
+ * @author Gustav Toftgaard <gustav@familientoftgaard.dk>
  */
 public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
     private List<ReadListener> listeners = new LinkedList<>();
@@ -31,6 +45,12 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
         prioritizedPatterns.put(Integer.MAX_VALUE, new String[]{"**.ol"});
     }
 
+    /**
+     * Constructs a new {@code JolieReader} with the specified {@link EntityFactory}.
+     *
+     * @param entityFactory the entity factory used to create artifacts and nodes
+     * @throws NullPointerException if {@code entityFactory} is {@code null}
+     */
     @Inject
     public JolieReader(EntityFactory entityFactory) {
         checkNotNull(entityFactory);
@@ -38,9 +58,9 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
     }
 
     /**
-     * Returns plugin ID for Jolie plugin
+     * Returns plugin ID for the {@link JoliePlugin}.
      *
-     * @return plugin ID
+     * @return A {@link String} containing the ID of the plugin
      */
     @Override
     public String getPluginId() {
@@ -48,9 +68,11 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
     }
 
     /**
-     * Returns a map of filename patterns with priority to the JolieReader
+     * Retrieves the prioritized filename patterns associated with this the {@link JolieReader}.
+     * <p>
+     * By default, this reader prioritizes files ending with ".ol".
      *
-     * @return filename patterns
+     * @return A {@link Map} of priority levels of filename patterns
      */
     @Override
     public Map<Integer, String[]> getPrioritizedPatterns() {
@@ -58,13 +80,14 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
     }
 
     /**
-     * Reads all files in input from the base parameter.
-     * Return set of node operants representing Jolie code.
-     * Expects input to be Jolie files.
+     * Reads and parses all input files relative to the specified base directory,
+     * converting them into artifact trees.
+     * <p>
+     * This method processes each file into an AST and translates it into an artifact tree.
      *
-     * @param base Base path with input files
-     * @param input Paths to input files from base
-     * @return A set of node operants representing Jolie code
+     * @param base The base directory
+     * @param input Relative paths to input files (expected to be Jolie source files)
+     * @return A set of artifact trees representing the parsed Jolie files
      * @see #read(Path[])
      */
     @Override
@@ -80,7 +103,11 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
     }
 
     /**
-     * read helper function
+     * Reads and parses the given Jolie file into an artifact tree.
+     *
+     * @param resolvedPath The absolute path to the file
+     * @param path The relative path of the file
+     * @return The root node of the generated artifact tree
      */
     private Node.Op parseJolieFile(Path resolvedPath, Path path) {
         Node.Op pluginNode = createPluginNode(path); // root node
@@ -91,7 +118,10 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
     }
 
     /**
-     * parseJolieFile helper function
+     * Creates a plugin artifact node for the given file.
+     *
+     * @param path The relative path of the file
+     * @return The created plugin node
      */
     private Node.Op createPluginNode(Path path) {
         Artifact.Op<PluginArtifactData> pluginArtifactData =
@@ -100,14 +130,10 @@ public class JolieReader implements ArtifactReader<Path, Set<Node.Op>> {
     }
 
     /**
-     * Takes the input files and the base parameter as
-     * parameters to calls {@link #read(Path, Path[]) }.
-     * Return set of node operants representing Jolie code.
-     * Expects input to be Jolie files.
+     * Calls {@link #read(Path, Path[])} with the current working directory as the base.
      *
-     * @param input Paths from working directory to input files
-     * @return A set of node operants representing Jolie code
-     * @see #read(Path, Path[])
+     * @param input Relative paths to Jolie source files
+     * @return A set of artifact nodes representing the parsed Jolie files
      */
     @Override
     public Set<Node.Op> read(Path[] input) {

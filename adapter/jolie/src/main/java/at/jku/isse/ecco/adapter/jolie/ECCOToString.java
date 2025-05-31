@@ -5,31 +5,51 @@ import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.visitors.Data.JolieLin
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.ast.visitors.Data.JolieTokenArtifactData;
 import at.jku.isse.ecco.tree.Node;
 
-import java.nio.file.Path;
-
 /**
- * ECCOToString turns Jolie artifact trees into
- * Jolie source code
+ * The {@code ECCOToString} class provides functionality for converting a Jolie artifact tree
+ * into the corresponding string representation of the Jolie source code.
+ * <p>
+ * The class recursively traverses the artifact tree from the root node ({@link Node}).
+ * It constructs the returned string (source code) by concatenating the {@code preLexeme}, {@code lexeme},
+ * {@code postLexeme}, line contents, and context node {@code postLexeme} of
+ * ({@link JolieContextArtifactData}, {@link JolieTokenArtifactData}, {@link JolieLineArtifactData}).
+ * </p>
+ *
+ * <p>
+ * Example usage:
+ * <pre>{@code
+ * Node rootNode = ???; // Root node of the Jolie artifact tree
+ * ECCOToString eccoToString = new ECCOToString(rootNode);
+ * String jolieSourceCode = eccoToString.convert();
+ * }</pre>
+ * </p>
+ *
+ * @see JolieWriter
+ *
+ * @author Gustav Toftgaard <gustav@familientoftgaard.dk>
  */
 public class ECCOToString {
     private final Node rootNode;
 
     /**
-     * ECCOToString is the class constructor.
-     * Expects root node of Jolie artifact tree as input.
+     * Constructs an {@code ECCOToString} instance.
+     * <p>
+     * The constructor expects the root node of a Jolie artifact tree, which it will convert
+     * into Jolie source code.
      *
-     * @param rootNode Root node of a Jolie artifact tree
+     * @param rootNode Root node of the Jolie artifact tree to convert
      */
     public ECCOToString(Node rootNode) {
         this.rootNode = rootNode;
     }
 
     /**
-     * Recursively converts all children of rootNode into source code.
-     * Return a string containing the source code form the
-     * artifact tree given in the constructor.
+     * Recursively converts all children of the {@code rootNode} into Jolie source code.
+     * <p>
+     * This method initiates the conversion process by calling the recursive helper method
+     * {@link #convertNode(Node)} on each child of the root node.
      *
-     * @return A string of Jolie source code
+     * @return A {@link String} containing the Jolie source code representation of the artifact tree
      */
     public String convert() {
         StringBuilder res = new StringBuilder();
@@ -42,14 +62,15 @@ public class ECCOToString {
     }
 
     /**
-     * It is a helper function for convert.
-     * Recursively checks the type of a node and all
-     * its children, converts all nodes into source code.
-     * Return a string containing the source code form the
-     * artifact tree given.
+     * Recursively converts the given {@link Node} and its children into a
+     * {@link String} representing the Jolie source code.
+     * <p>
+     * Depending on the type of the node
+     * ({@link JolieContextArtifactData}, {@link JolieTokenArtifactData}, {@link JolieLineArtifactData})
+     * , the appropriate conversion is performed and the {@link String} is generated.
      *
-     * @param node Node of type context, token, or line
-     * @return A string of Jolie source code
+     * @param node The node to convert
+     * @return A {@link String} containing the Jolie source code representation of the node
      */
     private String convertNode(Node node) {
         StringBuilder res = new StringBuilder();
@@ -76,66 +97,60 @@ public class ECCOToString {
     // ----
 
     /**
-     * It is a helper function.
-     * Checks if given node is of type context node.
+     * Checks whether the given {@link Node} is an instance of {@link JolieContextArtifactData}.
      *
-     * @param node Node ot check
-     * @return A boolean telling if the given node is a context node
+     * @param node The node to check
+     * @return {@code true} if the node is an instance of {@link JolieContextArtifactData} - {@code false} otherwise
      */
     private boolean isContextNode(Node node) {
         return (node.getArtifact().getData() instanceof JolieContextArtifactData);
     }
 
     /**
-     * It is a helper function.
-     * Checks if given node is of type token node.
+     * Checks whether the given {@link Node} is an instance of {@link JolieTokenArtifactData}.
      *
-     * @param node Node ot check
-     * @return A boolean telling if the given node is a token node
+     * @param node The node to check
+     * @return {@code true} if the node is an instance of {@link JolieTokenArtifactData} - {@code false} otherwise
      */
     private boolean isTokenNode(Node node) {
         return (node.getArtifact().getData() instanceof JolieTokenArtifactData);
     }
 
     /**
-     * It is a helper function.
-     * Checks if given node is of type line node.
+     * Checks whether the given {@link Node} is an instance of {@link JolieLineArtifactData}.
      *
-     * @param node Node ot check
-     * @return A boolean telling if the given node is a line node
+     * @param node The node to check
+     * @return {@code true} if the node is an instance of {@link JolieLineArtifactData} - {@code false} otherwise
      */
     private boolean isLineNode(Node node) {
         return (node.getArtifact().getData() instanceof JolieLineArtifactData);
     }
 
     /**
-     * It is a helper function.
-     * Converts given node into a context artifact data.
+     * Converts the given {@link Node} into a {@link JolieContextArtifactData}.
      *
-     * @param node Node ot check
-     * @return Context artifact data
+     * @param node The node to convert
+     * @return The {@link JolieContextArtifactData} of the given {@link Node}
      */
     private JolieContextArtifactData toContextNode(Node node) {
         return (JolieContextArtifactData) node.getArtifact().getData();
     }
 
     /**
-     * It is a helper function.
-     * Converts given node into a token artifact data.
+     * Converts the given {@link Node} into a {@link JolieTokenArtifactData}.
      *
-     * @param node Node ot check
-     * @return Token artifact data
+     * @param node The node to convert
+     * @return The {@link JolieTokenArtifactData} of the given {@link Node}
      */
     private JolieTokenArtifactData toTokenNode(Node node) {
         return (JolieTokenArtifactData) node.getArtifact().getData();
     }
 
     /**
-     * It is a helper function.
-     * Converts given node into a line artifact data.
+     * Converts the given {@link Node} into a {@link JolieLineArtifactData}.
      *
-     * @param node Node ot check
-     * @return Line artifact data
+     * @param node The node to convert
+     * @return The {@link JolieLineArtifactData} of the given {@link Node}
      */
     private JolieLineArtifactData toLineNode(Node node) {
         return (JolieLineArtifactData) node.getArtifact().getData();

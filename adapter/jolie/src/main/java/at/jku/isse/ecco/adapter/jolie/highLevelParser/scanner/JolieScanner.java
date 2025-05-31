@@ -2,7 +2,6 @@ package at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner;
 
 import static at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType.*;
 
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
@@ -11,6 +10,25 @@ import java.util.Map;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieToken;
 import at.jku.isse.ecco.adapter.jolie.highLevelParser.scanner.token.JolieTokenType;
 
+
+/**
+ * The {@code JolieScanner} class provides functionality
+ * for converting a {@link String} of Jolie source code
+ * into a list of {@link JolieToken}.
+ *
+ * <p>
+ * Example usage:
+ * <pre>{@code
+ * JolieScanner scanner = new JolieScanner(???); // Jolie source code as a string
+ * List<JolieToken> tokens = scanner.scanTokens();
+ * }</pre>
+ * </p>
+ *
+ * @see JolieToken
+ * @see at.jku.isse.ecco.adapter.jolie.highLevelParser.JolieFileToAST
+ *
+ * @author Gustav Toftgaard <gustav@familientoftgaard.dk>
+ */
 public class JolieScanner {
     // Keyword-map
     private static final Map<String, JolieTokenType> keywords;
@@ -172,7 +190,7 @@ public class JolieScanner {
                         addCommentToToken(startCommentLine);
                     } else {
                         commentChar = advance(); // move past '*'
-                        while (!isAtEnd() && (commentChar != '*' || peek() != '/')){ // TODO: add error for no end mult_comment
+                        while (!isAtEnd() && (commentChar != '*' || peek() != '/')){
                             commentChar = advanceMultiLineComment();
                         }
                         advance(); // to include '/' at the end
